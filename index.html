@@ -2,158 +2,169 @@
 <html lang="ru">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Ma chère Victoria</title>
-
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/media.css">
-
 </head>
 
 <body>
 
     <div class="layout">
 
+        <!-- Боковое меню (Сайдбар) -->
         <aside class="sidebar">
-
             <nav class="menu">
-
-                <a href="about.html">ОБО МНЕ</a>
-
+                <!-- Ссылки теперь ведут на id секций на этой же странице -->
+                <a href="#about">ОБО МНЕ</a>
                 <a href="blog.html">БЛОГ</a>
-
-                <a href="catalog.html">КАТАЛОГ</a>
-
+                <a href="#catalog">КАТАЛОГ</a>
                 <a href="contacts.html">КОНТАКТЫ</a>
-
             </nav>
-
             <div class="sidebar-footer">
-
                 <h2 class="menu-logo">
                     Ma chere<br>
                     Victoria
                 </h2>
-
             </div>
-
         </aside>
 
-        <main class="hero">
+        <!-- Главный контент страницы -->
+        <main class="main-content">
+            
+            <!-- Главный экран (Hero) -->
+            <section class="hero">
+                <div class="hero-content">
+                    <span class="hero-subtitle">Виктория Голикова</span>
+                    <h1>MA CHERE<br>VICTORIA</h1>
+                    <p>
+                        Художник, иллюстратор.
+                        Автор работ, вдохновлённых памятью,
+                        природой и человеческими чувствами.
+                    </p>
+                    <a href="#catalog" class="catalog-link">LE CATALOGUE →</a>
+                </div>
+                <div class="hero-image">
+                    <img src="media/hero.jpg" alt="Виктория Голикова">
+                </div>
+            </section>
 
-            <div class="hero-content">
+             <section class="about-page" id="about">
+                <div class="about-header">
+                    <span class="section-number">01</span>
+                    <h1>Обо мне</h1>
+                </div>
 
-                <span class="hero-subtitle">
-                    Виктория Голикова
-                </span>
+                <div class="about-layout">
+                    <div class="about-gallery">
+                        <img src="media/about-1.jpg" alt="Галерея обо мне 1">
+                        <img src="media/about-2.png" alt="Галерея обо мне 2">
+                        <img src="media/about-4.png" alt="Галерея обо мне 4">
+                        <img src="media/about-3.jpg" alt="Галерея обо мне 3">
+                    </div>
 
-                <h1>
-                    MA CHERE<br>
-                    VICTORIA
-                </h1>
+                    <article class="about-text">
+                        <p>
+                            В детстве мне не хватало красоты вокруг меня.
+                            Поэтому сегодня я воспеваю красоту в своих картинах и в жизни.
+                        </p>
+                        <p>
+                            Мои работы — это воспоминания о воспоминаниях.
+                            Попытка сохранить то, что исчезает быстрее всего:
+                            свет, запах, настроение, мгновение.
+                        </p>
+                        <p>
+                            Для меня живопись — это способ остановить время
+                            и показать красоту повседневного.
+                        </p>
+                        <blockquote>
+                            «Если я творю от сердца,
+                            почти всё работает;
+                            если из головы —
+                            почти ничего.»
+                            <span>— Марк Шагал</span>
+                        </blockquote>
+                    </article>
+                </div>
+            </section>
 
-                <p>
-                    Художник, иллюстратор.
-                    Автор работ, вдохновлённых памятью,
-                    природой и человеческими чувствами.
-                </p>
+            <!-- Секция Каталога -->
+            <section id="catalog" class="catalog">
+                <div class="section-header">
+                    <span class="section-number">02</span>
+                    <h2>Каталог</h2>
+                    <p>Избранные работы последних лет</p>
+                </div>
 
-                <a href="catalog.html" class="catalog-link">
-                    LE CATALOGUE →
-                </a>
+                <!-- Сетка всех работ (Плитка) -->
+                <div class="catalog-grid">
+                    <article class="painting-card">
+                        <img src="catalog/work-1.png" alt="Картина Memory of Summer">
+                        <div class="painting-info">
+                            <h3>Memory of Summer</h3>
+                            <span>2025 · Холст · Масло</span>
+                        </div>
+                    </article>
 
-            </div>
+                    <article class="painting-card">
+                        <img src="catalog/work-2.png" alt="Картина Silence">
+                        <div class="painting-info">
+                            <h3>Silence</h3>
+                            <span>2024 · Холст · Масло</span>
+                        </div>
+                    </article>
 
-            <div class="hero-image">
+                    <article class="painting-card">
+                        <img src="catalog/work-3.png" alt="Картина Morning">
+                        <div class="painting-info">
+                            <h3>Morning</h3>
+                            <span>2025 · Холст</span>
+                        </div>
+                    </article>
 
-                <img src="media/hero.jpg"
-                     alt="Виктория Голикова">
+                    <article class="painting-card">
+                        <img src="catalog/work-4.png" alt="Картина Flowers">
+                        <div class="painting-info">
+                            <h3>Flowers</h3>
+                            <span>2023</span>
+                        </div>
+                    </article>
+                </div>
 
-            </div>
+                <!-- Блок категорий с горизонтальным скроллом (Живопись) -->
+                <div class="gallery-section">
+                    <h3>Живопись</h3>
+                    <div class="gallery-row">
+                        <article class="painting-card">
+                            <img src="catalog/work-1.png" alt="Живопись 1">
+                            <div class="painting-info">
+                                <h3>Memory of Summer</h3>
+                                <span>2025 · Холст · Масло</span>
+                            </div>
+                        </article>
+                        <article class="painting-card">
+                            <img src="catalog/work-2.png" alt="Живопись 2">
+                            <div class="painting-info">
+                                <h3>Silence</h3>
+                                <span>2024 · Холст · Масло</span>
+                            </div>
+                        </article>
+                        <article class="painting-card">
+                            <img src="catalog/work-3.png" alt="Живопись 3">
+                            <div class="painting-info">
+                                <h3>Morning</h3>
+                                <span>2025 · Холст</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+            </section>
 
         </main>
 
     </div>
 
 </body>
-
-<section id="catalog" class="catalog">
-
-    <div class="section-header">
-
-        <span class="section-number">02</span>
-
-        <h2>Каталог</h2>
-
-        <p>
-            Избранные работы последних лет
-        </p>
-
-    </div>
-
-    <div class="catalog-grid">
-
-        <article class="painting-card">
-
-            <img src="media/catalog/work-1.jpg" alt="">
-
-            <div class="painting-info">
-
-                <h3>Memory of Summer</h3>
-
-                <span>2025 · Холст · Масло</span>
-
-            </div>
-
-        </article>
-
-        <article class="painting-card">
-
-            <img src="media/catalog/work-2.jpg" alt="">
-
-            <div class="painting-info">
-
-                <h3>Silence</h3>
-
-                <span>2024 · Холст · Масло</span>
-
-            </div>
-
-        </article>
-
-        <article class="painting-card">
-
-            <img src="media/catalog/work-3.jpg" alt="">
-
-            <div class="painting-info">
-
-                <h3>Morning</h3>
-
-                <span>2025 · Холст</span>
-
-            </div>
-
-        </article>
-
-        <article class="painting-card">
-
-            <img src="media/catalog/work-4.jpg" alt="">
-
-            <div class="painting-info">
-
-                <h3>Flowers</h3>
-
-                <span>2023</span>
-
-            </div>
-
-        </article>
-
-    </div>
-
-</section>
-
 </html>
