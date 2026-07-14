@@ -1,0 +1,572 @@
+/*
+   FONT
+*/
+
+@font-face {
+    font-family: "Maslova";
+    src: url("../fonts/cd-masvol-thin.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* 
+   VARIABLES
+ */
+
+:root {
+
+    /* Colors */
+
+    --bg: #F5F2EC;
+    --bg-light: #FBF9F6;
+
+    --text: #282225;
+    --text-soft: #726D68;
+
+    --line: #D8D1CA;
+
+    --accent: #9BB7D4;
+
+    /* Typography */
+
+    --font-title: "Maslova", serif;
+    --font-text: "Maslova", serif;
+
+    /* Sizes */
+
+    --container: 1280px;
+
+    --radius: 8px;
+
+    /* Animation */
+
+    --transition: .35s ease;
+
+}
+/* 
+   RESET
+ */
+
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+body {
+
+    background: var(--bg);
+
+    color: var(--text);
+
+    font-family:"Maslova";
+
+    font-size:20px;
+
+    line-height:1.8;
+
+    letter-spacing:.02em;
+    font-weight:normal;
+
+
+    min-height: 100vh;
+
+    -webkit-font-smoothing: antialiased;
+
+}
+/*
+   TYPOGRAPHY
+ */
+
+h1,
+h2,
+h3,
+.logo {
+
+    font-family: var(--font-title);
+
+    font-weight: 300;
+
+    letter-spacing: .05em;
+
+}
+
+h1 {
+
+    font-size: clamp(54px, 8vw, 90px);
+
+}
+
+h2 {
+
+    font-size: clamp(34px, 5vw, 56px);
+
+}
+
+p {
+
+    max-width: 700px;
+
+    color: var(--text-soft);
+
+}
+/* 
+   LINKS
+*/
+
+a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+    transition: var(--transition);
+
+}
+
+a:hover {
+
+    color: var(--accent);
+
+}
+/*
+   IMAGES
+*/
+
+img {
+
+    display: block;
+
+    width: 100%;
+
+}
+/*
+   LIST
+*/
+
+ul {
+
+    list-style: none;
+
+}
+/*
+   CONTAINER
+*/
+
+.container {
+
+    width: min(var(--container), 92%);
+
+    margin: 0 auto;
+
+}
+::selection {
+
+    background: var(--accent);
+
+    color: white;
+
+}
+.layout{
+
+    display:grid;
+
+    grid-template-columns:320px 1fr;
+
+    min-height:100vh;
+
+}
+.sidebar{
+
+    position:sticky;
+    top:0;
+
+    height:100vh;
+
+    padding:60px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+
+    border-right:1px solid var(--line);
+
+}
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+.menu a{
+
+    font-size:13px;
+
+    letter-spacing:.25em;
+
+    text-transform:uppercase;
+
+    color:var(--text-soft);
+
+}
+
+.menu a:hover{
+
+    color:var(--text);
+
+}
+.menu-logo{
+
+    font-size:42px;
+
+    line-height:1;
+
+}
+.hero{
+
+    display:grid;
+
+    grid-template-columns:1fr minmax(350px, 500px);
+
+    gap:60px;
+
+    padding:80px;
+
+    overflow:hidden;
+}
+.hero-content{
+
+    display:flex;
+    flex-direction:column;
+
+}
+.hero-image{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden; 
+}
+.hero-image img{
+
+    display:block;
+
+    max-width:100%;
+    max-height:90vh;
+
+    width:auto;
+    height:auto;
+
+    object-fit:contain;
+}
+.hero-subtitle{
+
+    font-size:14px;
+
+    letter-spacing:.25em;
+
+    text-transform:uppercase;
+
+    color:var(--text-soft);
+
+    margin-bottom:20px;
+
+}
+.hero h1{
+
+    line-height:.95;
+
+    margin-bottom:40px;
+
+}
+.hero p{
+
+    width:480px;
+
+    margin-bottom:60px;
+
+}
+.catalog-link{
+
+    display:inline-block;
+
+    font-size:15px;
+
+    letter-spacing:.2em;
+
+    text-transform:uppercase;
+
+}
+/* ===========================
+   ABOUT
+=========================== */
+
+.about-page{
+
+    width:min(1400px,90%);
+
+    margin:0 auto;
+
+    padding:140px 0;
+
+}
+
+.about-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:24px;
+
+    margin-bottom:80px;
+
+}
+
+.section-number{
+
+    font-size:14px;
+
+    letter-spacing:.3em;
+
+    color:var(--accent);
+
+}
+
+.about-header h1{
+
+    font-size:64px;
+
+    font-family:var(--font-title);
+
+    font-weight:300;
+
+}
+
+.about-layout{
+
+    display:grid;
+
+    grid-template-columns:520px 1fr;
+
+    gap:90px;
+
+    align-items:start;
+
+}
+
+.about-gallery{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+}
+
+.about-gallery img{
+
+    width:100%;
+
+    height:340px;
+
+    object-fit:cover;
+
+    object-position:center;
+
+    border-radius:6px;
+
+    transition:.45s ease;
+
+}
+
+.about-gallery img:hover{
+
+    transform:scale(1.03);
+
+}
+
+.top{
+
+    object-position:center top;
+
+}
+
+.left{
+
+    object-position:left center;
+
+}
+
+.right{
+
+    object-position:right center;
+
+}
+
+.about-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:34px;
+
+}
+
+.about-text p{
+
+    font-family:"Maslova",serif;
+
+    font-size:28px;
+
+    line-height:1.7;
+
+    color:var(--text);
+
+    max-width:650px;
+
+}
+
+.about-text blockquote{
+
+    margin-top:20px;
+
+    padding-left:30px;
+
+    border-left:2px solid var(--accent);
+
+    font-size:30px;
+
+    line-height:1.7;
+
+    font-family:"Maslova",serif;
+
+    color:var(--text-soft);
+
+}
+
+.about-text span{
+
+    display:block;
+
+    margin-top:25px;
+
+    font-size:18px;
+
+    letter-spacing:.2em;
+
+    text-transform:uppercase;
+
+}
+/* ===========================
+   CATALOG
+=========================== */
+
+.catalog{
+
+    width:min(1500px,92%);
+
+    margin:0 auto;
+
+    padding:140px 0;
+
+}
+
+.section-header{
+
+    margin-bottom:70px;
+
+}
+
+.section-header h2{
+
+    margin:15px 0;
+
+}
+
+.section-header p{
+
+    font-size:22px;
+
+    color:var(--text-soft);
+
+}
+
+.catalog-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:70px;
+
+}
+
+.painting-card{
+
+    cursor:pointer;
+
+    transition:.4s ease;
+
+}
+
+.painting-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.painting-card img{
+
+    width:100%;
+
+    aspect-ratio:4/5;
+
+    object-fit:cover;
+
+    border-radius:8px;
+
+}
+
+.painting-info{
+
+    margin-top:24px;
+
+}
+
+.painting-info h3{
+
+    font-family:"Maslova",serif;
+
+    font-size:32px;
+
+    font-weight:300;
+
+}
+
+.painting-info span{
+
+    display:block;
+
+    margin-top:10px;
+
+    color:var(--text-soft);
+
+    letter-spacing:.1em;
+
+}
