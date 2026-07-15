@@ -1,2 +1,2 @@
 # macher
-personal webcite 
+artist personal page
