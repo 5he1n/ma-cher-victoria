@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@media (max-width:768px){
 
     .gallery-row {
 
@@ -33,14 +33,11 @@
         border-radius: 8px;
 
     }
-
-}
-@media (max-width:768px){
-.main-content{
+    .main-content{
 
     margin-top:80px;
 
-}
+    }
 
 .hero{
 
