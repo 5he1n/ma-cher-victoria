@@ -360,14 +360,7 @@ ul {
     padding: 40px;
   }
 }
+.painting-card{
 
-@media (max-width: 768px) {
-  .about-page, .catalog {
-    padding: 60px 0;
-  }
-  .about-gallery {
-    grid-template-columns: 1fr; 
-  .painting-card {
-    flex: 0 0 280px; 
-  }
+    flex:0 0 75vw;
 }

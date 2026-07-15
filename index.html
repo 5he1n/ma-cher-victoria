@@ -8,27 +8,39 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/media.css">
 </head>
-
+<script src="js/navigation.js"></script>
 <body>
 
     <div class="layout">
 
-        <!-- Боковое меню (Сайдбар) -->
         <aside class="sidebar">
-            <nav class="menu">
-                <!-- Ссылки теперь ведут на id секций на этой же странице -->
+
+            <button class="menu-toggle" id="menuToggle">
+                ☰
+            </button>
+
+            <nav class="menu" id="menu">
+
                 <a href="#about">ОБО МНЕ</a>
-                <a href="blog.html">БЛОГ</a>
+
                 <a href="#catalog">КАТАЛОГ</a>
-                <a href="contacts.html">КОНТАКТЫ</a>
+
+                <a href="#blog">БЛОГ</a>
+
+                <a href="#contacts">КОНТАКТЫ</a>
+
             </nav>
+
             <div class="sidebar-footer">
+
                 <h2 class="menu-logo">
-                    Ma chere<br>
+                    Ma chère<br>
                     Victoria
                 </h2>
+
             </div>
-        </aside>
+
+        </aside>        
 
         <!-- Главный контент страницы -->
         <main class="main-content">
