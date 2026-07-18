@@ -1,182 +1,120 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma chère Victoria</title>
+    <title>Ma chere Victoria</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/media.css">
+    <script src="js/gallery.js" defer></script>
+    <script src="js/script.js" defer></script>
 </head>
-<script src="js/navigation.js"></script>
 <body>
 
-    <div class="layout">
+    <header class="site-header">
+        <div class="menu-logo">Ma chere Victoria</div>
+        <nav class="menu">
+            <a href="#about" class="active">Обо мне</a>
+            <a href="#blog">Блог</a>
+            <a href="#catalog">Серия работ</a>
+            <a href="#shop">Лавка</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+        <div class="lang-switcher">
+            <a href="#" class="lang-link active">RU</a>
+            <span class="lang-divider">/</span>
+            <a href="#" class="lang-link">EN</a>
+        </div>
+    </header>
 
-        <aside class="sidebar">
+    <main class="layout">
+        <section class="hero-canvas">
+            <div class="canvas-container">
+                <img src="media/victoria.jpeg" alt="Victoria Painting" class="main-painting">
 
-            <button class="menu-toggle" id="menuToggle">
-                ☰
-            </button>
+                <div class="shoulder-text left-shoulder">Ma</div>
+                <div class="shoulder-text right-shoulder">Chere</div>
 
-            <nav class="menu" id="menu">
+                <div class="canvas-footer-name">Victoria</div>
+            </div>
+        </section>
 
-                <a href="#about">ОБО МНЕ</a>
+        <section id="about" class="about-page">
+            <span class="section-number">01 // ABOUT ME</span>
+            <h2>Обо мне</h2>
 
-                <a href="#catalog">КАТАЛОГ</a>
+            <div class="about-layout">
+                <div class="about-gallery">
+                    <div class="img-frame frame-1">
+                        <img src="media/work.jpeg" alt="Процесс работы">
+                    </div>
+                    <div class="img-frame frame-2">
+                        <img src="media/about-2.png" alt="Деталь картины">
+                    </div>
+                    <div class="img-frame frame-3">
+                        <img src="media/painter.jpeg" alt="Мастерская">
+                    </div>
+                    <div class="img-frame frame-4">
+                        <img src="media/sgrt.jpg" alt="Виктория">
+                    </div>
+                </div>
 
-                <a href="#blog">БЛОГ</a>
+                <div class="about-text">
+                    <p>В детстве мне не хватало красоты вокруг меня. Поэтому сегодня я воспеваю красоту в своих картинах и в жизни. Мои работы — это воспоминания о воспоминаниях.</p>
+                    <blockquote>
+                        «Если я творю от сердца, почти всё работает; если из головы — почти ничего.»
+                        <span>— Марк Шагал</span>
+                    </blockquote>
+                    <p>Попытка сохранить то, что исчезает быстрее всего: свет, запах, настроение, мгновение. Для меня живопись — это способ остановить время и показать красоту повседневного.</p>
+                </div>
+            </div>
+        </section>
 
-                <a href="#contacts">КОНТАКТЫ</a>
+        <section id="blog" class="blog">
+            <span class="section-number">02 // BLOG</span>
+            <h2>Блог</h2>
+            <p class="catalog-intro">Заметки о процессе, выставках и вдохновении</p>
 
-            </nav>
+            <div id="blogGrid" class="blog-grid">
+                <!-- Записи блога подгружаются сюда (или вручную, по аналогии с .art-card) -->
+            </div>
+        </section>
 
-            <div class="sidebar-footer">
+        <section id="catalog" class="catalog">
+            <span class="section-number">03 // WORKS SERIES</span>
+            <h2>Серия работ</h2>
+            <p class="catalog-intro">Избранные работы последних лет</p>
 
-                <h2 class="menu-logo">
-                    Ma chère<br>
-                    Victoria
-                </h2>
-
+            <div class="category-tabs">
+                <button class="tab-btn active" data-category="all">Все работы</button>
+                <button class="tab-btn" data-category="painting">Живопись</button>
+                <button class="tab-btn" data-category="graphics">Графика</button>
+                <button class="tab-btn" data-category="illustration">Иллюстрация</button>
             </div>
 
-        </aside>        
+            <div id="catalogGrid" class="catalog-dynamic-grid"></div>
+        </section>
 
-        <!-- Главный контент страницы -->
-        <main class="main-content">
-            
-            <!-- Главный экран (Hero) -->
-            <section class="hero">
-                <div class="hero-content">
-                    <span class="hero-subtitle">Виктория Голикова</span>
-                    <h1>MA CHERE<br>VICTORIA</h1>
-                    <p>
-                        Художник, иллюстратор.
-                        Автор работ, вдохновлённых памятью,
-                        природой и человеческими чувствами.
-                    </p>
-                    <a href="#catalog" class="catalog-link">LE CATALOGUE →</a>
-                </div>
-                <div class="hero-image">
-                    <img src="media/hero.jpg" alt="Виктория Голикова">
-                </div>
-            </section>
+        <section id="shop" class="shop">
+            <span class="section-number">04 // SHOP</span>
+            <h2>Лавка</h2>
+            <p class="catalog-intro">Оригиналы и принты</p>
 
-             <section class="about-page" id="about">
-                <div class="about-header">
-                    <span class="section-number">01</span>
-                    <h1>Обо мне</h1>
-                </div>
+            <div id="shopGrid" class="catalog-dynamic-grid">
+                <!-- Товары — по тому же .art-card, что и в "Серия работ" -->
+            </div>
+        </section>
 
-                <div class="about-layout">
-                    <div class="about-gallery">
-                        <img src="media/about-1.jpg" alt="Галерея обо мне 1">
-                        <img src="media/about-2.png" alt="Галерея обо мне 2">
-                        <img src="media/about-4.png" alt="Галерея обо мне 4">
-                        <img src="media/about-3.jpg" alt="Галерея обо мне 3">
-                    </div>
+        <section id="contacts" class="contacts-page">
+            <span class="section-number">05 // CONTACTS</span>
+            <h2>Связаться</h2>
 
-                    <article class="about-text">
-                        <p>
-                            В детстве мне не хватало красоты вокруг меня.
-                            Поэтому сегодня я воспеваю красоту в своих картинах и в жизни.
-                        </p>
-                        <p>
-                            Мои работы — это воспоминания о воспоминаниях.
-                            Попытка сохранить то, что исчезает быстрее всего:
-                            свет, запах, настроение, мгновение.
-                        </p>
-                        <p>
-                            Для меня живопись — это способ остановить время
-                            и показать красоту повседневного.
-                        </p>
-                        <blockquote>
-                            «Если я творю от сердца,
-                            почти всё работает;
-                            если из головы —
-                            почти ничего.»
-                            <span>— Марк Шагал</span>
-                        </blockquote>
-                    </article>
-                </div>
-            </section>
-
-            <!-- Секция Каталога -->
-            <section id="catalog" class="catalog">
-                <div class="section-header">
-                    <span class="section-number">02</span>
-                    <h2>Каталог</h2>
-                    <p>Избранные работы последних лет</p>
-                </div>
-
-                <!-- Сетка всех работ (Плитка) -->
-                <div class="catalog-grid">
-                    <article class="painting-card">
-                        <img src="catalog/work-1.png" alt="Картина Memory of Summer">
-                        <div class="painting-info">
-                            <h3>Memory of Summer</h3>
-                            <span>2025 · Холст · Масло</span>
-                        </div>
-                    </article>
-
-                    <article class="painting-card">
-                        <img src="catalog/work-2.png" alt="Картина Silence">
-                        <div class="painting-info">
-                            <h3>Silence</h3>
-                            <span>2024 · Холст · Масло</span>
-                        </div>
-                    </article>
-
-                    <article class="painting-card">
-                        <img src="catalog/work-3.png" alt="Картина Morning">
-                        <div class="painting-info">
-                            <h3>Morning</h3>
-                            <span>2025 · Холст</span>
-                        </div>
-                    </article>
-
-                    <article class="painting-card">
-                        <img src="catalog/work-4.png" alt="Картина Flowers">
-                        <div class="painting-info">
-                            <h3>Flowers</h3>
-                            <span>2023</span>
-                        </div>
-                    </article>
-                </div>
-
-                <!-- Блок категорий с горизонтальным скроллом (Живопись) -->
-                <div class="gallery-section">
-                    <h3>Живопись</h3>
-                    <div class="gallery-row">
-                        <article class="painting-card">
-                            <img src="catalog/work-1.png" alt="Живопись 1">
-                            <div class="painting-info">
-                                <h3>Memory of Summer</h3>
-                                <span>2025 · Холст · Масло</span>
-                            </div>
-                        </article>
-                        <article class="painting-card">
-                            <img src="catalog/work-2.png" alt="Живопись 2">
-                            <div class="painting-info">
-                                <h3>Silence</h3>
-                                <span>2024 · Холст · Масло</span>
-                            </div>
-                        </article>
-                        <article class="painting-card">
-                            <img src="catalog/work-3.png" alt="Живопись 3">
-                            <div class="painting-info">
-                                <h3>Morning</h3>
-                                <span>2025 · Холст</span>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-
-            </section>
-
-        </main>
-
-    </div>
-
+            <div class="contacts-wrapper">
+                <a href="mailto:example@mail.com" class="contact-link">EMAIL</a>
+                <a href="https://instagram.com/..." target="_blank" class="contact-link">INSTAGRAM</a>
+                <a href="files/cv.pdf" download class="contact-link" style="font-style: italic;">СКАЧАТЬ CV (ВИЗИТКА) *</a>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

@@ -1,366 +1,656 @@
-/* FONT */ 
-@font-face { 
-  font-family: "Maslova"; 
-  src: url("../fonts/cd-masvol-thin.otf") format("opentype"); 
-  font-weight: 300; 
-  font-style: normal; 
-} 
-
-:root { 
-  /* Colors */ 
-  --bg: #F5F2EC; 
-  --bg-light: #FBF9F6; 
-  --text: #282225; 
-  --text-soft: #726D68; 
-  --line: #D8D1CA; 
-  --accent: #9BB7D4; 
-
-  --font-title: "Maslova", serif; 
-  --font-text: "Maslova", serif; 
-
-  --container: 1280px; 
-  --radius: 8px; 
-
-
-  --transition: .35s ease; 
-} 
-
-
-* { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
-} 
-
-html { 
-  scroll-behavior: smooth; 
-} 
-
-body { 
-  overflow-x: hidden;
-  max-width: 100vw;  
-  background: var(--bg); 
-  color: var(--text); 
-  font-family: "Maslova", serif; 
-  font-size: 20px; 
-  line-height: 1.8; 
-  letter-spacing: .02em; 
-  font-weight: normal; 
-  min-height: 100vh; 
-  -webkit-font-smoothing: antialiased; 
-} 
-
-
-h1, h2, h3, .logo { 
-  font-family: var(--font-title); 
-  font-weight: 300; 
-  letter-spacing: .05em; 
-} 
-
-h1 { font-size: clamp(40px, 8vw, 90px); }
-h2 { font-size: clamp(28px, 5vw, 56px); } 
-
-p { 
-  max-width: 700px; 
-  color: var(--text-soft); 
-} 
-
-a { 
-  color: inherit; 
-  text-decoration: none; 
-  transition: var(--transition); 
-} 
-
-a:hover { 
-  color: var(--accent); 
-} 
-
-img { 
-  display: block; 
-  max-width: 100%; 
-  height: auto; 
-} 
-
-ul { 
-  list-style: none; 
-} 
-
-.container { 
-  width: min(var(--container), 92%); 
-  margin: 0 auto; 
-} 
-
-::selection { 
-  background: var(--accent); 
-  color: white; 
-} 
-
-.layout { 
-  display: grid; 
-  grid-template-columns: 320px minmax(0, 1fr); 
-  min-height: 100vh; 
-  width: 100%;
-} 
-
-.sidebar { 
-  position: sticky; 
-  top: 0; 
-  height: 100vh; 
-  padding: 60px; 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: space-between; 
-  border-right: 1px solid var(--line); 
-} 
-
-.menu { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 22px; 
-} 
-
-.menu a { 
-  font-size: 13px; 
-  letter-spacing: .25em; 
-  text-transform: uppercase; 
-  color: var(--text-soft); 
-} 
-
-.menu a:hover { 
-  color: var(--text); 
-} 
-
-.menu-logo { 
-  font-size: 42px; 
-  line-height: 1; 
-} 
-
-.hero { 
-  display: grid; 
-  grid-template-columns: 1fr minmax(350px, 500px); 
-  gap: 60px; 
-  padding: 80px; 
-  overflow: hidden; 
-} 
-
-.hero-content { 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center;
-} 
-
-.hero-image { 
-  width: 100%;
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-} 
-
-.hero-image img { 
-  display: block; 
-  max-width: 100%; 
-  max-height: 90vh; 
-  width: auto; 
-  height: auto; 
-  object-fit: contain; 
-} 
-
-.hero-subtitle { 
-  font-size: 14px; 
-  letter-spacing: .25em; 
-  text-transform: uppercase; 
-  color: var(--text-soft); 
-  margin-bottom: 20px; 
-} 
-
-.hero h1 { 
-  line-height: .95; 
-  margin-bottom: 40px; 
-} 
-
-.hero p { 
-  max-width: 480px; 
-  margin-bottom: 60px; 
-} 
-
-.catalog-link { 
-  display: inline-block; 
-  font-size: 15px; 
-  letter-spacing: .2em; 
-  text-transform: uppercase; 
-} 
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 40px;
-  margin: 60px 0 90px 0;
+/* ==========================================================================
+   1. ШРИФТЫ И ГЛОБАЛЬНЫЕ НАСТРОЙКИ (Maslova правит бал)
+   ========================================================================== */
+@font-face {
+  font-family: "Maslova";
+  src: url("../fonts/cd-masvol-thin.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
 }
 
-.about-page { 
-  width: min(1400px, 90%); 
-  margin: 0 auto; 
-  padding: 140px 0; 
-} 
+:root {
+  /* Утонченная художественная палитра */
+  --bg: #F5F2EC;
+  --text: #282225;
+  /* Делаем интерфейсный текст мягче за счет прозрачности, используя основной шрифт */
+  --text-soft: rgba(40, 34, 37, 0.6);
+  --line: rgba(216, 209, 202, 0.8);
+  --accent: #9BB7D4;
+  --font-main: "Maslova", serif;
+  --container: 1400px;
+  --transition: .4s cubic-bezier(0.25, 1, 0.5, 1);
+}
 
-.about-header { 
-  display: flex; 
-  align-items: center; 
-  gap: 24px; 
-  margin-bottom: 80px; 
-} 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-.section-number { 
-  font-size: 14px; 
-  letter-spacing: .3em; 
-  color: var(--accent); 
-} 
+html {
+  scroll-behavior: smooth;
+}
 
-.about-header h1 { 
-  font-size: clamp(38px, 6vw, 64px); 
-  font-family: var(--font-title); 
-  font-weight: 300; 
-} 
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
+  font-size: 19px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
 
-.about-layout { 
-  display: grid; 
-  grid-template-columns: 520px 1fr; 
-  gap: 90px; 
-  align-items: start; 
-} 
+h1, h2, h3, h4, .menu-logo, .tab-btn, .lang-switcher {
+  font-family: var(--font-main);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
 
-.about-gallery { 
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: 20px; 
-} 
+h1 { font-size: clamp(46px, 7vw, 96px); }
+h2 { font-size: clamp(32px, 4vw, 52px); }
 
-.about-gallery img { 
-  width: 100%; 
-  height: 340px; 
-  object-fit: cover; 
-  object-position: center; 
-  border-radius: var(--radius); 
-  transition: .45s ease; 
-} 
+p {
+  max-width: 700px;
+  color: var(--text-soft);
+}
 
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
 
-.top { object-position: center top; } 
-.left { object-position: left center; } 
-.right { object-position: right center; } 
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
 
+.section-number {
+  font-size: 14px;
+  color: var(--text-soft);
+  display: block;
+  margin-bottom: 8px;
+  letter-spacing: 0.1em;
+}
 
-.about-text { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 34px; 
-} 
+/* ==========================================================================
+   2. ШАПКА САЙТА (Верхнее меню со штрихами)
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(245, 242, 236, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 60px;
+  border-bottom: 1px solid var(--line);
+  z-index: 1000;
+}
 
-.about-text p { 
-  font-family: var(--font-text); 
-  font-size: clamp(20px, 2vw, 28px); 
-  line-height: 1.7; 
-  color: var(--text); 
-  max-width: 650px; 
-} 
+.menu-logo {
+  font-size: 26px;
+  letter-spacing: 0.02em;
+}
 
-.about-text blockquote { 
-  margin-top: 20px; 
-  padding-left: 30px; 
-  border-left: 2px solid var(--accent); 
-  font-size: clamp(22px, 2.5vw, 30px); 
-  line-height: 1.7; 
-  font-family: var(--font-text); 
-  color: var(--text-soft); 
-} 
+.menu {
+  display: flex;
+  gap: 40px;
+}
 
-.about-text span { 
-  display: block; 
-  margin-top: 25px; 
-  font-size: 18px; 
-  letter-spacing: .2em; 
-  text-transform: uppercase; 
-} 
+.menu a {
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  position: relative;
+  padding: 4px 0;
+}
 
-/* GALLERY SECTION */
-.gallery-section { 
-  margin-bottom: 90px; 
+/* Тонкие штрихи-индикаторы активного раздела из ТЗ */
+.menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: var(--text);
+  transition: var(--transition);
+  transform: translateX(-50%);
+}
+
+.menu a:hover, .menu a.active {
+  color: var(--text);
+}
+
+.menu a:hover::after, .menu a.active::after {
+  width: 100%;
+}
+
+/* Переключатель языков */
+.lang-switcher {
+  font-size: 14px;
+  letter-spacing: 0.05em;
+}
+
+.lang-link {
+  color: var(--text-soft);
+}
+
+.lang-link.active, .lang-link:hover {
+  color: var(--text);
+}
+
+.lang-divider {
+  margin: 0 4px;
+  color: var(--line);
+}
+
+/* Лейаут */
+.layout {
+  display: block;
+  width: 100%;
+}
+
+.main-content {
+  width: 100%;
+}
+
+/* ==========================================================================
+   3. HERO СЕКЦИЯ (Главный экран в стиле журнальной обложки)
+   ========================================================================== */
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 80px;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 100px 60px 140px 60px;
+  align-items: center;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-subtitle {
+  font-size: 14px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  line-height: 0.95;
+  margin-bottom: 32px;
+}
+
+.hero-description {
+  font-size: 21px;
+  line-height: 1.6;
+  max-width: 520px;
+  margin-bottom: 48px;
+  color: var(--text);
+}
+
+.catalog-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.link-arrow {
+  transition: transform 0.3s ease;
+}
+
+.catalog-link:hover .link-arrow {
+  transform: translateX(8px);
+}
+
+.hero-image {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero-image img {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.02);
+}
+
+/* --------------------------------------------------------------------------
+   Hero: фото на весь экран + имя, разбитое на "MA / CHERE" по плечам и
+   "VICTORIA" внизу. Шрифт — тот же Maslova, что и везде на сайте; фото не
+   трогаем. Добавлен только скрим (градиент-подложка) под текстом, чтобы
+   надпись читалась независимо от того, что именно на фото под ней.
+   -------------------------------------------------------------------------- */
+.hero-canvas {
+  height: 100vh;
   width: 100%;
   overflow: hidden;
-} 
+}
 
-.gallery-section h3 { 
-  margin-top: 40px; 
-  margin-bottom: 28px; 
-  font-size: 34px; 
-  font-weight: 300; 
-} 
-
-.gallery-row { 
-  display: flex; 
-  gap: 30px; 
-  overflow-x: auto; 
-  overflow-y: hidden; 
-  scroll-snap-type: x mandatory; 
-  padding: 20px 0; 
+.canvas-container {
+  position: relative;
   width: 100%;
-  -webkit-overflow-scrolling: touch; 
-  scrollbar-width: none; 
-} 
-.gallery-row::-webkit-scrollbar { 
-  display: none; 
-} 
+  height: 100%;
+}
 
+.canvas-container .main-painting {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
-.painting-card { 
-  flex: 0 0 420px; 
-  scroll-snap-align: start;
-} 
+/* Скрим: темнее сверху и снизу (где сидит текст), прозрачный в центре
+   (где лицо и основной сюжет фото) */
+.canvas-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.32) 0%,
+    rgba(0, 0, 0, 0) 24%,
+    rgba(0, 0, 0, 0) 68%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  pointer-events: none;
+}
 
-.painting-card img { 
-  width: 100%; 
-  aspect-ratio: 4/5; 
-  object-fit: cover; 
-  border-radius: var(--radius);
-  transition: var(--transition);
-} 
+.shoulder-text {
+  position: absolute;
+  top: 44px;
+  font-family: var(--font-main);
+  font-weight: 300;
+  font-size: clamp(28px, 5vw, 64px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fdfcfa;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+  z-index: 2;
+}
 
-.painting-card:hover img { 
-  transform: scale(1.02); 
-} 
+.left-shoulder { left: 40px; }
+.right-shoulder { right: 40px; }
 
-.painting-info { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 6px; 
-  margin-top: 12px;
-} 
+.canvas-footer-name {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-main);
+  font-weight: 300;
+  font-size: clamp(28px, 4vw, 56px);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #fdfcfa;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
 
-.catalog { 
-  padding: 140px 80px; 
-} 
-
-/* Адаптив*/
-@media (max-width: 1100px) {
-  .layout {
-    grid-template-columns: 1fr; 
+@media (max-width: 768px) {
+  .hero-canvas {
+    height: 100svh;
   }
-  .sidebar {
-    height: auto;
-    position: relative;
-    padding: 40px;
-    border-right: none;
-    border-bottom: 1px solid var(--line);
+
+  .shoulder-text {
+    top: 24px;
+    font-size: 22px;
+    letter-spacing: 0.04em;
   }
-  .about-layout {
-    grid-template-columns: 1fr; 
-    gap: 50px;
-  }
-  .hero {
-    grid-template-columns: 1fr;
-    padding: 40px;
+
+  .left-shoulder { left: 20px; }
+  .right-shoulder { right: 20px; }
+
+  .canvas-footer-name {
+    bottom: 20px;
+    font-size: 20px;
+    letter-spacing: 0.25em;
   }
 }
-.painting-card{
 
-    flex:0 0 75vw;
+/* ==========================================================================
+   4. СЕКЦИЯ "О БО МНЕ" (Скрапбукинг хаос и асимметрия)
+   ========================================================================== */
+.about-page {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 100px 60px;
+  border-top: 1px solid var(--line);
+}
+
+/* Итоговая версия — галерея чуть шире текста, было продублировано в макете
+   ниже под тем же именем, оставлена одна актуальная версия. */
+.about-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.about-text p {
+  font-size: 20px;
+  color: var(--text);
+}
+
+blockquote {
+  font-size: 24px;
+  line-height: 1.5;
+  border-left: 2px solid var(--text);
+  padding-left: 24px;
+  margin: 20px 0;
+  color: var(--text);
+}
+
+blockquote span {
+  display: block;
+  font-size: 16px;
+  color: var(--text-soft);
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   АРТ-ГАЛЕРЕЯ «О БО МНЕ» (Скрапбукинг из эскиза)
+   ========================================================================== */
+
+/* Сетка для хаотичного расположения 4-х фото — единственная актуальная версия */
+.about-gallery {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 280px);
+  gap: 30px;
+}
+
+/* Базовый стиль рамок (стиль «полароид» / выставочный штрих) */
+.img-frame {
+  background: #ffffff;
+  padding: 12px 12px 24px 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--line);
+  transition: transform 0.4s ease, z-index 0.4s ease;
+  overflow: hidden;
+  height: fit-content;
+}
+
+.img-frame img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  filter: grayscale(10%) contrast(95%);
+}
+
+/* Эффект наведения: карточка слегка приподнимается и выходит на передний план */
+.img-frame:hover {
+  transform: scale(1.05) rotate(0deg) !important;
+  z-index: 10;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* --- ХАОТИЧНОЕ СМЕЩЕНИЕ И НАКЛОНЫ ИЗ ЭСКИЗА --- */
+
+.frame-1 {
+  grid-column: 1;
+  grid-row: 1;
+  transform: rotate(-3deg) translateY(10px);
+}
+
+.frame-2 {
+  grid-column: 2;
+  grid-row: 1;
+  transform: rotate(4deg) translateY(-20px) translateX(-10px);
+}
+
+.frame-3 {
+  grid-column: 1;
+  grid-row: 2;
+  transform: rotate(-2deg) translateX(15px) translateY(-10px);
+}
+
+.frame-4 {
+  grid-column: 2;
+  grid-row: 2;
+  transform: rotate(3deg) translateY(20px);
+}
+
+/* Цитата рядом с галереей (более специфичный селектор переопределяет
+   общий blockquote выше — это ожидаемо, не конфликт) */
+.about-text blockquote {
+  font-family: serif;
+  font-style: italic;
+  font-size: 20px;
+  border-left: 2px solid var(--text);
+  padding-left: 20px;
+  margin: 30px 0;
+  color: var(--text-soft);
+}
+
+.about-text blockquote span {
+  display: block;
+  font-size: 14px;
+  font-style: normal;
+  text-transform: uppercase;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   5. ИНТЕРАКТИВНЫЙ КАТАЛОГ С ГВОЗДИКАМИ
+   ========================================================================== */
+.catalog {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 100px 60px;
+  border-top: 1px solid var(--line);
+}
+
+.catalog-intro {
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+/* Виджет вкладок */
+.category-tabs {
+  display: flex;
+  gap: 15px;
+  margin: 50px 0;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 20px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-soft);
+  position: relative;
+  padding: 5px 15px;
+  transition: var(--transition);
+}
+
+.tab-btn.active, .tab-btn:hover {
+  color: var(--text);
+}
+
+/* Маркер активного таба в виде аккуратной точки снизу */
+.tab-btn.active::after {
+  content: '●';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: var(--text);
+}
+
+/* Сетка динамической выдачи */
+.catalog-dynamic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 60px 40px;
+}
+
+/* Карточка картины на «выставке» */
+.art-card {
+  position: relative;
+  background: #fff;
+  padding: 16px;
+  border: 1px solid rgba(0,0,0,0.01);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+.art-card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  background: #fcfbfa;
+}
+
+.art-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.art-card:hover img {
+  transform: scale(1.03);
+}
+
+/* Тот самый графический «гвоздик» сверху по центру */
+.art-card::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  background: #4a4547;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  z-index: 10;
+}
+
+.art-card-info {
+  margin-top: 18px;
+  border-top: 1px dashed var(--line);
+  padding-top: 14px;
+}
+
+.art-card-info h3 {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.art-card-info span {
+  font-size: 15px;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   6. СЕКЦИИ БЛОГА И КОНТАКТОВ (Завершение структуры)
+   ========================================================================== */
+#blog {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 100px 60px;
+  border-top: 1px solid var(--line);
+}
+
+#contacts {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 100px 60px 140px 60px;
+  border-top: 1px solid var(--line);
+}
+
+.contacts-wrapper {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-link {
+  font-size: clamp(24px, 4vw, 42px);
+  display: block;
+  width: fit-content;
+  border-bottom: 1px solid transparent;
+}
+
+.contact-link:hover {
+  border-bottom: 1px solid var(--text);
+  padding-left: 10px;
+}
+
+/* ==========================================================================
+   7. АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (Медиа-запросы)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .site-header { padding: 20px 30px; }
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 50px;
+    padding: 60px 30px;
+  }
+  .hero-image { justify-content: center; }
+  .about-layout {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .about-page, .catalog, #blog, #contacts { padding: 80px 30px; }
+}
+
+@media (max-width: 768px) {
+  .site-header {
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+  }
+  .menu {
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .about-gallery {
+    grid-template-columns: 1fr;
+  }
+  .img-frame img { height: 320px; }
+  .category-tabs {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tab-btn { font-size: 16px; padding: 5px 8px; }
 }
