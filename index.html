@@ -2,24 +2,32 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma chere Victoria</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Ma chere Victoria — живопись, графика, иллюстрация</title>
+    <meta name="description" content="Виктория — художница. Живопись, графика и иллюстрация: попытка остановить свет, запах и настроение мгновения.">
+
+    <!-- Шрифт грузим заранее: иначе заголовки перерисовываются на середине экрана -->
+    <link rel="preload" href="fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
+    <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/media.css">
     <script src="js/gallery.js" defer></script>
     <script src="js/script.js" defer></script>
 </head>
 <body>
 
     <header class="site-header">
-        <div class="menu-logo">Ma chere Victoria</div>
-        <nav class="menu">
+        <a href="#hero" class="menu-logo">Ma chere Victoria</a>
+
+        <button class="nav-toggle" aria-expanded="false" aria-controls="mainMenu" aria-label="Открыть меню"></button>
+
+        <nav class="menu" id="mainMenu">
             <a href="#about" class="active">Обо мне</a>
             <a href="#blog">Блог</a>
             <a href="#catalog">Серия работ</a>
             <a href="#shop">Лавка</a>
             <a href="#contacts">Контакты</a>
         </nav>
+
         <div class="lang-switcher">
             <a href="#" class="lang-link active">RU</a>
             <span class="lang-divider">/</span>
@@ -28,9 +36,10 @@
     </header>
 
     <main class="layout">
-        <section class="hero-canvas">
+        <section class="hero-canvas" id="hero">
             <div class="canvas-container">
-                <img src="media/victoria.jpeg" alt="Victoria Painting" class="main-painting">
+                <img src="media/main-v.jpg" alt="Виктория в мастерской" class="main-painting"
+                     fetchpriority="high" decoding="async">
 
                 <div class="shoulder-text left-shoulder">Ma</div>
                 <div class="shoulder-text right-shoulder">Chere</div>
@@ -39,24 +48,24 @@
             </div>
         </section>
 
-        <section id="about" class="about-page">
+        <section id="about" class="section about-page">
             <span class="section-number">01 // ABOUT ME</span>
             <h2>Обо мне</h2>
 
             <div class="about-layout">
                 <div class="about-gallery">
-                    <div class="img-frame frame-1">
-                        <img src="media/work.jpeg" alt="Процесс работы">
-                    </div>
-                    <div class="img-frame frame-2">
-                        <img src="media/about-2.png" alt="Деталь картины">
-                    </div>
-                    <div class="img-frame frame-3">
-                        <img src="media/painter.jpeg" alt="Мастерская">
-                    </div>
-                    <div class="img-frame frame-4">
-                        <img src="media/sgrt.jpg" alt="Виктория">
-                    </div>
+                    <figure class="img-frame frame-1">
+                        <img src="media/work.jpeg" alt="Процесс работы над картиной" loading="lazy" decoding="async">
+                    </figure>
+                    <figure class="img-frame frame-2">
+                        <img src="media/about-2.png" alt="Деталь картины крупным планом" loading="lazy" decoding="async">
+                    </figure>
+                    <figure class="img-frame frame-3">
+                        <img src="media/painter.jpeg" alt="Мастерская художницы" loading="lazy" decoding="async">
+                    </figure>
+                    <figure class="img-frame frame-4">
+                        <img src="media/sgrt.jpg" alt="Портрет Виктории" loading="lazy" decoding="async">
+                    </figure>
                 </div>
 
                 <div class="about-text">
@@ -70,49 +79,48 @@
             </div>
         </section>
 
-        <section id="blog" class="blog">
+        <section id="blog" class="section blog">
             <span class="section-number">02 // BLOG</span>
             <h2>Блог</h2>
             <p class="catalog-intro">Заметки о процессе, выставках и вдохновении</p>
 
             <div id="blogGrid" class="blog-grid">
-                <!-- Записи блога подгружаются сюда (или вручную, по аналогии с .art-card) -->
+                <!-- Записи блога -->
             </div>
         </section>
 
-        <section id="catalog" class="catalog">
+        <section id="catalog" class="section catalog">
             <span class="section-number">03 // WORKS SERIES</span>
             <h2>Серия работ</h2>
             <p class="catalog-intro">Избранные работы последних лет</p>
 
-            <div class="category-tabs">
-                <button class="tab-btn active" data-category="all">Все работы</button>
-                <button class="tab-btn" data-category="painting">Живопись</button>
-                <button class="tab-btn" data-category="graphics">Графика</button>
-                <button class="tab-btn" data-category="illustration">Иллюстрация</button>
+            <div class="category-tabs" role="tablist">
+                <button class="tab-btn active" data-category="all" role="tab" aria-selected="true">Все работы</button>
+                <button class="tab-btn" data-category="painting" role="tab" aria-selected="false">Живопись</button>
+                <button class="tab-btn" data-category="graphics" role="tab" aria-selected="false">Графика</button>
+                <button class="tab-btn" data-category="illustration" role="tab" aria-selected="false">Иллюстрация</button>
             </div>
 
-            <div id="catalogGrid" class="catalog-dynamic-grid"></div>
+            <!-- Карусель собирается сюда из js/gallery.js -->
+            <div id="catalogGrid"></div>
         </section>
 
-        <section id="shop" class="shop">
+        <section id="shop" class="section shop">
             <span class="section-number">04 // SHOP</span>
             <h2>Лавка</h2>
             <p class="catalog-intro">Оригиналы и принты</p>
 
-            <div id="shopGrid" class="catalog-dynamic-grid">
-                <!-- Товары — по тому же .art-card, что и в "Серия работ" -->
-            </div>
+            <div id="shopGrid"></div>
         </section>
 
-        <section id="contacts" class="contacts-page">
+        <section id="contacts" class="section contacts-page">
             <span class="section-number">05 // CONTACTS</span>
             <h2>Связаться</h2>
 
             <div class="contacts-wrapper">
                 <a href="mailto:example@mail.com" class="contact-link">EMAIL</a>
-                <a href="https://instagram.com/..." target="_blank" class="contact-link">INSTAGRAM</a>
-                <a href="files/cv.pdf" download class="contact-link" style="font-style: italic;">СКАЧАТЬ CV (ВИЗИТКА) *</a>
+                <a href="https://instagram.com/..." target="_blank" rel="noopener" class="contact-link">INSTAGRAM</a>
+                <a href="files/cv.pdf" download class="contact-link">СКАЧАТЬ CV</a>
             </div>
         </section>
     </main>

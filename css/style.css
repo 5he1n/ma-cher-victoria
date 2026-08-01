@@ -1,46 +1,54 @@
 /* ==========================================================================
-   1. ШРИФТЫ И ГЛОБАЛЬНЫЕ НАСТРОЙКИ (Maslova правит бал)
+   0. ШРИФТЫ
    ========================================================================== */
 @font-face {
   font-family: "Maslova";
   src: url("../fonts/cd-masvol-thin.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
+  font-display: swap; /* текст виден сразу, не ждёт загрузки .otf */
 }
 
+/* ==========================================================================
+   1. ТОКЕНЫ
+   ========================================================================== */
 :root {
-  /* Утонченная художественная палитра */
   --bg: #F5F2EC;
   --text: #282225;
-  /* Делаем интерфейсный текст мягче за счет прозрачности, используя основной шрифт */
   --text-soft: rgba(40, 34, 37, 0.6);
   --line: rgba(216, 209, 202, 0.8);
   --accent: #9BB7D4;
-  --font-main: "Maslova", serif;
+  --font-main: "Maslova", "Cormorant Garamond", Georgia, serif;
+
   --container: 1400px;
   --transition: .4s cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* Единый горизонтальный отступ: 20px на телефоне → 60px на десктопе */
+  --pad-x: clamp(20px, 5vw, 60px);
+  /* Единый вертикальный ритм секций */
+  --pad-y: clamp(64px, 9vw, 100px);
+  /* Высота шапки — нужна для якорей и для позиционирования меню */
+  --header-h: 72px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%; /* iOS не раздувает шрифт в ландшафте */
 }
 
 body {
-  overflow-x: hidden;
-  max-width: 100vw;
+  overflow-x: clip;           /* вместо hidden: не ломает position: sticky */
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-main);
-  font-size: 19px;
+  font-size: clamp(16px, 1.1vw, 19px);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
+
+body.nav-open { overflow: hidden; } /* фон не скроллится под открытым меню */
 
 h1, h2, h3, h4, .menu-logo, .tab-btn, .lang-switcher {
   font-family: var(--font-main);
@@ -49,72 +57,78 @@ h1, h2, h3, h4, .menu-logo, .tab-btn, .lang-switcher {
   line-height: 1.1;
 }
 
-h1 { font-size: clamp(46px, 7vw, 96px); }
-h2 { font-size: clamp(32px, 4vw, 52px); }
+h1 { font-size: clamp(40px, 7vw, 96px); }
+h2 { font-size: clamp(28px, 4.5vw, 52px); }
+h3 { font-size: clamp(19px, 1.8vw, 24px); }
 
-p {
-  max-width: 700px;
-  color: var(--text-soft);
-}
+p { max-width: 65ch; color: var(--text-soft); }
 
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: var(--transition);
-}
+a { color: inherit; text-decoration: none; transition: var(--transition); }
 
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+img { display: block; max-width: 100%; height: auto; }
+
+/* Видимый фокус с клавиатуры — но не мышью */
+:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
 }
 
 .section-number {
-  font-size: 14px;
+  font-size: clamp(11px, 1.1vw, 14px);
   color: var(--text-soft);
   display: block;
   margin-bottom: 8px;
   letter-spacing: 0.1em;
 }
 
+/* Общая обёртка секции — вместо повторов у .about-page/.catalog/#blog */
+.section {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--pad-y) var(--pad-x);
+  border-top: 1px solid var(--line);
+  scroll-margin-top: calc(var(--header-h) + 16px); /* якорь не уезжает под шапку */
+}
+
+.section:last-child { padding-bottom: calc(var(--pad-y) * 1.4); }
+
 /* ==========================================================================
-   2. ШАПКА САЙТА (Верхнее меню со штрихами)
+   2. ШАПКА
    ========================================================================== */
 .site-header {
   position: sticky;
   top: 0;
-  left: 0;
   width: 100%;
-  background: rgba(245, 242, 236, 0.9);
+  min-height: var(--header-h);
+  background: rgba(245, 242, 236, 0.92);
   backdrop-filter: blur(8px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 60px;
+  gap: 24px;
+  padding: 16px var(--pad-x);
   border-bottom: 1px solid var(--line);
   z-index: 1000;
 }
 
 .menu-logo {
-  font-size: 26px;
+  font-size: clamp(18px, 2.2vw, 26px);
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
-.menu {
-  display: flex;
-  gap: 40px;
-}
+.menu { display: flex; gap: clamp(18px, 2.5vw, 40px); }
 
 .menu a {
-  font-size: 14px;
+  font-size: clamp(13px, 1.1vw, 17px);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--text-soft);
   position: relative;
   padding: 4px 0;
+  white-space: nowrap;
 }
 
-/* Тонкие штрихи-индикаторы активного раздела из ТЗ */
 .menu a::after {
   content: '';
   position: absolute;
@@ -127,141 +141,65 @@ img {
   transform: translateX(-50%);
 }
 
-.menu a:hover, .menu a.active {
-  color: var(--text);
+.menu a:hover, .menu a.active { color: var(--text); }
+.menu a:hover::after, .menu a.active::after { width: 100%; }
+
+.lang-switcher { font-size: 14px; letter-spacing: 0.05em; }
+.lang-link { color: var(--text-soft); }
+.lang-link.active, .lang-link:hover { color: var(--text); }
+.lang-divider { margin: 0 4px; color: var(--line); }
+
+/* --- Бургер: две линии, рисуем через ::before/::after --- */
+.nav-toggle {
+  display: none;               /* появляется только на мобильных */
+  width: 44px;                 /* 44px — минимальная зона касания */
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  flex: 0 0 auto;
 }
 
-.menu a:hover::after, .menu a.active::after {
-  width: 100%;
+.nav-toggle::before,
+.nav-toggle::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  width: 24px;
+  height: 1px;
+  background: var(--text);
+  transition: transform .35s ease, opacity .2s ease;
 }
 
-/* Переключатель языков */
-.lang-switcher {
-  font-size: 14px;
-  letter-spacing: 0.05em;
-}
+.nav-toggle::before { top: 18px; }
+.nav-toggle::after  { top: 26px; }
 
-.lang-link {
-  color: var(--text-soft);
-}
+.nav-toggle[aria-expanded="true"]::before { transform: translateY(4px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"]::after  { transform: translateY(-4px) rotate(-45deg); }
 
-.lang-link.active, .lang-link:hover {
-  color: var(--text);
-}
-
-.lang-divider {
-  margin: 0 4px;
-  color: var(--line);
-}
-
-/* Лейаут */
-.layout {
-  display: block;
-  width: 100%;
-}
-
-.main-content {
-  width: 100%;
-}
+.layout, .main-content { width: 100%; }
 
 /* ==========================================================================
-   3. HERO СЕКЦИЯ (Главный экран в стиле журнальной обложки)
+   3. HERO (фото на весь экран + имя)
    ========================================================================== */
-.hero {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 80px;
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 100px 60px 140px 60px;
-  align-items: center;
-}
-
-.hero-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.hero-subtitle {
-  font-size: 14px;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: var(--text-soft);
-  margin-bottom: 24px;
-}
-
-.hero h1 {
-  line-height: 0.95;
-  margin-bottom: 32px;
-}
-
-.hero-description {
-  font-size: 21px;
-  line-height: 1.6;
-  max-width: 520px;
-  margin-bottom: 48px;
-  color: var(--text);
-}
-
-.catalog-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  width: fit-content;
-}
-
-.link-arrow {
-  transition: transform 0.3s ease;
-}
-
-.catalog-link:hover .link-arrow {
-  transform: translateX(8px);
-}
-
-.hero-image {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.hero-image img {
-  display: block;
-  max-width: 100%;
-  max-height: 70vh;
-  object-fit: contain;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.02);
-}
-
-/* --------------------------------------------------------------------------
-   Hero: фото на весь экран + имя, разбитое на "MA / CHERE" по плечам и
-   "VICTORIA" внизу. Шрифт — тот же Maslova, что и везде на сайте; фото не
-   трогаем. Добавлен только скрим (градиент-подложка) под текстом, чтобы
-   надпись читалась независимо от того, что именно на фото под ней.
-   -------------------------------------------------------------------------- */
 .hero-canvas {
-  height: 100vh;
+  height: 100svh;              /* svh корректно учитывает адресную строку iOS */
+  min-height: 480px;
   width: 100%;
   overflow: hidden;
 }
 
-.canvas-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+.canvas-container { position: relative; width: 100%; height: 100%; }
 
 .canvas-container .main-painting {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 30%; /* на узком экране кадр не срезает лицо */
   display: block;
 }
 
-/* Скрим: темнее сверху и снизу (где сидит текст), прозрачный в центре
-   (где лицо и основной сюжет фото) */
 .canvas-container::before {
   content: '';
   position: absolute;
@@ -278,10 +216,11 @@ img {
 
 .shoulder-text {
   position: absolute;
-  top: 44px;
+  top: 38%;
+  transform: translateY(-50%);
   font-family: var(--font-main);
   font-weight: 300;
-  font-size: clamp(28px, 5vw, 64px);
+  font-size: clamp(32px, 7vw, 96px);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #fdfcfa;
@@ -289,78 +228,42 @@ img {
   z-index: 2;
 }
 
-.left-shoulder { left: 40px; }
-.right-shoulder { right: 40px; }
+.left-shoulder  { left: var(--pad-x); }
+.right-shoulder { right: var(--pad-x); }
 
 .canvas-footer-name {
   position: absolute;
-  bottom: 36px;
+  bottom: clamp(20px, 4vw, 36px);
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--font-main);
   font-weight: 300;
   font-size: clamp(28px, 4vw, 56px);
-  letter-spacing: 0.4em;
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;          /* компенсируем трекинг, текст остаётся по центру */
   text-transform: uppercase;
   color: #fdfcfa;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
   z-index: 2;
 }
 
-@media (max-width: 768px) {
-  .hero-canvas {
-    height: 100svh;
-  }
-
-  .shoulder-text {
-    top: 24px;
-    font-size: 22px;
-    letter-spacing: 0.04em;
-  }
-
-  .left-shoulder { left: 20px; }
-  .right-shoulder { right: 20px; }
-
-  .canvas-footer-name {
-    bottom: 20px;
-    font-size: 20px;
-    letter-spacing: 0.25em;
-  }
-}
-
 /* ==========================================================================
-   4. СЕКЦИЯ "О БО МНЕ" (Скрапбукинг хаос и асимметрия)
+   4. ОБО МНЕ
    ========================================================================== */
-.about-page {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 100px 60px;
-  border-top: 1px solid var(--line);
-}
-
-/* Итоговая версия — галерея чуть шире текста, было продублировано в макете
-   ниже под тем же именем, оставлена одна актуальная версия. */
 .about-layout {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 80px;
+  gap: clamp(40px, 6vw, 80px);
   align-items: center;
-  margin-top: 50px;
+  margin-top: clamp(32px, 4vw, 50px);
 }
 
-.about-text {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.about-text p {
-  font-size: 20px;
-  color: var(--text);
-}
+.about-text { display: flex; flex-direction: column; gap: 24px; }
+.about-text p { font-size: clamp(16px, 1.3vw, 20px); color: var(--text); }
 
 blockquote {
-  font-size: 24px;
+  font-size: clamp(18px, 1.7vw, 24px);
   line-height: 1.5;
   border-left: 2px solid var(--text);
   padding-left: 24px;
@@ -370,116 +273,58 @@ blockquote {
 
 blockquote span {
   display: block;
-  font-size: 16px;
+  font-size: 14px;
   color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: .08em;
   margin-top: 8px;
 }
 
-/* ==========================================================================
-   АРТ-ГАЛЕРЕЯ «О БО МНЕ» (Скрапбукинг из эскиза)
-   ========================================================================== */
-
-/* Сетка для хаотичного расположения 4-х фото — единственная актуальная версия */
+/* Скрапбукинг-галерея */
 .about-gallery {
-  position: relative;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 280px);
-  gap: 30px;
+  gap: clamp(16px, 2.5vw, 30px);
 }
 
-/* Базовый стиль рамок (стиль «полароид» / выставочный штрих) */
 .img-frame {
   background: #ffffff;
-  padding: 12px 12px 24px 12px;
+  padding: 10px 10px 20px 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--line);
-  transition: transform 0.4s ease, z-index 0.4s ease;
-  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
   height: fit-content;
 }
 
 .img-frame img {
   width: 100%;
-  height: 220px;
+  aspect-ratio: 4 / 5;          /* вместо фикс. 220px — тянется под ширину */
+  height: auto;
   object-fit: cover;
   filter: grayscale(10%) contrast(95%);
 }
 
-/* Эффект наведения: карточка слегка приподнимается и выходит на передний план */
 .img-frame:hover {
-  transform: scale(1.05) rotate(0deg) !important;
+  transform: scale(1.04) rotate(0deg);
   z-index: 10;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-/* --- ХАОТИЧНОЕ СМЕЩЕНИЕ И НАКЛОНЫ ИЗ ЭСКИЗА --- */
-
-.frame-1 {
-  grid-column: 1;
-  grid-row: 1;
-  transform: rotate(-3deg) translateY(10px);
-}
-
-.frame-2 {
-  grid-column: 2;
-  grid-row: 1;
-  transform: rotate(4deg) translateY(-20px) translateX(-10px);
-}
-
-.frame-3 {
-  grid-column: 1;
-  grid-row: 2;
-  transform: rotate(-2deg) translateX(15px) translateY(-10px);
-}
-
-.frame-4 {
-  grid-column: 2;
-  grid-row: 2;
-  transform: rotate(3deg) translateY(20px);
-}
-
-/* Цитата рядом с галереей (более специфичный селектор переопределяет
-   общий blockquote выше — это ожидаемо, не конфликт) */
-.about-text blockquote {
-  font-family: serif;
-  font-style: italic;
-  font-size: 20px;
-  border-left: 2px solid var(--text);
-  padding-left: 20px;
-  margin: 30px 0;
-  color: var(--text-soft);
-}
-
-.about-text blockquote span {
-  display: block;
-  font-size: 14px;
-  font-style: normal;
-  text-transform: uppercase;
-  margin-top: 8px;
-  letter-spacing: 1px;
-}
+.frame-1 { transform: rotate(-3deg) translateY(10px); }
+.frame-2 { transform: rotate(4deg)  translateY(-20px) translateX(-10px); }
+.frame-3 { transform: rotate(-2deg) translateX(15px)  translateY(-10px); }
+.frame-4 { transform: rotate(3deg)  translateY(20px); }
 
 /* ==========================================================================
-   5. ИНТЕРАКТИВНЫЙ КАТАЛОГ С ГВОЗДИКАМИ
+   5. ТАБЫ КАТАЛОГА
    ========================================================================== */
-.catalog {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 100px 60px;
-  border-top: 1px solid var(--line);
-}
+.catalog-intro { font-size: clamp(16px, 1.3vw, 20px); margin-top: 8px; }
 
-.catalog-intro {
-  font-size: 20px;
-  margin-top: 8px;
-}
-
-/* Виджет вкладок */
 .category-tabs {
   display: flex;
-  gap: 15px;
-  margin: 50px 0;
+  flex-wrap: wrap;
+  gap: 8px 15px;
+  margin: clamp(32px, 4vw, 50px) 0;
   border-bottom: 1px dashed var(--line);
   padding-bottom: 20px;
 }
@@ -488,66 +333,83 @@ blockquote span {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: clamp(15px, 1.3vw, 18px);
   color: var(--text-soft);
   position: relative;
-  padding: 5px 15px;
+  padding: 8px 14px;
   transition: var(--transition);
 }
 
-.tab-btn.active, .tab-btn:hover {
-  color: var(--text);
-}
+.tab-btn.active, .tab-btn:hover { color: var(--text); }
 
-/* Маркер активного таба в виде аккуратной точки снизу */
 .tab-btn.active::after {
-  content: '●';
+  content: '';
   position: absolute;
-  bottom: -15px;
+  bottom: -1px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 9px;
-  color: var(--text);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text);
 }
 
-/* Сетка динамической выдачи */
-.catalog-dynamic-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 60px 40px;
+/* ==========================================================================
+   6. КАРУСЕЛЬ РАБОТ
+   ========================================================================== */
+.carousel { position: relative; }
+
+/* Дорожка: нативный горизонтальный скролл + snap.
+   Свайп на телефоне и трекпаде работает "из коробки", без библиотек. */
+.carousel-track {
+  display: flex;
+  gap: clamp(16px, 2.5vw, 40px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-left: 2px;
+  padding: 14px 2px 24px;       /* сверху — место для «гвоздика», снизу для тени */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;         /* Firefox */
 }
 
-/* Карточка картины на «выставке» */
+.carousel-track::-webkit-scrollbar { display: none; }
+
+/* Ширина слайда: 1 карточка на телефоне → 3 на большом экране */
+.carousel-slide {
+  flex: 0 0 min(82%, 380px);
+  scroll-snap-align: start;
+}
+
+@media (min-width: 700px)  { .carousel-slide { flex-basis: min(46%, 400px); } }
+@media (min-width: 1100px) { .carousel-slide { flex-basis: min(31%, 420px); } }
+
+/* Карточка «на выставке» */
 .art-card {
   position: relative;
   background: #fff;
-  padding: 16px;
-  border: 1px solid rgba(0,0,0,0.01);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.02);
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
+  height: 100%;
   transition: var(--transition);
 }
 
 .art-card-img-wrapper {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4/5;
+  aspect-ratio: 4 / 5;
   background: #fcfbfa;
 }
 
-.art-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: var(--transition);
-}
+.art-card img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+.art-card:hover img { transform: scale(1.03); }
 
-.art-card:hover img {
-  transform: scale(1.03);
-}
-
-/* Тот самый графический «гвоздик» сверху по центру */
+/* Гвоздик */
 .art-card::before {
   content: '';
   position: absolute;
@@ -558,99 +420,162 @@ blockquote span {
   height: 7px;
   background: #4a4547;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   z-index: 10;
 }
 
 .art-card-info {
-  margin-top: 18px;
+  margin-top: 16px;
   border-top: 1px dashed var(--line);
-  padding-top: 14px;
+  padding-top: 12px;
 }
 
-.art-card-info h3 {
-  font-size: 24px;
-  margin-bottom: 6px;
+.art-card-info h3 { margin-bottom: 6px; }
+.art-card-info span { font-size: clamp(13px, 1vw, 15px); color: var(--text-soft); }
+
+/* Управление: стрелки + счётчик */
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
 }
 
-.art-card-info span {
-  font-size: 15px;
+.carousel-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: var(--transition);
+}
+
+.carousel-btn:hover:not(:disabled) { background: var(--text); color: var(--bg); border-color: var(--text); }
+.carousel-btn:disabled { opacity: .25; cursor: default; }
+.carousel-btn svg { width: 16px; height: 16px; }
+
+.carousel-counter {
+  font-size: 14px;
+  letter-spacing: .18em;
   color: var(--text-soft);
-  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Полоса прогресса — вместо точек, читается при любом числе работ */
+.carousel-progress {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-progress i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  width: 20%;
+  background: var(--text);
+  transition: transform .3s ease, width .3s ease;
+}
+
+.carousel-empty { color: var(--text-soft); padding: 40px 0; }
+
+/* На телефоне стрелки прячем — там свайп */
+@media (max-width: 699px) {
+  .carousel-btn { display: none; }
+  .carousel-controls { gap: 12px; }
 }
 
 /* ==========================================================================
-   6. СЕКЦИИ БЛОГА И КОНТАКТОВ (Завершение структуры)
+   7. БЛОГ И КОНТАКТЫ
    ========================================================================== */
-#blog {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 100px 60px;
-  border-top: 1px solid var(--line);
-}
-
-#contacts {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 100px 60px 140px 60px;
-  border-top: 1px solid var(--line);
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: clamp(24px, 3vw, 40px);
+  margin-top: clamp(32px, 4vw, 50px);
 }
 
 .contacts-wrapper {
-  margin-top: 50px;
+  margin-top: clamp(32px, 4vw, 50px);
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .contact-link {
-  font-size: clamp(24px, 4vw, 42px);
+  font-size: clamp(22px, 4vw, 42px);
   display: block;
   width: fit-content;
   border-bottom: 1px solid transparent;
 }
 
-.contact-link:hover {
-  border-bottom: 1px solid var(--text);
-  padding-left: 10px;
-}
+.contact-link:hover { border-bottom-color: var(--text); padding-left: 10px; }
 
 /* ==========================================================================
-   7. АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (Медиа-запросы)
+   8. АДАПТИВ
    ========================================================================== */
 @media (max-width: 1024px) {
-  .site-header { padding: 20px 30px; }
-  .hero {
-    grid-template-columns: 1fr;
-    gap: 50px;
-    padding: 60px 30px;
+  .about-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 860px) {
+  .nav-toggle { display: block; }
+  .lang-switcher { margin-left: auto; }
+
+  /* Меню уезжает в выпадающую панель под шапкой */
+  .menu {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 8px var(--pad-x) 28px;
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease, transform .3s ease, visibility .3s;
   }
-  .hero-image { justify-content: center; }
-  .about-layout {
-    grid-template-columns: 1fr;
-    gap: 60px;
-  }
-  .about-page, .catalog, #blog, #contacts { padding: 80px 30px; }
+
+  .menu.is-open { transform: translateY(0); opacity: 1; visibility: visible; }
+
+  .menu a { font-size: 18px; padding: 12px 0; letter-spacing: .12em; }
+  .menu a::after { display: none; }
+  .menu a.active { border-bottom: 1px solid var(--text); }
 }
 
 @media (max-width: 768px) {
-  .site-header {
-    flex-direction: column;
-    gap: 16px;
-    position: relative;
+  .shoulder-text {
+    top: 24px;
+    transform: none;             /* без этого текст уезжал вверх на half-height */
+    font-size: clamp(20px, 6vw, 28px);
+    letter-spacing: 0.04em;
   }
-  .menu {
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+
+  .canvas-footer-name { letter-spacing: 0.22em; text-indent: 0.22em; }
+
+  .about-gallery { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .img-frame { padding: 7px 7px 14px; }
+  .frame-1, .frame-2, .frame-3, .frame-4 { transform: rotate(0deg); }
+  .frame-2 { transform: translateY(-14px); }
+  .frame-3 { transform: translateY(14px); }
+}
+
+/* Уважаем системную настройку «меньше движения» */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .carousel-track { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
   }
-  .about-gallery {
-    grid-template-columns: 1fr;
-  }
-  .img-frame img { height: 320px; }
-  .category-tabs {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .tab-btn { font-size: 16px; padding: 5px 8px; }
 }
