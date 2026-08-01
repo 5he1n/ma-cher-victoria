@@ -3,21 +3,21 @@
 // ==========================================================================
 const gallery = {
   painting: [
-    { image: 'catalog/work-1.png', title: 'Утро в Юрмале', year: 2024, material: 'Холст, масло', size: '60×80' },
-    { image: 'catalog/work-2.png', title: 'Окно',          year: 2024, material: 'Холст, масло', size: '40×50' },
-    { image: 'catalog/work-3.png', title: 'Сирень',        year: 2023, material: 'Холст, масло', size: '50×70' },
-    { image: 'catalog/work-4.png', title: 'Тишина',        year: 2023, material: 'Холст, масло', size: '40×40' }
+    { image: 'catalog/work-1.webp', title: 'Утро в Юрмале', year: 2024, material: 'Холст, масло', size: '60×80' },
+    { image: 'catalog/work-2.webp', title: 'Окно',          year: 2024, material: 'Холст, масло', size: '40×50' },
+    { image: 'catalog/work-3.webp', title: 'Сирень',        year: 2023, material: 'Холст, масло', size: '50×70' },
+    { image: 'catalog/work-4.webp', title: 'Тишина',        year: 2023, material: 'Холст, масло', size: '40×40' }
   ],
   graphics: [
-    { image: 'catalog/work-5.png', title: 'Набросок I',  year: 2025, material: 'Бумага, тушь',  size: '21×30' },
-    { image: 'catalog/work-6.png', title: 'Набросок II', year: 2025, material: 'Бумага, тушь',  size: '21×30' },
-    { image: 'catalog/work-7.png', title: 'Профиль',     year: 2024, material: 'Бумага, уголь', size: '30×40' }
+    { image: 'catalog/work-5.webp', title: 'Набросок I',  year: 2025, material: 'Бумага, тушь',  size: '21×30' },
+    { image: 'catalog/work-6.webp', title: 'Набросок II', year: 2025, material: 'Бумага, тушь',  size: '21×30' },
+    { image: 'catalog/work-7.webp', title: 'Профиль',     year: 2024, material: 'Бумага, уголь', size: '30×40' }
   ],
   illustration: [
-    { image: 'catalog/work-8.png',  title: 'Кофейня',  year: 2025, material: 'Цифровая печать', size: 'A3' },
-    { image: 'catalog/work-9.png',  title: 'Прогулка', year: 2025, material: 'Цифровая печать', size: 'A3' },
-    { image: 'catalog/work-10.JPG', title: 'Двор',     year: 2024, material: 'Акварель',        size: '30×40' },
-    { image: 'catalog/work-11.JPG', title: 'Вечер',    year: 2024, material: 'Акварель',        size: '30×40' }
+    { image: 'catalog/work-8.webp',  title: 'Кофейня',  year: 2025, material: 'Цифровая печать', size: 'A3' },
+    { image: 'catalog/work-9.webp',  title: 'Прогулка', year: 2025, material: 'Цифровая печать', size: 'A3' },
+    { image: 'catalog/work-10.webp', title: 'Двор',     year: 2024, material: 'Акварель',        size: '30×40' },
+    { image: 'catalog/work-11.webp', title: 'Вечер',    year: 2024, material: 'Акварель',        size: '30×40' }
   ]
 };
 
@@ -38,8 +38,8 @@ const shop = [
   {
     id: 'orig-yurmala',
     title: 'Утро в Юрмале',
-    image: 'catalog/work-1.png',
-    detail: 'catalog/work-1.png',
+    image: 'catalog/work-1.webp',
+    detail: 'catalog/work-1.webp',
     kind: 'original',
     type: 'Оригинал',
     ratio: '4/5',
@@ -53,7 +53,7 @@ const shop = [
   {
     id: 'orig-window',
     title: 'Окно',
-    image: 'catalog/work-2.png',
+    image: 'catalog/work-2.webp',
     kind: 'original',
     type: 'Оригинал',
     ratio: '4/5',
@@ -68,7 +68,7 @@ const shop = [
   {
     id: 'orig-silence',
     title: 'Тишина',
-    image: 'catalog/work-4.png',
+    image: 'catalog/work-4.webp',
     kind: 'original',
     type: 'Оригинал',
     ratio: '1/1',
@@ -83,7 +83,7 @@ const shop = [
   {
     id: 'print-yurmala-a3',
     title: 'Утро в Юрмале',
-    image: 'catalog/work-1.png',
+    image: 'catalog/work-1.webp',
     kind: 'print',
     type: 'Принт, тираж 25',
     ratio: '4/5',
@@ -96,7 +96,7 @@ const shop = [
   {
     id: 'print-sketch-a4',
     title: 'Набросок I',
-    image: 'catalog/work-5.png',
+    image: 'catalog/work-5.webp',
     kind: 'print',
     type: 'Принт, тираж 50',
     ratio: '3/4',
