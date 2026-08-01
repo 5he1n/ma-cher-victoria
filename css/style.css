@@ -92,6 +92,15 @@ img { display: block; max-width: 100%; height: auto; }
   margin-bottom: 10px;
 }
 
+.menu a,
+.lang-switcher {
+  font-family: var(--font-main);
+  font-size: clamp(14px, 1.2vw, 17px);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
 .section {
   max-width: var(--container);
   margin: 0 auto;

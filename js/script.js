@@ -2,7 +2,8 @@
 // НАСТРОЙКИ
 // ==========================================================================
 const SHOP_EMAIL = 'example@mail.com';   // ← сюда приходят заказы
-const CURRENCY = '€';
+const CURRENCY = '₽';
+const CART_KEY = 'mcv-cart';             // ключ хранения корзины
 
 // ==========================================================================
 // 1. УТИЛИТЫ
@@ -13,6 +14,22 @@ const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) =>
 const money = (n) => `${Number(n).toLocaleString('ru-RU')} ${CURRENCY}`;
 const num = (i) => String(i + 1).padStart(2, '0');
 const caption = (o) => [o.year, o.material, o.size].filter(Boolean).join(' · ');
+
+/**
+ * Тег картинки с адаптивными срезами.
+ * Мелкая копия ожидается рядом с оригиналом: work-1.webp → work-1-sm.webp.
+ * Если её нет или файл не webp — отдаём обычный src без srcset.
+ */
+function imgTag(src, alt, { sizes, eager = false, ratio = '4/5' } = {}) {
+  const small = src.endsWith('.webp') ? src.replace(/\.webp$/, '-sm.webp') : null;
+  const [w, h] = ratio.split('/').map(Number);
+
+  return `<img src="${esc(src)}"
+    ${small && sizes ? `srcset="${esc(small)} 800w, ${esc(src)} 1400w" sizes="${esc(sizes)}"` : ''}
+    alt="${esc(alt)}"
+    width="${w * 100}" height="${h * 100}"
+    loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
+}
 
 // ==========================================================================
 // 2. ПОДГРУЗКА HTML-ЧАСТЕЙ
@@ -50,8 +67,9 @@ function initNav() {
 
   toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
   menu.addEventListener('click', (e) => { if (e.target.closest('a')) setOpen(false); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
   matchMedia('(min-width: 861px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+
+  return setOpen;
 }
 
 function initScrollSpy() {
@@ -77,17 +95,20 @@ const ARROW = {
   next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M9 4l8 8-8 8"/></svg>'
 };
 
+const CAROUSEL_SIZES = '(max-width: 700px) 82vw, (max-width: 1100px) 45vw, 30vw';
+
 function workMarkup(item, i, eager) {
-  const title = esc(item.title || 'Без названия');
+  const title = item.title || 'Без названия';
   const note = esc(caption(item));
+
   return `
     <article class="work">
       <div class="work-media">
-        <img src="${esc(item.image)}" alt="${title}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">
+        ${imgTag(item.image, title, { sizes: CAROUSEL_SIZES, eager })}
       </div>
       <div class="work-meta">
         <div>
-          <h3 class="work-title">${num(i)} — ${title}</h3>
+          <h3 class="work-title">${num(i)} — ${esc(title)}</h3>
           ${note ? `<span class="work-note">${note}</span>` : ''}
         </div>
       </div>
@@ -194,26 +215,29 @@ function initFilters(selector, onChange) {
 const shopItems = () => (typeof shop === 'undefined' ? [] : shop);
 const findItem = (id) => shopItems().find((i) => String(i.id) === String(id));
 
-// Пропорция работы. Нужна, чтобы пустое место от проданной картины
-// имело ровно тот размер, который занимала сама картина.
+// Пропорция работы: пустое место от проданной картины занимает ровно
+// столько же, сколько занимала она сама
 const ratioOf = (item) => item.ratio || '4/5';
+
+const WALL_SIZES = '(max-width: 700px) 88vw, (max-width: 1100px) 44vw, 30vw';
 
 function hangMarkup(item, i) {
   const sold = item.status === 'sold';
-  const title = esc(item.title || 'Без названия');
+  const title = item.title || 'Без названия';
   const meta = esc([item.type, item.size].filter(Boolean).join(' · '));
   const scale = item.scale === 's' || item.scale === 'l' ? ` is-${item.scale}` : '';
+  const ratio = ratioOf(item);
 
   const body = sold
-    ? `<div class="hang-ghost" style="aspect-ratio:${esc(ratioOf(item))}" aria-hidden="true"></div>`
-    : `<div class="hang-media" style="aspect-ratio:${esc(ratioOf(item))}">
-         <img src="${esc(item.image)}" alt="${title}" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async">
+    ? `<div class="hang-ghost" style="aspect-ratio:${esc(ratio)}" aria-hidden="true"></div>`
+    : `<div class="hang-media" style="aspect-ratio:${esc(ratio)}">
+         ${imgTag(item.image, title, { sizes: WALL_SIZES, eager: i < 4, ratio })}
        </div>`;
 
   const label = `
     <div class="hang-label">
       <span class="hang-index">№${num(i)}</span>
-      <span class="hang-title">${title}
+      <span class="hang-title">${esc(title)}
         ${meta ? `<span class="hang-meta">${meta}</span>` : ''}
         ${sold && item.collection ? `<span class="hang-collection">${esc(item.collection)}</span>` : ''}
       </span>
@@ -224,8 +248,7 @@ function hangMarkup(item, i) {
   return `
     <article class="hang${scale}">
       <span class="hang-nail" aria-hidden="true"></span>
-      <button class="hang-frame" data-open="${esc(item.id)}"
-              aria-label="${title} — подробнее">
+      <button class="hang-frame" data-open="${esc(item.id)}" aria-label="${esc(title)} — подробнее">
         ${body}
         ${label}
       </button>
@@ -246,6 +269,8 @@ function renderShop(filter = 'all') {
 // ==========================================================================
 // 6. РАЗВОРОТ РАБОТЫ
 // ==========================================================================
+let lastFocused = null;   // куда вернуть фокус после закрытия
+
 function specRow(name, value) {
   return value ? `<div><span>${esc(name)}</span><span>${esc(value)}</span></div>` : '';
 }
@@ -255,20 +280,22 @@ function openSpread(id) {
   const spread = document.getElementById('spread');
   if (!item || !spread) return;
 
+  lastFocused = document.activeElement;
+
   const index = shopItems().indexOf(item);
   const sold = item.status === 'sold';
 
   spread.querySelector('.spread-inner').innerHTML = `
     <div class="spread-main">
-      <img src="${esc(item.image)}" alt="${esc(item.title)}">
+      ${imgTag(item.image, item.title, { eager: true, ratio: ratioOf(item) })}
     </div>
 
     <div class="spread-side">
-      <span class="spread-index">№${num(index)} ${sold ? '— продано' : ''}</span>
+      <span class="spread-index">№${num(index)}${sold ? ' — продано' : ''}</span>
       <h2 class="spread-title">${esc(item.title)}</h2>
 
       ${item.detail ? `
-        <div class="spread-detail"><img src="${esc(item.detail)}" alt="Фрагмент работы"></div>
+        <div class="spread-detail">${imgTag(item.detail, 'Фрагмент работы', { eager: true })}</div>
         <p class="spread-detail-note">Фрагмент</p>` : ''}
 
       ${item.about ? `<p class="spread-about">${esc(item.about)}</p>` : ''}
@@ -285,21 +312,24 @@ function openSpread(id) {
         ? `<p class="spread-sold">${esc(item.collection || 'Работа продана')}</p>`
         : `<div class="spread-buy">
              <button class="btn" data-add="${esc(item.id)}">В корзину — ${money(item.price)}</button>
+             <p class="spread-ship">Отправка из Москвы по всему миру</p>
            </div>`}
     </div>`;
 
   spread.classList.add('is-open');
   spread.setAttribute('aria-hidden', 'false');
   document.body.classList.add('is-locked');
-  spread.querySelector('.spread-close').focus();
+  spread.querySelector('.spread-close')?.focus();
 }
 
 function closeSpread() {
   const spread = document.getElementById('spread');
-  if (!spread) return;
+  if (!spread?.classList.contains('is-open')) return;
+
   spread.classList.remove('is-open');
   spread.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('is-locked');
+  lastFocused?.focus();
 }
 
 // ==========================================================================
@@ -308,17 +338,36 @@ function closeSpread() {
 const cart = {
   items: [],
 
+  // Храним только id: цены и названия всегда берём из gallery.js,
+  // иначе после правки прайса в корзине останется старая цена
+  load() {
+    try {
+      const ids = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      this.items = ids.map(findItem).filter((i) => i && i.status !== 'sold');
+    } catch (e) {
+      this.items = [];
+    }
+  },
+
+  save() {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(this.items.map((i) => i.id)));
+    } catch (e) { /* приватный режим — просто не сохраняем */ }
+  },
+
   add(id) {
     const product = findItem(id);
     if (!product || product.status === 'sold') return false;
     if (this.items.some((i) => i.id === product.id)) return false;  // оригинал один
     this.items.push(product);
+    this.save();
     this.render();
     return true;
   },
 
   remove(id) {
     this.items = this.items.filter((i) => String(i.id) !== String(id));
+    this.save();
     this.render();
   },
 
@@ -331,7 +380,8 @@ const cart = {
     body.innerHTML = this.items.length
       ? this.items.map((i) => `
           <div class="cart-item">
-            <img src="${esc(i.image)}" alt="">
+            <img src="${esc(i.image.endsWith('.webp') ? i.image.replace(/\.webp$/, '-sm.webp') : i.image)}"
+                 alt="" width="64" height="80" loading="lazy">
             <div>
               <h4>${esc(i.title)}</h4>
               <span class="cart-item-note">${esc([i.type, i.size].filter(Boolean).join(' · '))}</span>
@@ -359,12 +409,17 @@ const cart = {
       'Здравствуйте! Хочу оформить заказ:', '',
       ...lines, '',
       `Итого: ${money(this.total())}`, '',
-      'Имя:', 'Адрес доставки:', 'Телефон:'
+      'Имя:',
+      'Страна и город:',
+      'Адрес доставки:',
+      'Телефон:'
     ].join('\n');
 
     return `mailto:${SHOP_EMAIL}?subject=${encodeURIComponent('Заказ — Ma chere Victoria')}&body=${encodeURIComponent(body)}`;
   }
 };
+
+let setCartOpen = () => {};
 
 function initCart() {
   const panel = document.getElementById('cartPanel');
@@ -372,24 +427,25 @@ function initCart() {
   const toggle = document.getElementById('cartToggle');
   if (!panel || !toggle) return;
 
-  const setOpen = (open) => {
+  setCartOpen = (open) => {
     panel.classList.toggle('is-open', open);
-    overlay.classList.toggle('is-open', open);
+    overlay?.classList.toggle('is-open', open);
     panel.setAttribute('aria-hidden', String(!open));
     document.body.classList.toggle('is-locked', open);
+    if (open) panel.querySelector('.cart-close')?.focus();
   };
 
-  toggle.addEventListener('click', () => setOpen(true));
-  overlay.addEventListener('click', () => setOpen(false));
-  panel.querySelector('.cart-close').addEventListener('click', () => setOpen(false));
+  toggle.addEventListener('click', () => setCartOpen(true));
+  overlay?.addEventListener('click', () => setCartOpen(false));
+  panel.querySelector('.cart-close')?.addEventListener('click', () => setCartOpen(false));
 
   toggle.hidden = false;
+  cart.load();
   cart.render();
-  return setOpen;
 }
 
 // ==========================================================================
-// 8. ОБЩЕЕ ДЕЛЕГИРОВАНИЕ КЛИКОВ
+// 8. ОБЩЕЕ ДЕЛЕГИРОВАНИЕ
 // ==========================================================================
 // Карточки перерисовываются при смене фильтра, поэтому слушаем документ
 function initDelegation() {
@@ -397,7 +453,10 @@ function initDelegation() {
     const open = e.target.closest('[data-open]');
     if (open) { openSpread(open.dataset.open); return; }
 
-    if (e.target.closest('.spread-close')) { closeSpread(); return; }
+    if (e.target.closest('.spread-close') || e.target.closest('.spread-overlay')) {
+      closeSpread();
+      return;
+    }
 
     const add = e.target.closest('[data-add]');
     if (add) {
@@ -405,7 +464,10 @@ function initDelegation() {
       const original = add.textContent;
       add.textContent = ok ? 'Добавлено в корзину' : 'Уже в корзине';
       add.classList.add('btn-added');
-      setTimeout(() => { add.textContent = original; add.classList.remove('btn-added'); }, 1800);
+      setTimeout(() => {
+        add.textContent = original;
+        add.classList.remove('btn-added');
+      }, 1800);
       return;
     }
 
@@ -413,7 +475,17 @@ function initDelegation() {
     if (rm) cart.remove(rm.dataset.remove);
   });
 
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSpread(); });
+  // Один обработчик на всё: сначала верхний слой, потом нижний
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('spread')?.classList.contains('is-open')) {
+      closeSpread();
+    } else {
+      setCartOpen(false);
+      document.querySelector('.menu')?.classList.remove('is-open');
+      document.querySelector('.nav-toggle')?.setAttribute('aria-expanded', 'false');
+    }
+  });
 }
 
 // ==========================================================================
