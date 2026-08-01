@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Ma chere Victoria — живопись, графика, иллюстрация</title>
-    <meta name="description" content="Виктория — художница. Живопись, графика и иллюстрация: попытка остановить свет, запах и настроение мгновения.">
+    <title>Ma chere Victoria</title>
+    <meta name="description" content="Виктория — художница. Манифест, серия работ и лавка: оригиналы и печатные тиражи.">
 
-    <!-- Шрифт грузим заранее: иначе заголовки перерисовываются на середине экрана -->
     <link rel="preload" href="fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
-    <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shop.css">
     <script src="js/gallery.js" defer></script>
     <script src="js/script.js" defer></script>
 </head>
@@ -18,111 +17,159 @@
     <header class="site-header">
         <a href="#hero" class="menu-logo">Ma chere Victoria</a>
 
-        <button class="nav-toggle" aria-expanded="false" aria-controls="mainMenu" aria-label="Открыть меню"></button>
-
         <nav class="menu" id="mainMenu">
-            <a href="#about" class="active">Обо мне</a>
-            <a href="#blog">Блог</a>
+            <a href="#about">Обо мне</a>
+            <a href="#manifesto">Манифест</a>
             <a href="#catalog">Серия работ</a>
             <a href="#shop">Лавка</a>
             <a href="#contacts">Контакты</a>
         </nav>
 
-        <div class="lang-switcher">
-            <a href="#" class="lang-link active">RU</a>
-            <span class="lang-divider">/</span>
-            <a href="#" class="lang-link">EN</a>
+        <div class="header-right">
+            <div class="lang-switcher">
+                <a href="#" class="lang-link active">RU</a>
+                <span class="lang-divider">/</span>
+                <a href="#" class="lang-link">EN</a>
+            </div>
+            <button class="cart-toggle" id="cartToggle" hidden>
+                Корзина <span class="cart-count" id="cartCount"></span>
+            </button>
         </div>
+
+        <button class="nav-toggle" aria-expanded="false" aria-controls="mainMenu" aria-label="Открыть меню"></button>
     </header>
 
     <main class="layout">
         <section class="hero-canvas" id="hero">
             <div class="canvas-container">
-                <img src="media/main-v.jpg" alt="Виктория в мастерской" class="main-painting"
+                <img src="media/victoria.jpeg" alt="Виктория" class="main-painting"
                      fetchpriority="high" decoding="async">
-
                 <div class="shoulder-text left-shoulder">Ma</div>
                 <div class="shoulder-text right-shoulder">Chere</div>
-
                 <div class="canvas-footer-name">Victoria</div>
             </div>
         </section>
 
-        <section id="about" class="section about-page">
-            <span class="section-number">01 // ABOUT ME</span>
+        <section id="about" class="section">
+            <span class="section-number">01 — Обо мне</span>
             <h2>Обо мне</h2>
 
             <div class="about-layout">
                 <div class="about-gallery">
-                    <figure class="img-frame frame-1">
-                        <img src="media/work.jpeg" alt="Процесс работы над картиной" loading="lazy" decoding="async">
-                    </figure>
-                    <figure class="img-frame frame-2">
-                        <img src="media/about-2.png" alt="Деталь картины крупным планом" loading="lazy" decoding="async">
-                    </figure>
-                    <figure class="img-frame frame-3">
-                        <img src="media/painter.jpeg" alt="Мастерская художницы" loading="lazy" decoding="async">
-                    </figure>
-                    <figure class="img-frame frame-4">
-                        <img src="media/sgrt.jpg" alt="Портрет Виктории" loading="lazy" decoding="async">
-                    </figure>
+                    <figure><img src="media/work.jpeg" alt="Процесс работы над картиной" loading="lazy" decoding="async"></figure>
+                    <figure><img src="media/about-2.png" alt="Деталь картины" loading="lazy" decoding="async"></figure>
+                    <figure><img src="media/painter.jpeg" alt="Мастерская" loading="lazy" decoding="async"></figure>
+                    <figure><img src="media/sgrt.jpg" alt="Портрет Виктории" loading="lazy" decoding="async"></figure>
                 </div>
 
                 <div class="about-text">
                     <p>В детстве мне не хватало красоты вокруг меня. Поэтому сегодня я воспеваю красоту в своих картинах и в жизни. Мои работы — это воспоминания о воспоминаниях.</p>
                     <blockquote>
                         «Если я творю от сердца, почти всё работает; если из головы — почти ничего.»
-                        <span>— Марк Шагал</span>
+                        <span>Марк Шагал</span>
                     </blockquote>
-                    <p>Попытка сохранить то, что исчезает быстрее всего: свет, запах, настроение, мгновение. Для меня живопись — это способ остановить время и показать красоту повседневного.</p>
+                    <p>Попытка сохранить то, что исчезает быстрее всего: свет, запах, настроение, мгновение.</p>
                 </div>
             </div>
         </section>
 
-        <section id="blog" class="section blog">
-            <span class="section-number">02 // BLOG</span>
-            <h2>Блог</h2>
-            <p class="catalog-intro">Заметки о процессе, выставках и вдохновении</p>
-
-            <div id="blogGrid" class="blog-grid">
-                <!-- Записи блога -->
+        <!-- МАНИФЕСТ: одна крупная мысль на разворот, без картинок-иллюстраций -->
+        <section id="manifesto" class="section">
+            <span class="section-number">02 — Манифест</span>
+            <div class="manifesto">
+                <h2 class="manifesto-lead">Живопись как способ<br>остановить время</h2>
+                <div class="manifesto-body">
+                    <p>Здесь — artist statement. Два-три абзаца о том, почему появилась эта серия, что Виктория ищет в ней и чем она отличается от предыдущих работ.</p>
+                    <p>Этот раздел делает сайт не витриной, а документом. Его читают галеристы и кураторы — им важнее позиция, чем количество работ.</p>
+                </div>
             </div>
         </section>
 
-        <section id="catalog" class="section catalog">
-            <span class="section-number">03 // WORKS SERIES</span>
-            <h2>Серия работ</h2>
-            <p class="catalog-intro">Избранные работы последних лет</p>
+        <section id="catalog" class="section">
+            <span class="section-number">03 — Серия работ</span>
+            <h2>«Название серии»</h2>
+            <p class="section-intro">Работы 2023–2025 годов</p>
 
-            <div class="category-tabs" role="tablist">
-                <button class="tab-btn active" data-category="all" role="tab" aria-selected="true">Все работы</button>
-                <button class="tab-btn" data-category="painting" role="tab" aria-selected="false">Живопись</button>
-                <button class="tab-btn" data-category="graphics" role="tab" aria-selected="false">Графика</button>
-                <button class="tab-btn" data-category="illustration" role="tab" aria-selected="false">Иллюстрация</button>
+            <div class="filters" id="catalogFilters" role="tablist">
+                <button class="tab-btn active" data-filter="all" role="tab" aria-selected="true">Все</button>
+                <button class="tab-btn" data-filter="painting" role="tab" aria-selected="false">Живопись</button>
+                <button class="tab-btn" data-filter="graphics" role="tab" aria-selected="false">Графика</button>
+                <button class="tab-btn" data-filter="illustration" role="tab" aria-selected="false">Иллюстрация</button>
             </div>
 
-            <!-- Карусель собирается сюда из js/gallery.js -->
             <div id="catalogGrid"></div>
         </section>
 
-        <section id="shop" class="section shop">
-            <span class="section-number">04 // SHOP</span>
-            <h2>Лавка</h2>
-            <p class="catalog-intro">Оригиналы и принты</p>
+        <!-- ЛАВКА: тёмная стена, работы на гвоздях, проданные оставляют след -->
+        <section id="shop" class="section section-wall">
+            <div class="wall-inner">
+                <div class="wall-head">
+                    <span class="section-number">04 — Лавка</span>
+                    <h2>Стена</h2>
+                    <p class="section-intro">Работы, которые можно унести домой. Проданные остаются на стене — гвоздём и невыгоревшим следом.</p>
+                </div>
 
-            <div id="shopGrid"></div>
+                <div class="filters" id="shopFilters" role="tablist">
+                    <button class="tab-btn active" data-filter="all" role="tab" aria-selected="true">Всё</button>
+                    <button class="tab-btn" data-filter="original" role="tab" aria-selected="false">Оригиналы</button>
+                    <button class="tab-btn" data-filter="print" role="tab" aria-selected="false">Принты</button>
+                </div>
+
+                <div class="wall-rail"></div>
+                <div id="shopWall" class="wall"></div>
+
+                <div class="wall-terms">
+                    <p><strong>Доставка</strong>Латвия и ЕС, 5–10 дней. Оригиналы — в жёсткой упаковке.</p>
+                    <p><strong>Оплата</strong>Банковский перевод или PayPal по счёту.</p>
+                    <p><strong>Оформление</strong>Соберите заказ и отправьте — ответ в течение суток.</p>
+                </div>
+            </div>
         </section>
 
-        <section id="contacts" class="section contacts-page">
-            <span class="section-number">05 // CONTACTS</span>
+        <section id="contacts" class="section">
+            <span class="section-number">05 — Контакты</span>
             <h2>Связаться</h2>
 
             <div class="contacts-wrapper">
-                <a href="mailto:example@mail.com" class="contact-link">EMAIL</a>
-                <a href="https://instagram.com/..." target="_blank" rel="noopener" class="contact-link">INSTAGRAM</a>
-                <a href="files/cv.pdf" download class="contact-link">СКАЧАТЬ CV</a>
+                <a href="mailto:example@mail.com" class="contact-link">Email</a>
+                <a href="https://instagram.com/..." target="_blank" rel="noopener" class="contact-link">Instagram</a>
             </div>
+
+            <!-- Визитка CV: физический объект, а не ссылка в списке -->
+            <a class="cv-card" href="files/cv.pdf" download>
+                <span class="cv-card-name">Victoria</span>
+                <span class="cv-card-role">Artist · Riga</span>
+                <span class="cv-card-hint">CV — PDF</span>
+            </a>
         </section>
     </main>
+
+    <!-- Разворот работы -->
+    <div class="spread" id="spread" aria-hidden="true" role="dialog" aria-label="Работа">
+        <button class="spread-close">Закрыть</button>
+        <div class="spread-inner"></div>
+    </div>
+
+    <!-- Корзина -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <aside class="cart-panel" id="cartPanel" aria-hidden="true" aria-label="Корзина">
+        <div class="cart-head">
+            <h3>Корзина</h3>
+            <button class="cart-close" aria-label="Закрыть корзину">&times;</button>
+        </div>
+
+        <div class="cart-body" id="cartBody"></div>
+
+        <div class="cart-foot">
+            <div class="cart-total">
+                <span>Итого</span>
+                <b id="cartTotal">0 €</b>
+            </div>
+            <a class="btn btn-solid" id="cartOrder" href="#">Отправить заказ</a>
+            <p class="cart-hint">Откроется письмо со списком работ. Доставку и оплату согласуем в переписке.</p>
+        </div>
+    </aside>
+
 </body>
 </html>

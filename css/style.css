@@ -6,7 +6,7 @@
   src: url("../fonts/cd-masvol-thin.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
-  font-display: swap; /* текст виден сразу, не ждёт загрузки .otf */
+  font-display: swap;
 }
 
 /* ==========================================================================
@@ -14,20 +14,22 @@
    ========================================================================== */
 :root {
   --bg: #F5F2EC;
+  --bg-tint: #EDE9E1;        /* подложка под изображением, пока оно грузится */
   --text: #282225;
-  --text-soft: rgba(40, 34, 37, 0.6);
-  --line: rgba(216, 209, 202, 0.8);
+  --text-soft: rgba(40, 34, 37, 0.55);
+  --line: rgba(40, 34, 37, 0.14);
   --accent: #9BB7D4;
+
   --font-main: "Maslova", "Cormorant Garamond", Georgia, serif;
+  /* Утилитарный шрифт для этикеток, цен и кнопок: тонкая Maslova на 12px
+     нечитаема, поэтому весь мелкий текст — гротеском */
+  --font-ui: "Helvetica Neue", Arial, sans-serif;
 
   --container: 1400px;
   --transition: .4s cubic-bezier(0.25, 1, 0.5, 1);
 
-  /* Единый горизонтальный отступ: 20px на телефоне → 60px на десктопе */
   --pad-x: clamp(20px, 5vw, 60px);
-  /* Единый вертикальный ритм секций */
   --pad-y: clamp(64px, 9vw, 100px);
-  /* Высота шапки — нужна для якорей и для позиционирования меню */
   --header-h: 72px;
 }
 
@@ -35,11 +37,11 @@
 
 html {
   scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%; /* iOS не раздувает шрифт в ландшафте */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  overflow-x: clip;           /* вместо hidden: не ломает position: sticky */
+  overflow-x: clip;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-main);
@@ -48,9 +50,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body.nav-open { overflow: hidden; } /* фон не скроллится под открытым меню */
+body.is-locked { overflow: hidden; }
 
-h1, h2, h3, h4, .menu-logo, .tab-btn, .lang-switcher {
+h1, h2, h3, h4, .menu-logo {
   font-family: var(--font-main);
   font-weight: 300;
   letter-spacing: 0.04em;
@@ -59,38 +61,52 @@ h1, h2, h3, h4, .menu-logo, .tab-btn, .lang-switcher {
 
 h1 { font-size: clamp(40px, 7vw, 96px); }
 h2 { font-size: clamp(28px, 4.5vw, 52px); }
-h3 { font-size: clamp(19px, 1.8vw, 24px); }
+h3 { font-size: clamp(18px, 1.6vw, 22px); }
 
 p { max-width: 65ch; color: var(--text-soft); }
-
 a { color: inherit; text-decoration: none; transition: var(--transition); }
-
 img { display: block; max-width: 100%; height: auto; }
 
-/* Видимый фокус с клавиатуры — но не мышью */
-:focus-visible {
-  outline: 2px solid var(--text);
-  outline-offset: 3px;
+:focus-visible { outline: 1px solid var(--text); outline-offset: 3px; }
+
+/* Мелкий утилитарный текст: этикетки, цены, кнопки, счётчики */
+.section-number,
+.tab-btn,
+.btn,
+.work-note,
+.work-price,
+.carousel-counter,
+.lang-switcher,
+.menu a,
+.shop-note {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .section-number {
-  font-size: clamp(11px, 1.1vw, 14px);
   color: var(--text-soft);
   display: block;
-  margin-bottom: 8px;
-  letter-spacing: 0.1em;
+  margin-bottom: 10px;
 }
 
-/* Общая обёртка секции — вместо повторов у .about-page/.catalog/#blog */
 .section {
   max-width: var(--container);
   margin: 0 auto;
   padding: var(--pad-y) var(--pad-x);
   border-top: 1px solid var(--line);
-  scroll-margin-top: calc(var(--header-h) + 16px); /* якорь не уезжает под шапку */
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
-.section:last-child { padding-bottom: calc(var(--pad-y) * 1.4); }
+.section:last-of-type { padding-bottom: calc(var(--pad-y) * 1.4); }
+
+.section-intro {
+  font-size: clamp(16px, 1.3vw, 20px);
+  margin-top: 10px;
+  max-width: 52ch;
+}
 
 /* ==========================================================================
    2. ШАПКА
@@ -105,24 +121,17 @@ img { display: block; max-width: 100%; height: auto; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   padding: 16px var(--pad-x);
   border-bottom: 1px solid var(--line);
-  z-index: 1000;
+  z-index: 900;
 }
 
-.menu-logo {
-  font-size: clamp(18px, 2.2vw, 26px);
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
+.menu-logo { font-size: clamp(17px, 2.2vw, 26px); white-space: nowrap; }
 
-.menu { display: flex; gap: clamp(18px, 2.5vw, 40px); }
+.menu { display: flex; gap: clamp(18px, 2.5vw, 36px); }
 
 .menu a {
-  font-size: clamp(13px, 1.1vw, 17px);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
   color: var(--text-soft);
   position: relative;
   padding: 4px 0;
@@ -132,91 +141,89 @@ img { display: block; max-width: 100%; height: auto; }
 .menu a::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 1px;
-  background-color: var(--text);
+  bottom: 0; left: 0;
+  width: 0; height: 1px;
+  background: var(--text);
   transition: var(--transition);
-  transform: translateX(-50%);
 }
 
 .menu a:hover, .menu a.active { color: var(--text); }
 .menu a:hover::after, .menu a.active::after { width: 100%; }
 
-.lang-switcher { font-size: 14px; letter-spacing: 0.05em; }
+.header-right { display: flex; align-items: center; gap: 18px; }
+
 .lang-link { color: var(--text-soft); }
 .lang-link.active, .lang-link:hover { color: var(--text); }
-.lang-divider { margin: 0 4px; color: var(--line); }
+.lang-divider { margin: 0 5px; color: var(--line); }
 
-/* --- Бургер: две линии, рисуем через ::before/::after --- */
-.nav-toggle {
-  display: none;               /* появляется только на мобильных */
-  width: 44px;                 /* 44px — минимальная зона касания */
-  height: 44px;
+/* Кнопка корзины в шапке */
+.cart-toggle {
   background: none;
   border: none;
   cursor: pointer;
-  position: relative;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 8px 0;
+  white-space: nowrap;
+}
+
+.cart-toggle[hidden] { display: none; }
+.cart-count { color: var(--text-soft); }
+
+/* Бургер */
+.nav-toggle {
+  display: none;
+  width: 44px; height: 44px;
+  background: none; border: none;
+  cursor: pointer; position: relative;
   flex: 0 0 auto;
 }
 
-.nav-toggle::before,
-.nav-toggle::after {
+.nav-toggle::before, .nav-toggle::after {
   content: '';
-  position: absolute;
-  left: 10px;
-  width: 24px;
-  height: 1px;
+  position: absolute; left: 10px;
+  width: 24px; height: 1px;
   background: var(--text);
-  transition: transform .35s ease, opacity .2s ease;
+  transition: transform .35s ease;
 }
 
-.nav-toggle::before { top: 18px; }
+.nav-toggle::before { top: 19px; }
 .nav-toggle::after  { top: 26px; }
-
-.nav-toggle[aria-expanded="true"]::before { transform: translateY(4px) rotate(45deg); }
-.nav-toggle[aria-expanded="true"]::after  { transform: translateY(-4px) rotate(-45deg); }
-
-.layout, .main-content { width: 100%; }
+.nav-toggle[aria-expanded="true"]::before { transform: translateY(3.5px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"]::after  { transform: translateY(-3.5px) rotate(-45deg); }
 
 /* ==========================================================================
-   3. HERO (фото на весь экран + имя)
+   3. HERO
    ========================================================================== */
 .hero-canvas {
-  height: 100svh;              /* svh корректно учитывает адресную строку iOS */
+  /* было: height: 100svh */
+  height: calc(100svh - var(--header-h));
   min-height: 480px;
-  width: 100%;
   overflow: hidden;
 }
-
 .canvas-container { position: relative; width: 100%; height: 100%; }
 
 .canvas-container .main-painting {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center 30%; /* на узком экране кадр не срезает лицо */
-  display: block;
+  object-position: center 30%;
 }
 
 .canvas-container::before {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.32) 0%,
-    rgba(0, 0, 0, 0) 24%,
-    rgba(0, 0, 0, 0) 68%,
-    rgba(0, 0, 0, 0.5) 100%
-  );
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,.30) 0%, rgba(0,0,0,0) 24%,
+    rgba(0,0,0,0) 68%, rgba(0,0,0,.48) 100%);
   pointer-events: none;
 }
 
 .shoulder-text {
   position: absolute;
-  top: 38%;
+  top: 33%;
   transform: translateY(-50%);
   font-family: var(--font-main);
   font-weight: 300;
@@ -224,7 +231,7 @@ img { display: block; max-width: 100%; height: auto; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #fdfcfa;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 2px 18px rgba(0,0,0,.45);
   z-index: 2;
 }
 
@@ -240,127 +247,135 @@ img { display: block; max-width: 100%; height: auto; }
   font-weight: 300;
   font-size: clamp(28px, 4vw, 56px);
   letter-spacing: 0.35em;
-  text-indent: 0.35em;          /* компенсируем трекинг, текст остаётся по центру */
+  text-indent: 0.35em;
   text-transform: uppercase;
   color: #fdfcfa;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 18px rgba(0,0,0,.5);
   white-space: nowrap;
   z-index: 2;
 }
 
 /* ==========================================================================
-   4. ОБО МНЕ
+   4. ОБО МНЕ — изображения без рамок, ступенчатая сетка
    ========================================================================== */
 .about-layout {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: clamp(40px, 6vw, 80px);
-  align-items: center;
-  margin-top: clamp(32px, 4vw, 50px);
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(40px, 6vw, 90px);
+  align-items: start;
+  margin-top: clamp(32px, 4vw, 56px);
 }
 
-.about-text { display: flex; flex-direction: column; gap: 24px; }
+.about-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(12px, 1.6vw, 20px);
+}
+
+/* Ритм задан смещением колонки, а не наклоном карточек */
+.about-gallery figure:nth-child(even) { margin-top: clamp(28px, 5vw, 64px); }
+
+.about-gallery img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--bg-tint);
+  filter: grayscale(8%);
+  transition: opacity var(--transition);
+}
+
+.about-gallery img:hover { opacity: .82; }
+
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: sticky;
+  top: calc(var(--header-h) + 40px);
+}
+
 .about-text p { font-size: clamp(16px, 1.3vw, 20px); color: var(--text); }
 
 blockquote {
-  font-size: clamp(18px, 1.7vw, 24px);
+  font-size: clamp(18px, 1.7vw, 23px);
   line-height: 1.5;
-  border-left: 2px solid var(--text);
-  padding-left: 24px;
-  margin: 20px 0;
-  color: var(--text);
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+  color: var(--text-soft);
 }
 
 blockquote span {
   display: block;
-  font-size: 14px;
-  color: var(--text-soft);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  letter-spacing: .08em;
-  margin-top: 8px;
+  margin-top: 12px;
 }
-
-/* Скрапбукинг-галерея */
-.about-gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(16px, 2.5vw, 30px);
-}
-
-.img-frame {
-  background: #ffffff;
-  padding: 10px 10px 20px 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--line);
-  transition: transform var(--transition), box-shadow var(--transition);
-  height: fit-content;
-}
-
-.img-frame img {
-  width: 100%;
-  aspect-ratio: 4 / 5;          /* вместо фикс. 220px — тянется под ширину */
-  height: auto;
-  object-fit: cover;
-  filter: grayscale(10%) contrast(95%);
-}
-
-.img-frame:hover {
-  transform: scale(1.04) rotate(0deg);
-  z-index: 10;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-.frame-1 { transform: rotate(-3deg) translateY(10px); }
-.frame-2 { transform: rotate(4deg)  translateY(-20px) translateX(-10px); }
-.frame-3 { transform: rotate(-2deg) translateX(15px)  translateY(-10px); }
-.frame-4 { transform: rotate(3deg)  translateY(20px); }
 
 /* ==========================================================================
-   5. ТАБЫ КАТАЛОГА
+   5. ФИЛЬТРЫ
    ========================================================================== */
-.catalog-intro { font-size: clamp(16px, 1.3vw, 20px); margin-top: 8px; }
-
-.category-tabs {
+.filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 15px;
-  margin: clamp(32px, 4vw, 50px) 0;
-  border-bottom: 1px dashed var(--line);
-  padding-bottom: 20px;
+  gap: 6px 4px;
+  margin: clamp(32px, 4vw, 48px) 0 clamp(24px, 3vw, 36px);
 }
 
 .tab-btn {
   background: none;
   border: none;
+  border-bottom: 1px solid transparent;
   cursor: pointer;
-  font-size: clamp(15px, 1.3vw, 18px);
   color: var(--text-soft);
-  position: relative;
-  padding: 8px 14px;
+  padding: 8px 14px 6px;
   transition: var(--transition);
 }
 
-.tab-btn.active, .tab-btn:hover { color: var(--text); }
-
-.tab-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--text);
-}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
 
 /* ==========================================================================
-   6. КАРУСЕЛЬ РАБОТ
+   6. РАБОТА — карточка без рамки и тени
+   ========================================================================== */
+.work { display: flex; flex-direction: column; height: 100%; }
+
+.work-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-tint);
+  aspect-ratio: 4 / 5;
+}
+
+.work-media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .7s cubic-bezier(.25,1,.5,1);
+}
+
+.work:hover .work-media img { transform: scale(1.03); }
+
+/* Этикетка под работой */
+.work-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.work-title { font-weight: 300; }
+.work-note { color: var(--text-soft); margin-top: 5px; display: block; }
+.work-price { white-space: nowrap; }
+
+/* ==========================================================================
+   7. КАРУСЕЛЬ «СЕРИЯ РАБОТ»
    ========================================================================== */
 .carousel { position: relative; }
 
-/* Дорожка: нативный горизонтальный скролл + snap.
-   Свайп на телефоне и трекпаде работает "из коробки", без библиотек. */
 .carousel-track {
   display: flex;
   gap: clamp(16px, 2.5vw, 40px);
@@ -368,104 +383,45 @@ blockquote span {
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  scroll-padding-left: 2px;
-  padding: 14px 2px 24px;       /* сверху — место для «гвоздика», снизу для тени */
-  -webkit-overflow-scrolling: touch;
+  padding-bottom: 28px;
   overscroll-behavior-x: contain;
-  scrollbar-width: none;         /* Firefox */
+  scrollbar-width: none;
 }
 
 .carousel-track::-webkit-scrollbar { display: none; }
 
-/* Ширина слайда: 1 карточка на телефоне → 3 на большом экране */
 .carousel-slide {
-  flex: 0 0 min(82%, 380px);
+  flex: 0 0 min(80%, 380px);
   scroll-snap-align: start;
 }
 
-@media (min-width: 700px)  { .carousel-slide { flex-basis: min(46%, 400px); } }
-@media (min-width: 1100px) { .carousel-slide { flex-basis: min(31%, 420px); } }
+@media (min-width: 700px)  { .carousel-slide { flex-basis: min(45%, 400px); } }
+@media (min-width: 1100px) { .carousel-slide { flex-basis: min(30%, 420px); } }
 
-/* Карточка «на выставке» */
-.art-card {
-  position: relative;
-  background: #fff;
-  padding: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  transition: var(--transition);
-}
-
-.art-card-img-wrapper {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 4 / 5;
-  background: #fcfbfa;
-}
-
-.art-card img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
-.art-card:hover img { transform: scale(1.03); }
-
-/* Гвоздик */
-.art-card::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 7px;
-  height: 7px;
-  background: #4a4547;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  z-index: 10;
-}
-
-.art-card-info {
-  margin-top: 16px;
-  border-top: 1px dashed var(--line);
-  padding-top: 12px;
-}
-
-.art-card-info h3 { margin-bottom: 6px; }
-.art-card-info span { font-size: clamp(13px, 1vw, 15px); color: var(--text-soft); }
-
-/* Управление: стрелки + счётчик */
 .carousel-controls {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 8px;
+  gap: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
 }
 
 .carousel-btn {
-  width: 44px;
-  height: 44px;
+  width: 40px; height: 40px;
   border: 1px solid var(--line);
-  border-radius: 50%;
-  background: transparent;
+  background: none;
   color: var(--text);
   cursor: pointer;
-  display: grid;
-  place-items: center;
+  display: grid; place-items: center;
   transition: var(--transition);
 }
 
 .carousel-btn:hover:not(:disabled) { background: var(--text); color: var(--bg); border-color: var(--text); }
-.carousel-btn:disabled { opacity: .25; cursor: default; }
-.carousel-btn svg { width: 16px; height: 16px; }
+.carousel-btn:disabled { opacity: .22; cursor: default; }
+.carousel-btn svg { width: 15px; height: 15px; }
 
-.carousel-counter {
-  font-size: 14px;
-  letter-spacing: .18em;
-  color: var(--text-soft);
-  font-variant-numeric: tabular-nums;
-}
+.carousel-counter { color: var(--text-soft); font-variant-numeric: tabular-nums; }
 
-/* Полоса прогресса — вместо точек, читается при любом числе работ */
 .carousel-progress {
   flex: 1;
   height: 1px;
@@ -475,71 +431,272 @@ blockquote span {
 }
 
 .carousel-progress i {
-  position: absolute;
-  inset: 0 auto 0 0;
-  display: block;
-  width: 20%;
+  position: absolute; inset: 0 auto 0 0;
+  display: block; width: 20%;
   background: var(--text);
   transition: transform .3s ease, width .3s ease;
 }
 
-.carousel-empty { color: var(--text-soft); padding: 40px 0; }
+.state-empty { color: var(--text-soft); padding: 48px 0; }
 
-/* На телефоне стрелки прячем — там свайп */
 @media (max-width: 699px) {
   .carousel-btn { display: none; }
-  .carousel-controls { gap: 12px; }
 }
 
 /* ==========================================================================
-   7. БЛОГ И КОНТАКТЫ
+   8. ЛАВКА
+   ========================================================================== */
+/* Условия покупки: три коротких пункта, чтобы не пришлось спрашивать */
+.shop-terms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 20px 40px;
+  margin-top: clamp(28px, 3vw, 40px);
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.shop-note { color: var(--text-soft); }
+
+.shop-note strong {
+  display: block;
+  color: var(--text);
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  gap: clamp(32px, 4vw, 56px) clamp(20px, 2.5vw, 36px);
+}
+
+/* Плашка «продано» поверх изображения */
+.work-badge {
+  position: absolute;
+  inset: auto 0 0 0;
+  background: rgba(245, 242, 236, .93);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 10px;
+}
+
+.work-media.is-sold img { filter: grayscale(100%); opacity: .55; }
+
+.work-actions { margin-top: 14px; }
+
+/* ==========================================================================
+   9. КНОПКИ
+   ========================================================================== */
+.btn {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  background: none;
+  color: var(--text);
+  border: 1px solid var(--text);
+  padding: 13px 20px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn:hover:not(:disabled) { background: var(--text); color: var(--bg); }
+
+.btn:disabled,
+.btn.is-disabled {
+  border-color: var(--line);
+  color: var(--text-soft);
+  background: none;
+  cursor: default;
+  pointer-events: none;
+}
+
+.btn-solid { background: var(--text); color: var(--bg); }
+.btn-solid:hover { opacity: .85; }
+.btn-ghost { border-color: var(--line); }
+.btn-added { background: var(--text); color: var(--bg); }
+
+/* ==========================================================================
+   10. КОРЗИНА
+   ========================================================================== */
+.cart-overlay {
+  position: fixed; inset: 0;
+  background: rgba(40, 34, 37, .3);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s;
+  z-index: 1000;
+}
+
+.cart-overlay.is-open { opacity: 1; visibility: visible; }
+
+.cart-panel {
+  position: fixed;
+  top: 0; right: 0;
+  height: 100dvh;
+  width: min(400px, 100%);
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .4s cubic-bezier(.25,1,.5,1);
+  z-index: 1001;
+}
+
+.cart-panel.is-open { transform: translateX(0); }
+
+.cart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px var(--pad-x) 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cart-head h3 { font-size: 22px; }
+
+.cart-close {
+  background: none; border: none;
+  cursor: pointer; color: var(--text);
+  font-size: 24px; line-height: 1;
+  padding: 8px;
+}
+
+.cart-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px var(--pad-x);
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 14px;
+  align-items: start;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cart-item img {
+  width: 64px; height: 80px;
+  object-fit: cover;
+  background: var(--bg-tint);
+}
+
+.cart-item h4 { font-size: 17px; font-weight: 300; margin-bottom: 4px; }
+
+.cart-item-note {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.cart-item-price {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+
+.cart-remove {
+  display: block;
+  background: none; border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  padding: 6px 0 0;
+  margin-top: 8px;
+}
+
+.cart-remove:hover { color: var(--text); }
+
+.cart-empty { color: var(--text-soft); padding: 40px 0; }
+
+.cart-foot {
+  padding: 20px var(--pad-x) 26px;
+  border-top: 1px solid var(--line);
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.cart-total b { font-size: 18px; font-weight: 400; letter-spacing: .06em; }
+
+.cart-hint {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--text-soft);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   11. БЛОГ И КОНТАКТЫ
    ========================================================================== */
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-  gap: clamp(24px, 3vw, 40px);
-  margin-top: clamp(32px, 4vw, 50px);
+  gap: clamp(28px, 3vw, 44px);
+  margin-top: clamp(32px, 4vw, 48px);
 }
 
 .contacts-wrapper {
-  margin-top: clamp(32px, 4vw, 50px);
+  margin-top: clamp(32px, 4vw, 48px);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
 .contact-link {
-  font-size: clamp(22px, 4vw, 42px);
-  display: block;
+  font-size: clamp(22px, 4vw, 40px);
   width: fit-content;
   border-bottom: 1px solid transparent;
 }
 
-.contact-link:hover { border-bottom-color: var(--text); padding-left: 10px; }
+.contact-link:hover { border-bottom-color: var(--text); }
 
 /* ==========================================================================
-   8. АДАПТИВ
+   12. АДАПТИВ
    ========================================================================== */
 @media (max-width: 1024px) {
   .about-layout { grid-template-columns: 1fr; }
+  .about-text { position: static; }
 }
 
 @media (max-width: 860px) {
-  .nav-toggle { display: block; }
-  .lang-switcher { margin-left: auto; }
+  .nav-toggle { display: block; order: 3; }
+  .header-right { order: 2; margin-left: auto; }
 
-  /* Меню уезжает в выпадающую панель под шапкой */
   .menu {
     position: fixed;
     top: var(--header-h);
-    left: 0;
-    right: 0;
+    left: 0; right: 0;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 0;
     background: var(--bg);
     border-bottom: 1px solid var(--line);
-    padding: 8px var(--pad-x) 28px;
+    padding: 4px var(--pad-x) 28px;
     transform: translateY(-12px);
     opacity: 0;
     visibility: hidden;
@@ -547,35 +704,103 @@ blockquote span {
   }
 
   .menu.is-open { transform: translateY(0); opacity: 1; visibility: visible; }
-
-  .menu a { font-size: 18px; padding: 12px 0; letter-spacing: .12em; }
+  .menu a { font-size: 14px; padding: 16px 0; letter-spacing: .18em; }
   .menu a::after { display: none; }
-  .menu a.active { border-bottom: 1px solid var(--text); }
 }
 
 @media (max-width: 768px) {
   .shoulder-text {
     top: 24px;
-    transform: none;             /* без этого текст уезжал вверх на half-height */
+    transform: none;
     font-size: clamp(20px, 6vw, 28px);
     letter-spacing: 0.04em;
   }
 
-  .canvas-footer-name { letter-spacing: 0.22em; text-indent: 0.22em; }
-
-  .about-gallery { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .img-frame { padding: 7px 7px 14px; }
-  .frame-1, .frame-2, .frame-3, .frame-4 { transform: rotate(0deg); }
-  .frame-2 { transform: translateY(-14px); }
-  .frame-3 { transform: translateY(14px); }
+  .canvas-footer-name {
+  /* было: bottom: clamp(20px, 4vw, 36px) */
+  bottom: clamp(56px, 9vh, 110px);
+}
+  .about-gallery figure:nth-child(even) { margin-top: 24px; }
+  .cart-head, .cart-body, .cart-foot { padding-left: 20px; padding-right: 20px; }
 }
 
-/* Уважаем системную настройку «меньше движения» */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .carousel-track { scroll-behavior: auto; }
+  html, .carousel-track { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
   }
 }
+
+/* ==========================================================================
+   13. МАНИФЕСТ — крупная мысль слева, текст справа
+   ========================================================================== */
+.manifesto {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(32px, 6vw, 90px);
+  align-items: start;
+  margin-top: clamp(24px, 3vw, 40px);
+}
+
+.manifesto-lead {
+  font-size: clamp(32px, 5.5vw, 76px);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+}
+
+.manifesto-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: clamp(8px, 1.5vw, 20px);
+}
+
+.manifesto-body p { font-size: clamp(16px, 1.25vw, 19px); color: var(--text); }
+
+@media (max-width: 860px) {
+  .manifesto { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   14. ВИЗИТКА CV
+   ========================================================================== */
+/* Не строка в списке ссылок, а предмет: карточка 85×55, как настоящая */
+.cv-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: clamp(240px, 30vw, 320px);
+  aspect-ratio: 85 / 55;
+  margin-top: clamp(40px, 5vw, 64px);
+  padding: 24px 26px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 2px rgba(40, 34, 37, .06);
+  transform: rotate(-1.5deg);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.cv-card:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 0 14px 32px rgba(40, 34, 37, .12);
+}
+
+.cv-card-name {
+  font-family: var(--font-main);
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: .04em;
+  line-height: 1;
+}
+
+.cv-card-role,
+.cv-card-hint {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.cv-card-hint { margin-top: 10px; }
