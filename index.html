@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/shop.css">
     <script src="js/gallery.js" defer></script>
     <script src="js/script.js" defer></script>
+    <link rel="icon" href="media/favicon.png" type="image/png">
 </head>
 <body>
 
@@ -42,35 +43,33 @@
     <main class="layout">
         <section class="hero-canvas" id="hero">
             <div class="canvas-container">
-                <img src="media/main-v.webp" alt="Виктория" class="main-painting"
-                     fetchpriority="high" decoding="async">
-                <div class="shoulder-text left-shoulder">Ma</div>
-                <div class="shoulder-text right-shoulder">Chere</div>
-                <div class="canvas-footer-name">Victoria</div>
+                <img src="media/main-v.png" alt="Виктория" class="main-painting"
+                    fetchpriority="high" decoding="async" id="heroImage">
             </div>
         </section>
 
-        <section id="about" class="section">
-            <span class="section-number">01 — Обо мне</span>
-            <h2>Обо мне</h2>
+        <section id="about" class="section about-scene">
 
-            <div class="about-layout">
-                <div class="about-gallery">
-                    <figure><img src="media/work.webp" alt="Процесс работы над картиной" loading="lazy" decoding="async"></figure>
-                    <figure><img src="media/about-2.webp" alt="Деталь картины" loading="lazy" decoding="async"></figure>
-                    <figure><img src="media/painter.webp" alt="Мастерская" loading="lazy" decoding="async"></figure>
-                    <figure><img src="media/sgrt.webp" alt="Портрет Виктории" loading="lazy" decoding="async"></figure>
-                </div>
+        <div class="about-scene-inner">
+            <span class="section-number" data-reveal="fade">01 — Обо мне</span>
+            <h2 data-reveal="up" data-delay="80">Обо мне</h2>
 
-                <div class="about-text">
-                    <p>В детстве мне не хватало красоты вокруг меня. Поэтому сегодня я воспеваю красоту в своих картинах и в жизни. Мои работы — это воспоминания о воспоминаниях.</p>
-                    <blockquote>
-                        «Если я творю от сердца, почти всё работает; если из головы — почти ничего.»
-                        <span>Марк Шагал</span>
-                    </blockquote>
-                    <p>Попытка сохранить то, что исчезает быстрее всего: свет, запах, настроение, мгновение.</p>
-                </div>
+            <div class="about-note-layout">
+            <div class="about-portrait is-left" data-reveal="left" data-delay="200">
+                <img src="media/portrait-left.jpg" alt="">
             </div>
+
+            <div class="note is-typed" data-reveal="up" data-delay="350">
+                <p> В детстве мне не хватало красоты вокруг меня, поэтому теперь я воспеваю красоту в своих картинах и в жизни Мои работы - это воспоминания о воспоминаниях Тема фиксации действительности, момента и хрупкости воспоминаний.Мне важно фиксировать в своих работах временную красоту повседневного Запечатлеть красоту мимолетного</p>
+                <p>Я могу описать весь свой характер и личность одной фразой Марка Шагала Точнее обо мне не скажешь «Если я творю от сердца, почти всё работает; если из головы, то почти ничего»</p>
+                <span class="note-sign">Виктория</span>
+            </div>
+
+            <div class="about-portrait is-right" data-reveal="right" data-delay="200">
+                <img src="media/portrait-right.jpg" alt="">
+            </div>
+            </div>
+        </div>
         </section>
 
         <!-- МАНИФЕСТ: одна крупная мысль на разворот, без картинок-иллюстраций -->

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Движение — примеры</title>
+<style>
+  :root {
+    --bg: #F5F2EC;
+    --text: #282225;
+    --transition: .4s cubic-bezier(.25,1,.5,1);
+    --pad-x: clamp(20px, 5vw, 60px);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: Georgia, serif; }
+  h2 { font-weight: 300; font-size: clamp(28px, 5vw, 64px); letter-spacing: .04em; }
+  .note { font-family: system-ui, sans-serif; font-size: 12px; letter-spacing: .14em;
+          text-transform: uppercase; opacity: .5; }
+  .pad { padding: 12vh var(--pad-x); }
+  /* Заглушки вместо реальных картинок */
+  .ph { background: linear-gradient(140deg, #cfd8e3, #9BB7D4); border-radius: 2px; }
+</style>
+<link rel="stylesheet" href="css/motion.css">
+</head>
+<body>
+
+<!-- ====================================================================
+     СЦЕНА 1. Картинки вылетают через градиент
+     Фон едет медленнее, элементы — с разной скоростью, вуаль сверху
+     прячет их появление у края экрана.
+     ==================================================================== -->
+<section class="scene" style="--veil-from:#F5F2EC; --veil-to:#9BB7D4;">
+
+  <div class="scene-bg" data-parallax="0.15">
+    <div class="ph" style="width:100%;height:100%"></div>
+  </div>
+
+  <div class="scene-veil"></div>
+
+  <!-- Летящие работы: у каждой своя скорость и свой угол входа -->
+  <div class="scene-item has-shadow" style="left:6%;  top:18%; width:16%;"
+       data-parallax="0.5" data-reveal="left" data-delay="0">
+    <div class="ph" style="aspect-ratio:4/5"></div>
+  </div>
+
+  <div class="scene-item has-shadow" style="right:9%; top:12%; width:13%;"
+       data-parallax="-0.35" data-reveal="right" data-delay="150">
+    <div class="ph" style="aspect-ratio:3/4"></div>
+  </div>
+
+  <div class="scene-item has-shadow" style="left:14%; bottom:12%; width:11%;"
+       data-parallax="0.7" data-reveal="up" data-delay="300" data-float>
+    <div class="ph" style="aspect-ratio:1/1"></div>
+  </div>
+
+  <div class="scene-item has-shadow" style="right:16%; bottom:16%; width:14%;"
+       data-parallax="-0.55" data-reveal="scale" data-delay="450" data-float="slow">
+    <div class="ph" style="aspect-ratio:4/5"></div>
+  </div>
+
+  <div class="scene-layer" style="text-align:center">
+    <p class="note" data-reveal="fade">Серия работ</p>
+    <h2 data-reveal="up" data-delay="120">Предчувствие</h2>
+  </div>
+</section>
+
+<!-- ====================================================================
+     СЦЕНА 2. Лента, которая едет от прокрутки
+     ==================================================================== -->
+<section class="scene" style="--veil-from:#9BB7D4; --veil-to:#F5F2EC;">
+  <div class="scene-veil"></div>
+
+  <div class="scene-layer pad" style="width:100%">
+    <p class="note" data-reveal="fade">Прокрутите — лента поедет</p>
+
+    <div style="overflow:hidden; margin-top:32px;">
+      <div class="drift-strip" data-strip="600">
+        <div class="ph" style="width:240px;height:300px"></div>
+        <div class="ph" style="width:200px;height:300px"></div>
+        <div class="ph" style="width:280px;height:300px"></div>
+        <div class="ph" style="width:220px;height:300px"></div>
+        <div class="ph" style="width:260px;height:300px"></div>
+        <div class="ph" style="width:210px;height:300px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================================
+     СЦЕНА 3. Спокойное появление текста
+     ==================================================================== -->
+<section class="pad" style="min-height:80vh">
+  <p class="note" data-reveal="fade">Обо мне</p>
+  <h2 data-reveal="up" data-delay="100" style="margin:16px 0 32px">Тише, чем кажется</h2>
+  <p data-reveal="up" data-delay="250" style="max-width:60ch; line-height:1.7">
+    Появление по одному, с задержкой в полторы десятых секунды между элементами.
+    Читается как проявление, а не как аттракцион.
+  </p>
+</section>
+
+<div class="pad"></div>
+
+<script src="js/motion.js"></script>
+</body>
+</html>

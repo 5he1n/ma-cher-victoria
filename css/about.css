@@ -1,0 +1,194 @@
+/* ==========================================================================
+   РАЗДЕЛ «ОБО МНЕ»
+   Подключать последним, после style.css и motion.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. ПЕРЕХОД ОТ ГЛАВНОГО ЭКРАНА
+   Фотография растворяется в белый — дальше начинается светлое «подполье».
+   -------------------------------------------------------------------------- */
+.hero-canvas { position: relative; }
+
+.hero-canvas::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: clamp(180px, 34vh, 420px);
+  pointer-events: none;
+  z-index: 3;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 34%,
+    rgba(255, 255, 255, 0.82) 66%,
+    #ffffff 100%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   2. ФОН РАЗДЕЛА: БЕЛЫЙ С УХОДОМ В КРЕМОВЫЙ
+   Никакой фотографии — чистый градиент. Сверху белый, к низу мягко
+   переходит в основной цвет сайта, чтобы стык со следующим разделом исчез.
+   -------------------------------------------------------------------------- */
+.about-scene {
+  position: relative;
+  overflow: hidden;
+  max-width: none;
+  border-top: none;
+  padding: clamp(40px, 6vw, 80px) 0 clamp(70px, 9vw, 120px);
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #ffffff 42%,
+    #FBF9F5 72%,
+    var(--bg) 100%
+  );
+}
+
+.about-scene-inner {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
+
+/* --------------------------------------------------------------------------
+   3. КОМПОЗИЦИЯ
+   Портреты по краям, записка по центру и чуть выше — она главная.
+   -------------------------------------------------------------------------- */
+.about-note-layout {
+  display: grid;
+  grid-template-columns: 1fr minmax(300px, 460px) 1fr;
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 24px);
+  margin-top: clamp(32px, 4vw, 56px);
+}
+
+/* Портреты нарисованы на белом, а фон здесь тоже белый — рамка не видна.
+   Размер сдержанный: рисунки поддерживают текст, а не спорят с ним. */
+.about-portrait img {
+  width: 100%;
+  height: auto;
+  max-height: 460px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.about-portrait.is-left  { margin-right: -8%; }
+.about-portrait.is-right { margin-left: -8%; }
+
+/* ==========================================================================
+   ЗАПИСКА — версия под референс
+   Заменить в css/about.css весь блок «4. ЗАПИСКА» на этот.
+   ========================================================================== */
+
+.note {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;          /* нужно, чтобы слой бумаги остался внутри */
+  background: transparent;     /* сама бумага рисуется в ::after */
+  padding: clamp(38px, 4vw, 56px) clamp(32px, 3.4vw, 48px) clamp(42px, 4.4vw, 60px);
+  transform: rotate(-0.35deg); /* почти прямо, как в референсе */
+  transition: transform var(--transition);
+}
+
+.note:hover { transform: rotate(0deg); }
+
+/* --- Лист бумаги ---
+   Отдельным слоем, потому что clip-path обрезал бы скотч, торчащий сверху.
+   z-index: -1 удерживается внутри записки за счёт isolation выше. */
+.note::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  /* Холодный светло-серый, не жёлтый */
+  background-color: #F2F1EC;
+
+  /* Зерно бумаги: процедурный шум, картинка не нужна */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 130% 90% at 50% 40%, rgba(255,255,255,.7), transparent 65%),
+    radial-gradient(ellipse at 100% 100%, rgba(120,112,98,.10), transparent 45%),
+    radial-gradient(ellipse at 0% 95%, rgba(120,112,98,.07), transparent 40%);
+  background-blend-mode: multiply, normal, normal, normal;
+
+  /* Неровные края: лист отрезан от руки, а не по линейке */
+  clip-path: polygon(
+    0.4% 0.6%, 26% 0%, 58% 0.9%, 84% 0.2%, 100% 1.1%,
+    99.4% 28%, 100% 62%, 99.2% 88%, 99.7% 99.2%,
+    72% 100%, 41% 99.1%, 14% 100%, 0.6% 99%,
+    0% 71%, 0.8% 38%, 0% 14%
+  );
+
+  filter: drop-shadow(0 2px 3px rgba(60, 55, 45, .10))
+          drop-shadow(0 14px 30px rgba(60, 55, 45, .12));
+}
+
+/* --- Скотч ---
+   Серый, с вертикальными волокнами и матовой полупрозрачностью. */
+.note::before {
+  content: '';
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%) rotate(0.8deg);
+  width: 104px;
+  height: 46px;
+  z-index: 3;
+
+  background-color: rgba(196, 195, 190, .78);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,.22) 0 1px,
+    rgba(140,139,134,.10) 1px 2px,
+    transparent 2px 4px
+  );
+  box-shadow: 0 1px 2px rgba(60, 55, 45, .14);
+
+  /* Рваные торцы ленты */
+  clip-path: polygon(
+    3% 0%, 97% 2%, 100% 8%, 96% 16%, 100% 24%,
+    97% 100%, 3% 98%, 0% 90%, 4% 82%, 0% 74%
+  );
+}
+
+/* --- Текст --- */
+.note p {
+  font-family: "Courier New", "Nimbus Mono PS", monospace;
+  font-size: clamp(11px, 0.82vw, 13px);
+  line-height: 2.05;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #1F1D1A;
+  max-width: none;
+}
+
+.note p + p { margin-top: 26px; }
+
+.note-sign {
+  display: block;
+  margin-top: 28px;
+  font-family: "Courier New", "Nimbus Mono PS", monospace;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(31, 29, 26, .5);
+}
+/* --------------------------------------------------------------------------
+   5. МОБИЛЬНЫЙ
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .about-note-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .about-note-layout .note { order: -1; }   /* текст первым */
+
+  .about-portrait { max-width: 55%; }
+  .about-portrait.is-left  { margin: 0 auto 0 0; }
+  .about-portrait.is-right { margin: 0 0 0 auto; }
+  .about-portrait img { max-height: 320px; }
+}

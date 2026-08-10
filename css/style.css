@@ -141,24 +141,22 @@ img { display: block; max-width: 100%; height: auto; }
 .menu { display: flex; gap: clamp(18px, 2.5vw, 36px); }
 
 .menu a {
-  color: var(--text-soft);
-  position: relative;
+  font-family: var(--font-main);
+  font-size: clamp(15px, 1.25vw, 18px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);                        /* было --text-soft */
+  -webkit-text-stroke: 0.4px currentColor;   /* утолщение штриха */
   padding: 4px 0;
-  white-space: nowrap;
 }
 
-.menu a::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 0; height: 1px;
-  background: var(--text);
-  transition: var(--transition);
+.menu a:not(.active) { opacity: 0.75; }      /* разница активного мягче цвета */
+.menu a:hover { opacity: 1; }
+
+.menu a.active {
+  opacity: 1;
+  -webkit-text-stroke: 0.7px currentColor;
 }
-
-.menu a:hover, .menu a.active { color: var(--text); }
-.menu a:hover::after, .menu a.active::after { width: 100%; }
-
 .header-right { display: flex; align-items: center; gap: 18px; }
 
 .lang-link { color: var(--text-soft); }

@@ -1,0 +1,145 @@
+/* ==========================================================================
+   МАНИФЕСТ / ARTIST STATEMENT
+   Подключать после style.css и motion.css.
+
+   Композиция: три колонки. По краям — серии работ со своими цветовыми
+   ореолами, по центру — текст манифеста на белом.
+   ========================================================================== */
+
+.manifesto {
+  position: relative;
+  max-width: none;
+  border-top: none;
+  overflow: hidden;
+  padding: clamp(60px, 8vw, 110px) 0 clamp(60px, 8vw, 110px);
+  background: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   ЦВЕТОВЫЕ ОРЕОЛЫ
+   Два пятна по краям: холодно-сиреневое слева, тёплое охристое справа.
+   Центр остаётся белым, чтобы текст читался.
+   -------------------------------------------------------------------------- */
+.manifesto::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 46% 78% at 4% 52%,  rgba(122, 108, 232, .30), transparent 68%),
+    radial-gradient(ellipse 40% 70% at 98% 50%, rgba(196, 152, 84, .22), transparent 66%);
+}
+
+.manifesto-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr minmax(420px, 620px) 1fr;
+  align-items: center;
+  gap: clamp(16px, 2vw, 40px);
+}
+
+/* --------------------------------------------------------------------------
+   ЦЕНТР — ЗАГОЛОВОК И ТЕКСТ
+   -------------------------------------------------------------------------- */
+.manifesto-center { text-align: center; padding: 0 clamp(12px, 2vw, 32px); }
+
+.manifesto-title {
+  font-family: var(--font-main);
+  font-weight: 300;
+  font-size: clamp(38px, 6.5vw, 104px);
+  line-height: 0.94;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: clamp(28px, 3.5vw, 48px);
+}
+
+.manifesto-text { text-align: left; max-width: 560px; margin: 0 auto; }
+
+.manifesto-text p {
+  font-family: "Courier New", "Nimbus Mono PS", monospace;
+  font-size: clamp(11px, 0.82vw, 13px);
+  line-height: 1.95;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #1F1D1A;
+  max-width: none;
+}
+
+.manifesto-text p + p { margin-top: 22px; }
+
+/* --------------------------------------------------------------------------
+   БОКОВЫЕ СЕРИИ
+   Коллажи уходят за край экрана — это даёт ощущение продолжения.
+   -------------------------------------------------------------------------- */
+.series { position: relative; }
+
+.series-label {
+  font-family: "Courier New", "Nimbus Mono PS", monospace;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+/* Рукописное название — картинкой с прозрачным фоном */
+.series-name { display: block; width: clamp(180px, 20vw, 330px); height: auto; }
+
+.series-collage { display: block; width: 100%; height: auto; margin-top: 14px; }
+
+/* Вопросы под коллажем */
+.series-question {
+  font-family: "Courier New", "Nimbus Mono PS", monospace;
+  font-size: clamp(10px, 0.72vw, 12px);
+  line-height: 1.9;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  max-width: 34ch;
+  margin-top: 16px;
+}
+
+/* --- Левая серия: синяя, прижата к левому краю --- */
+.series.is-left { margin-left: calc(var(--pad-x) * -1); }
+.series.is-left .series-label,
+.series.is-left .series-question { color: #4A46D6; }
+.series.is-left .series-label { padding-left: clamp(24px, 4vw, 60px); }
+.series.is-left .series-name  { margin-left: clamp(16px, 3vw, 48px); }
+.series.is-left .series-question { margin-left: clamp(24px, 4vw, 60px); }
+
+/* --- Правая серия: охристая, прижата к правому краю, текст по правому --- */
+.series.is-right { margin-right: calc(var(--pad-x) * -1); text-align: right; }
+.series.is-right .series-label,
+.series.is-right .series-question { color: #B0803A; }
+.series.is-right .series-question { margin-left: auto; }
+.series.is-right .series-name { margin-left: auto; margin-right: clamp(16px, 3vw, 48px); }
+
+/* --------------------------------------------------------------------------
+   МОБИЛЬНЫЙ
+   Три колонки складываются в столбик: заголовок, текст, затем серии.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1000px) {
+  .manifesto-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 8vw, 72px);
+    padding: 0 var(--pad-x);
+  }
+
+  .manifesto-center { order: -1; }
+
+  .series.is-left,
+  .series.is-right { margin-left: 0; margin-right: 0; text-align: left; }
+  .series.is-right .series-name,
+  .series.is-right .series-question { margin-left: 0; margin-right: 0; }
+  .series.is-left .series-label,
+  .series.is-left .series-name,
+  .series.is-left .series-question { margin-left: 0; padding-left: 0; }
+
+  .series-collage { max-width: 560px; }
+  .series-question { max-width: none; }
+
+  .manifesto::before {
+    background:
+      radial-gradient(ellipse 90% 30% at 50% 62%, rgba(122,108,232,.22), transparent 70%),
+      radial-gradient(ellipse 90% 28% at 50% 92%, rgba(196,152,84,.18), transparent 70%);
+  }
+}
