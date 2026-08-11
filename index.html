@@ -6,11 +6,18 @@
     <title>Ma chere Victoria</title>
     <meta name="description" content="Виктория — художница. Манифест, серия работ и лавка: оригиналы и печатные тиражи.">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
     <link rel="preload" href="fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/shop.css">
+    <link rel="stylesheet" href="css/style.css?v=15">
+    <link rel="stylesheet" href="css/shop.css?v=15">
+    <link rel="stylesheet" href="css/motion.css?v=15">
+    <link rel="stylesheet" href="css/manifesto.css?v=15">
+    <link rel="stylesheet" href="css/about.css?v=15">
     <script src="js/gallery.js" defer></script>
     <script src="js/script.js" defer></script>
+    <script src="js/motion.js?v=15" defer></script>
     <link rel="icon" href="media/favicon.png" type="image/png">
 </head>
 <body>
@@ -72,32 +79,68 @@
         </div>
         </section>
 
-        <!-- МАНИФЕСТ: одна крупная мысль на разворот, без картинок-иллюстраций -->
-        <section id="manifesto" class="section">
-            <span class="section-number">02 — Манифест</span>
-            <div class="manifesto">
-                <h2 class="manifesto-lead">Живопись как способ<br>остановить время</h2>
-                <div class="manifesto-body">
-                    <p>Здесь — artist statement. Два-три абзаца о том, почему появилась эта серия, что Виктория ищет в ней и чем она отличается от предыдущих работ.</p>
+
+        <section id="manifesto" class="manifesto">
+            <div class="manifesto-grid">
+
+                <div class="series is-left" data-reveal="left" data-delay="200">
+                    <span class="series-label">Artwork series</span>
+                    <span class="series-name">Blue Room</span>
+
+                    <div class="series-collage">
+                        <img src="media/blue-1.jpg" alt="" loading="lazy">
+                        <img src="media/blue-2.jpg" alt="" loading="lazy">
+                        <img src="media/blue-3.jpg" alt="" loading="lazy">
+                    </div>
+
+                    <p class="series-question">
+                        Как бытовое пространство из интимного превращается в одиночество?
+                        Где начинается единение с собой? Когда ванная комната перестаёт
+                        быть обычной и повседневной?
+                    </p>
                 </div>
+
+                <!-- ЦЕНТР -->
+                <div class="manifesto-center">
+                    <span class="section-number">02 — Манифест</span>
+                    <h2 class="manifesto-title" data-reveal="up">Artist<br>Statement</h2>
+
+                    <div class="manifesto-text">
+                        <p data-reveal="up" data-delay="120">
+                            В моей художественной практике я работаю с темой опыта переживания.
+                        </p>
+                        <p data-reveal="up" data-delay="220">
+                            Выбирая техники классической живописи и графики я обращаюсь
+                            к бытовым сюжетам, которые обостряю новым взглядом на привычные вещи.
+                        </p>
+                        <p data-reveal="up" data-delay="320">
+                            Большую роль в моих работах имеет текст, инсталляция, работа
+                            с целой серией. Мои интересы сосредоточены вокруг театрального
+                            жеста, анимационного движения, документальности гравюры.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ПРАВАЯ СЕРИЯ -->
+                <div class="series is-right" data-reveal="right" data-delay="200">
+                    <span class="series-label">Серия работ</span>
+                    <span class="series-name">Предчувствие</span>
+
+                    <div class="series-collage">
+                        <img src="media/sepia-1.jpg" alt="" loading="lazy">
+                        <img src="media/sepia-2.jpg" alt="" loading="lazy">
+                        <img src="media/sepia-3.jpg" alt="" loading="lazy">
+                    </div>
+
+                    <p class="series-question">
+                        Записные книжки, обрывки фраз и осколки воспоминаний.
+                        Почему мы собираем физическую память? Что остаётся в конце
+                        от того, что мы увидели и запомнили?
+                    </p>
+                </div>
+
             </div>
         </section>
-
-        <section id="catalog" class="section">
-            <span class="section-number">03 — Серия работ</span>
-            <h2>«Название серии»</h2>
-            <p class="section-intro">Работы 2023–2025 годов</p>
-
-            <div class="filters" id="catalogFilters" role="tablist">
-                <button class="tab-btn active" data-filter="all" role="tab" aria-selected="true">Все</button>
-                <button class="tab-btn" data-filter="painting" role="tab" aria-selected="false">Живопись</button>
-                <button class="tab-btn" data-filter="graphics" role="tab" aria-selected="false">Графика</button>
-                <button class="tab-btn" data-filter="illustration" role="tab" aria-selected="false">Иллюстрация</button>
-            </div>
-
-            <div id="catalogGrid"></div>
-        </section>
-
         <!-- ЛАВКА: тёмная стена, работы на гвоздях, проданные оставляют след -->
         <section id="shop" class="section section-wall">
             <div class="wall-inner">
