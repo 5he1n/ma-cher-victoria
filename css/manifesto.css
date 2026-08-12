@@ -1,40 +1,20 @@
 /* ==========================================================================
    МАНИФЕСТ / ARTIST STATEMENT
    Подключать после style.css и motion.css, перед about.css.
-
-   Коллаж собран наложением: главная работа снизу, две мелкие лежат
-   поверх неё со сдвигом. Позиции заданы в процентах от ширины колонки,
-   поэтому композиция держится на любом экране.
+   Раскрытие по наведению отключено — коллажи видны постоянно.
    ========================================================================== */
 
 .manifesto {
   position: relative;
   overflow: hidden;
-  padding: clamp(60px, 7vw, 100px) 0;
+  padding: clamp(70px, 9vw, 130px) 0;
   background: #ffffff;
 }
 
-/* Цветовые ореолы: холодный слева, тёплый справа, центр белый */
-.manifesto::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 44% 76% at 0% 50%,   rgba(122, 108, 232, .34), transparent 70%),
-    radial-gradient(ellipse 40% 70% at 100% 50%, rgba(196, 152, 84, .26), transparent 68%);
-}
-
-/* Колонки жёстко в долях: боковые по 27%, центр забирает остальное.
-   Так серии не распирают сетку, что бы ни лежало внутри. */
+/* Колонки в процентах: 30 / 40 / 30. Проценты, а не fr — тогда содержимое
+   не может распереть колонку и схлопнуть соседние. */
 .manifesto-grid {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 27% 1fr 27%;
-  align-items: center;
-  gap: clamp(16px, 2.5vw, 48px);
-  padding: 0 clamp(16px, 2vw, 32px);
+  align-items: start;
 }
 
 /* --------------------------------------------------------------------------
@@ -42,148 +22,88 @@
    -------------------------------------------------------------------------- */
 .manifesto-center {
   text-align: center;
-  min-width: 0;              /* без этого длинный текст растягивает колонку */
+  min-width: 0;
+  padding: 0 clamp(16px, 2.5vw, 44px);
 }
 
-.manifesto-center .section-number { margin-bottom: 14px; }
+.manifesto-center .section-number { display: block; margin-bottom: 16px; }
 
 .manifesto-title {
-  font-family: var(--font-main);
-  font-weight: 300;
-  font-size: clamp(34px, 5.4vw, 92px);
-  line-height: 0.94;
-  letter-spacing: 0.02em;
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: clamp(32px, 4.4vw, 78px);
+  line-height: 0.98;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
-  margin-bottom: clamp(26px, 3.5vw, 44px);
+  margin-bottom: clamp(28px, 3.5vw, 48px);
 }
 
-.manifesto-text { text-align: left; max-width: 480px; margin: 0 auto; }
-
-.manifesto-text p {
-  font-family: "Courier New", "Nimbus Mono PS", monospace;
-  font-size: clamp(10.5px, 0.78vw, 12.5px);
-  line-height: 1.95;
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
-  color: #1F1D1A;
-  max-width: none;
-}
-
-.manifesto-text p + p { margin-top: 20px; }
+.manifesto-text { text-align: left; max-width: 440px; margin: 0 auto; }
+.manifesto-text p + p { margin-top: 22px; }
 
 /* --------------------------------------------------------------------------
    СЕРИЯ
    -------------------------------------------------------------------------- */
 .series { min-width: 0; }
 
-.series-label {
+.series-heading {
   display: block;
-  font-family: "Courier New", "Nimbus Mono PS", monospace;
-  font-size: 10px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
+  font-family: var(--font-head);
+  font-size: clamp(24px, 2.4vw, 44px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-bottom: 14px;
   white-space: nowrap;
 }
 
-.series-name {
-  display: block;
-  font-family: "Caveat", "Segoe Script", cursive;
-  font-size: clamp(28px, 3.4vw, 54px);
-  font-weight: 600;
-  line-height: 1;
-  margin: 4px 0 0;
-  white-space: nowrap;       /* название не должно ломаться на строки */
-  transform: rotate(-1.5deg);
-  transform-origin: left center;
-}
-
-.series-name::before { content: '« '; opacity: .5; }
-.series-name::after  { content: ' »'; opacity: .5; }
-
-.series-question {
-  font-family: "Courier New", "Nimbus Mono PS", monospace;
-  font-size: clamp(9.5px, 0.68vw, 11.5px);
-  line-height: 1.85;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  margin-top: clamp(16px, 2vw, 28px);
-}
+.series.is-left  .series-heading { color: #4A46D6; }
+.series.is-right .series-heading { color: #B0803A; text-align: right; }
 
 /* --------------------------------------------------------------------------
-   КОЛЛАЖ — НАЛОЖЕНИЕ
-   Главная работа задаёт высоту блока, мелкие лежат поверх абсолютом.
+   КОЛЛАЖ
+   Сцена — квадрат от ширины колонки. Фрагменты разложены абсолютом
+   в процентах, поэтому композиция масштабируется целиком.
    -------------------------------------------------------------------------- */
-.series-collage {
+.series-stage {
   position: relative;
-  margin-top: clamp(14px, 1.8vw, 24px);
-  padding-bottom: 14%;        /* место под нижнюю карточку, вылезающую за край */
-}
-
-.series-collage img {
-  display: block;
-  object-fit: cover;
-  background: rgba(255, 255, 255, .4);
-}
-
-/* Главная: занимает всю ширину колонки */
-.series-collage img:nth-child(1) {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
 }
 
-/* Вторая: наезжает на главную сверху справа */
-.series-collage img:nth-child(2) {
+/* Круг-градиент лежит подложкой */
+.series-circle {
   position: absolute;
-  right: -16%;
-  top: 12%;
-  width: 46%;
-  aspect-ratio: 1 / 1;
-  box-shadow: -6px 6px 18px rgba(40, 34, 37, .12);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: .5;
 }
 
-/* Третья: наезжает снизу справа, ниже второй */
-.series-collage img:nth-child(3) {
+.series-piece {
   position: absolute;
-  right: -8%;
-  bottom: -2%;
-  width: 40%;
-  aspect-ratio: 1 / 1;
-  box-shadow: -6px 6px 18px rgba(40, 34, 37, .12);
+  z-index: 2;
+  filter: drop-shadow(0 8px 20px rgba(40, 34, 37, .14));
 }
+
+.series-piece:nth-of-type(1) { left: 0%;  top: 12%;   width: 54%; }
+.series-piece:nth-of-type(2) { right: 2%; top: 2%;    width: 36%; }
+.series-piece:nth-of-type(3) { right: 0%; top: 44%;   width: 42%; }
+.series-piece:nth-of-type(4) { left: 20%; bottom: 0%; width: 38%; }
 
 /* --------------------------------------------------------------------------
-   ЛЕВАЯ СЕРИЯ — синяя, композиция раскрывается вправо
+   ВОПРОСЫ ПОД КОЛЛАЖЕМ
    -------------------------------------------------------------------------- */
-.series.is-left .series-label,
-.series.is-left .series-name,
-.series.is-left .series-question { color: #4A46D6; }
-
-/* --------------------------------------------------------------------------
-   ПРАВАЯ СЕРИЯ — охристая, зеркальная
-   -------------------------------------------------------------------------- */
-.series.is-right { text-align: right; }
-
-.series.is-right .series-label,
-.series.is-right .series-name,
-.series.is-right .series-question { color: #B0803A; }
-
-.series.is-right .series-name {
-  transform: rotate(1.5deg);
-  transform-origin: right center;
+.series-question {
+  margin-top: clamp(16px, 2vw, 26px);
+  max-width: none;
 }
 
-/* Мелкие работы уходят влево, к краю экрана */
-.series.is-right .series-collage img:nth-child(2) {
-  right: auto;
-  left: -16%;
-  box-shadow: 6px 6px 18px rgba(40, 34, 37, .12);
-}
+.series.is-left  .series-question { color: #4A46D6; }
+.series.is-right .series-question { color: #B0803A; text-align: right; }
 
-.series.is-right .series-collage img:nth-child(3) {
-  right: auto;
-  left: -8%;
-  box-shadow: 6px 6px 18px rgba(40, 34, 37, .12);
-}
+.series-hint { display: none; }
 
 /* --------------------------------------------------------------------------
    ПЛАНШЕТ И ТЕЛЕФОН
@@ -191,49 +111,14 @@
 @media (max-width: 1100px) {
   .manifesto-grid {
     grid-template-columns: 1fr;
-    gap: clamp(56px, 10vw, 90px);
+    gap: clamp(48px, 9vw, 80px);
     padding: 0 var(--pad-x);
   }
 
-  .manifesto-center { order: -1; }
+  .manifesto-center { order: -1; padding: 0; }
 
-  .series { max-width: 460px; }
-  .series.is-right { margin-left: auto; }
+  .series { max-width: 480px; margin: 0 auto; }
 
-  .series.is-right .series-name {
-    transform: rotate(-1.5deg);
-    transform-origin: right center;
-  }
-
-  /* На узком экране наложение сдержаннее, иначе карточки уедут за экран */
-  .series-collage img:nth-child(2) { right: -6%; width: 42%; }
-  .series-collage img:nth-child(3) { right: -2%; width: 38%; }
-  .series.is-right .series-collage img:nth-child(2) { left: -6%; }
-  .series.is-right .series-collage img:nth-child(3) { left: -2%; }
+  .series.is-right .series-heading,
+  .series.is-right .series-question { text-align: left; }
 }
-
-@media (max-width: 560px) {
-  .series-collage img:nth-child(2),
-  .series.is-right .series-collage img:nth-child(2) { right: 0; left: auto; width: 40%; }
-  .series-collage img:nth-child(3),
-  .series.is-right .series-collage img:nth-child(3) { right: 4%; left: auto; width: 34%; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .series-name { transform: none; }
-}
-/* Секция и сетка всегда во всю ширину окна */
-.manifesto {
-  width: 100%;
-  max-width: none;
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.manifesto-grid {
-  width: 100%;
-  max-width: var(--container);
-  margin: 0 auto;
-}
-.manifesto-center { padding: 0 clamp(20px, 3vw, 56px); }
-.manifesto-title { font-size: clamp(32px, 4.6vw, 82px); }

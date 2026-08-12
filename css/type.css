@@ -1,0 +1,118 @@
+@font-face {
+  font-family: "TT2020";
+  src: url("../fonts/TT2020StyleE-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Maslova остаётся — но только для крупных надписей поверх фотографий,
+   где её тонкий штрих работает как в журнале. */
+@font-face {
+  font-family: "Maslova";
+  src: url("../fonts/cd-masvol-thin.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   ПЕРЕМЕННЫЕ
+   -------------------------------------------------------------------------- */
+:root {
+  /* Book Antiqua метрически совпадает с Palatino: если у посетителя нет
+     первого, второй встанет на его место без сдвига вёрстки. */
+  --font-head: "Book Antiqua", "Palatino Linotype", "URW Palladio L",
+               Palatino, "Palatino LT STD", Georgia, serif;
+
+  /* Наборный текст. Courier остаётся запасным: если TT2020 не загрузится,
+     машинописный характер сохранится. */
+  --font-body: "TT2020", "Courier New", "Nimbus Mono PS", monospace;
+
+  /* Крупные надписи на фотографиях */
+  --font-display: "Maslova", var(--font-head);
+
+  /* Совместимость: старые файлы ссылаются на эти имена */
+  --font-main: var(--font-head);
+  --font-ui: var(--font-body);
+}
+
+/* --------------------------------------------------------------------------
+   БАЗОВЫЕ ПРАВИЛА
+   -------------------------------------------------------------------------- */
+body {
+  font-family: var(--font-head);
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.75;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-head);
+  font-weight: 400;             /* у Palatino нормальное начертание плотнее */
+  letter-spacing: 0.01em;
+  line-height: 1.12;
+}
+
+h1 { font-size: clamp(38px, 6vw, 88px); }
+h2 { font-size: clamp(28px, 4.2vw, 56px); }
+h3 { font-size: clamp(17px, 1.5vw, 22px); }
+
+/* Крупные надписи поверх фотографий */
+.shoulder-text,
+.canvas-footer-name,
+.menu-logo {
+  font-family: var(--font-display);
+  font-weight: 300;
+}
+
+/* --------------------------------------------------------------------------
+   МАШИНОПИСНЫЙ НАБОР
+   Класс .typed вешается на блоки, которые должны выглядеть напечатанными.
+   -------------------------------------------------------------------------- */
+.typed,
+.note p,
+.manifesto-text p,
+.series-question {
+  font-family: var(--font-body);
+  font-size: clamp(11px, 0.82vw, 13.5px);
+  line-height: 1.95;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Интерфейсная мелочь: номера разделов, кнопки, этикетки */
+.section-number,
+.series-label,
+.tab-btn,
+.btn,
+.work-note,
+.work-price,
+.carousel-counter,
+.cart-toggle,
+.lang-switcher {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Меню: Book Antiqua, крупнее и плотнее — по правке «контрастнее и жирнее» */
+.menu a {
+  font-family: var(--font-head);
+  font-size: clamp(14px, 1.15vw, 17px);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   ЗАМЕТКА ПРО TT2020
+   Шрифт содержит по девять вариантов каждого глифа: одинаковые буквы
+   в строке рисуются по-разному, как у настоящей машинки. За это отвечает
+   таблица альтернатив — включаем её явно.
+   -------------------------------------------------------------------------- */
+.typed,
+.note p,
+.manifesto-text p,
+.series-question {
+  font-feature-settings: "calt" 1, "rand" 1;
+}

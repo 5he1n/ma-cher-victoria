@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Ma chere Victoria</title>
     <meta name="description" content="Виктория — художница. Манифест, серия работ и лавка: оригиналы и печатные тиражи.">
-
+    <link rel="stylesheet" href="css/type.css?v=17">
+    <link rel="stylesheet" href="css/style.css?v=17">
+    <link rel="stylesheet" href="css/motion.css?v=17">
+    <link rel="stylesheet" href="css/shop.css?v=17">
+    <link rel="stylesheet" href="css/manifesto.css?v=17">
+    <link rel="stylesheet" href="css/about.css?v=17">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
     <link rel="preload" href="fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
-    <link rel="stylesheet" href="css/style.css?v=15">
-    <link rel="stylesheet" href="css/shop.css?v=15">
-    <link rel="stylesheet" href="css/motion.css?v=15">
-    <link rel="stylesheet" href="css/manifesto.css?v=15">
-    <link rel="stylesheet" href="css/about.css?v=15">
-    <script src="js/gallery.js" defer></script>
+    <script src="js/gallery.js" defer></scr>
     <script src="js/script.js" defer></script>
-    <script src="js/motion.js?v=15" defer></script>
+    <script src="js/motion.js?v=17" defer></script>
     <link rel="icon" href="media/favicon.png" type="image/png">
 </head>
 <body>
@@ -50,47 +51,59 @@
     <main class="layout">
         <section class="hero-canvas" id="hero">
             <div class="canvas-container">
+                <img class="hero-vensel" src="media/vensel.png" alt="">
                 <img src="media/main-v.png" alt="Виктория" class="main-painting"
+                
                     fetchpriority="high" decoding="async" id="heroImage">
             </div>
         </section>
 
-        <section id="about" class="section about-scene">
+        <!-- ==========================================================================
+     БЛОК 1 — ОБО МНЕ
+     Заменить весь <section id="about"> на это
+     ========================================================================== -->
 
-        <div class="about-scene-inner">
-            <span class="section-number" data-reveal="fade">01 — Обо мне</span>
-            <h2 data-reveal="up" data-delay="80">Обо мне</h2>
-
-            <div class="about-note-layout">
-            <div class="about-portrait is-left" data-reveal="left" data-delay="200">
-                <img src="media/portrait-left.jpg" alt="">
+        <section id="about" class="about-scene">
+            <div class="about-bg">
+                <img src="media/background_obomne.png" alt="">
             </div>
 
-            <div class="note is-typed" data-reveal="up" data-delay="350">
-                <p> В детстве мне не хватало красоты вокруг меня, поэтому теперь я воспеваю красоту в своих картинах и в жизни Мои работы - это воспоминания о воспоминаниях Тема фиксации действительности, момента и хрупкости воспоминаний.Мне важно фиксировать в своих работах временную красоту повседневного Запечатлеть красоту мимолетного</p>
-                <p>Я могу описать весь свой характер и личность одной фразой Марка Шагала Точнее обо мне не скажешь «Если я творю от сердца, почти всё работает; если из головы, то почти ничего»</p>
-                <span class="note-sign">Виктория</span>
-            </div>
+            <div class="about-scene-inner">
+                <h2 class="about-heading" data-reveal="up" data-delay="80">ПРО МЕНЯ</h2>
 
-            <div class="about-portrait is-right" data-reveal="right" data-delay="200">
-                <img src="media/portrait-right.jpg" alt="">
+                <div class="about-note-layout">
+                    <div class="about-portrait is-left" data-reveal="left" data-delay="200">
+                        <img src="media/portrait-left.jpg" alt="" loading="lazy">
+                    </div>
+
+                    <div class="note" data-reveal="up" data-delay="350">
+                        <p>Моё имя Виктория. Я художник. В своих работах я отталкиваюсь от себя. Мне интересен эффект привычного, бытового и понятного. Как человека формирует что-то простое и красивое.</p>
+                        <p>Моё кредо в искусстве — приумножать прекрасное вокруг меня. Когда все вокруг ищут новые смыслы — я хочу разобраться со старыми.</p>
+                        <span class="note-sign">Виктория</span>
+                    </div>
+
+                    <div class="about-portrait is-right" data-reveal="right" data-delay="200">
+                        <img src="media/portrait-right.jpg" alt="" loading="lazy">
+                    </div>
+                </div>
             </div>
-            </div>
-        </div>
         </section>
+
 
 
         <section id="manifesto" class="manifesto">
             <div class="manifesto-grid">
 
-                <div class="series is-left" data-reveal="left" data-delay="200">
-                    <span class="series-label">Artwork series</span>
-                    <span class="series-name">Blue Room</span>
+                <!-- ЛЕВАЯ СЕРИЯ — BLUE ROOM -->
+                <div class="series is-left" data-reveal="left" data-delay="150">
+                    <div class="series-stage">
+                        <img class="series-circle" src="media/blue_circle.png" alt="">
+                        <span class="series-heading">Blue Room</span>
 
-                    <div class="series-collage">
-                        <img src="media/blue-1.jpg" alt="" loading="lazy">
-                        <img src="media/blue-2.jpg" alt="" loading="lazy">
-                        <img src="media/blue-3.jpg" alt="" loading="lazy">
+                        <img class="series-piece" src="media/blue_room_piece_1.png" alt="" loading="lazy">
+                        <img class="series-piece" src="media/blue_room_piece_2.png" alt="" loading="lazy">
+                        <img class="series-piece" src="media/blue_room_piece_3.png" alt="" loading="lazy">
+                        <img class="series-piece" src="media/blue_room_piece_4.png" alt="" loading="lazy">
                     </div>
 
                     <p class="series-question">
@@ -98,6 +111,7 @@
                         Где начинается единение с собой? Когда ванная комната перестаёт
                         быть обычной и повседневной?
                     </p>
+                    <span class="series-hint">Наведите, чтобы раскрыть</span>
                 </div>
 
                 <!-- ЦЕНТР -->
@@ -105,7 +119,7 @@
                     <span class="section-number">02 — Манифест</span>
                     <h2 class="manifesto-title" data-reveal="up">Artist<br>Statement</h2>
 
-                    <div class="manifesto-text">
+                    <div class="manifesto-text typed">
                         <p data-reveal="up" data-delay="120">
                             В моей художественной практике я работаю с темой опыта переживания.
                         </p>
@@ -121,15 +135,15 @@
                     </div>
                 </div>
 
-                <!-- ПРАВАЯ СЕРИЯ -->
-                <div class="series is-right" data-reveal="right" data-delay="200">
-                    <span class="series-label">Серия работ</span>
-                    <span class="series-name">Предчувствие</span>
-
-                    <div class="series-collage">
-                        <img src="media/sepia-1.jpg" alt="" loading="lazy">
-                        <img src="media/sepia-2.jpg" alt="" loading="lazy">
-                        <img src="media/sepia-3.jpg" alt="" loading="lazy">
+                <!-- ПРАВАЯ СЕРИЯ — ПРЕДЧУВСТВИЕ -->
+                <div class="series is-right" data-reveal="right" data-delay="150">
+                    <div class="series-stage">
+                        <img class="series-circle" src="media/yellow_circle.png" alt="">
+                        <span class="series-heading">Предчувствие</span>
+                        <img class="series-piece" src="media/yellow_piece_1.png" alt="" loading="lazy">
+                        <img class="series-piece" src="media/yellow_piece_2.png" alt="" loading="lazy">
+                        <img class="series-piece" src="media/yellow_piece_3.png" alt="" loading="lazy">
+                        <img class="series-piece" src="media/yellow_piece_4.png" alt="" loading="lazy">
                     </div>
 
                     <p class="series-question">
@@ -137,10 +151,12 @@
                         Почему мы собираем физическую память? Что остаётся в конце
                         от того, что мы увидели и запомнили?
                     </p>
+                    <span class="series-hint">Наведите, чтобы раскрыть</span>
                 </div>
 
             </div>
         </section>
+
         <!-- ЛАВКА: тёмная стена, работы на гвоздях, проданные оставляют след -->
         <section id="shop" class="section section-wall">
             <div class="wall-inner">
