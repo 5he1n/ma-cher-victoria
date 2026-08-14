@@ -212,3 +212,111 @@
   z-index: 3;
   pointer-events: none;
 }
+.series.is-left img.series-heading { padding-left: clamp(30px, 4vw, 70px); }
+.series-stage { height: 34vw !important; max-height: 620px !important; }
+.series-piece { max-width: none !important; }
+.series.is-left .series-piece:nth-of-type(1) { width: 13vw !important; }
+.series.is-left .series-piece:nth-of-type(2) { width: 11vw !important; }
+.series.is-left .series-piece:nth-of-type(3) { width: 17vw !important; }
+.series.is-left .series-piece:nth-of-type(4) { width: 10vw !important; }
+.series.is-right .series-piece:nth-of-type(1) { width: 10vw !important; }
+.series.is-right .series-piece:nth-of-type(2) { width: 9vw !important; }
+.series.is-right .series-piece:nth-of-type(3) { width: 12vw !important; }
+.series.is-right .series-piece:nth-of-type(4) { width: 15vw !important; }
+
+/* ==========================================================================
+   МАНИФЕСТ — плотная стопка по эскизу
+   ========================================================================== */
+
+.manifesto {
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  width: 100vw;
+  max-width: 100vw;
+  padding: clamp(40px, 5vw, 70px) 0 0;
+  overflow: hidden;
+}
+
+.manifesto-grid {
+  display: grid;
+  grid-template-columns: 34vw 32vw 34vw;
+  align-items: start;
+  gap: 0;
+  width: 100vw;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Сцена высокая — стопка занимает колонку целиком */
+.series-stage {
+  position: relative;
+  width: 100%;
+  height: 46vw;
+  max-height: 820px;
+}
+
+.series-piece { position: absolute; max-width: none; height: auto; }
+
+/* Перебиваем прежние правила с nth-of-type */
+/* Пропорции: главная крупная, фон умеренный */
+.series.is-left .series-piece.p3 { left: -4%; top: 30%; width: 16vw; z-index: 1; }
+.series.is-left .series-piece.p4 { left: 32%; top: 64%; width: 9vw;  z-index: 2; }
+.series.is-left .series-piece.p1 { left: 2%;  top: 4%;  width: 13vw; z-index: 3; }
+.series.is-left .series-piece.p2 { left: 6%;  top: 12%; width: 22vw; z-index: 5; }
+
+.series.is-right .series-piece.p4 { right: -8%; top: 6%;  width: 24vw; z-index: 1; }
+.series.is-right .series-piece.p3 { right: 8%;  top: 2%;  width: 19vw; z-index: 2; }
+.series.is-right .series-piece.p2 { right: 20%; top: 34%; width: 14vw; z-index: 3; }
+.series.is-right .series-piece.p1 { right: 26%; top: 18%; width: 13vw; z-index: 5; }
+/* Заголовки */
+img.series-heading {
+  display: block;
+  width: clamp(220px, 21vw, 420px);
+  height: auto;
+  margin-bottom: 10px;
+  padding: 0 clamp(12px, 2vw, 36px);
+}
+
+.series.is-right img.series-heading { margin-left: auto; }
+
+/* --- ТЕКСТ --- */
+.manifesto-text p,
+.series-question {
+  font-size: clamp(14px, 1.05vw, 17px);
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+.manifesto-text { max-width: none; }
+.manifesto-center { padding: clamp(30px, 5vw, 90px) clamp(12px, 1.5vw, 28px) 0; }
+.manifesto-title { font-size: clamp(38px, 5.2vw, 92px); }
+
+.series-question { padding: 0 clamp(12px, 2vw, 36px); margin-top: 18px; }
+
+@media (max-width: 1100px) {
+  .manifesto-grid { grid-template-columns: 1fr; gap: 56px; padding: 0 var(--pad-x); }
+  .series-stage { height: 105vw; max-height: 600px; }
+  .series-piece { width: auto; max-width: 52%; }
+}
+
+/* ==========================================================================
+   МАНИФЕСТ — финальная раскладка, перебивает всё предыдущее
+   ========================================================================== */
+.manifesto .series.is-left .series-piece.p1,
+.manifesto .series.is-left .series-piece.p3,
+.manifesto .series.is-left .series-piece.p4 {
+  width: 9vw !important;
+}
+
+.manifesto .series.is-left .series-piece.p1 { left: 0    !important; top: 4%  !important; z-index: 3 !important; }
+.manifesto .series.is-left .series-piece.p3 { left: 2%   !important; top: 46% !important; z-index: 1 !important; }
+.manifesto .series.is-left .series-piece.p4 { left: 40%  !important; top: 62% !important; z-index: 2 !important; }
+
+.manifesto .series.is-left .series-piece.p2 {
+  left: 12% !important; top: 12% !important;
+  width: 22vw !important; z-index: 5 !important;
+}
+
+.manifesto .series-stage { height: 48vw !important; max-height: 780px !important; }

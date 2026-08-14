@@ -236,3 +236,21 @@
   .series.is-left .series-piece:nth-of-type(4),
   .series.is-right .series-piece:nth-of-type(4) { max-width: 40%; }
 }
+/* Жёсткое ограничение: размеры от ширины окна */
+.series-stage { position: relative; width: 100%; height: 34vw; max-height: 620px; }
+.series-piece { position: absolute; max-width: none; height: auto; }
+
+.series.is-left .series-piece:nth-of-type(1) { left: -6%; top: 0;   width: 13vw; z-index: 3; }
+.series.is-left .series-piece:nth-of-type(2) { left: 34%; top: -2%; width: 11vw; z-index: 2; }
+.series.is-left .series-piece:nth-of-type(3) { left: 10%; top: 22%; width: 17vw; z-index: 4; }
+.series.is-left .series-piece:nth-of-type(4) { left: 46%; top: 60%; width: 10vw; z-index: 5; }
+
+.series.is-right .series-piece:nth-of-type(1) { right: 12%; top: 2%;  width: 10vw; z-index: 4; }
+.series.is-right .series-piece:nth-of-type(2) { right: -4%; top: 16%; width: 9vw;  z-index: 3; }
+.series.is-right .series-piece:nth-of-type(3) { right: 34%; top: 38%; width: 12vw; z-index: 2; }
+.series.is-right .series-piece:nth-of-type(4) { right: 2%;  top: 55%; width: 15vw; z-index: 5; }
+
+@media (max-width: 1100px) {
+  .series-stage { height: 92vw; max-height: 560px; }
+  .series-piece { width: auto; max-width: 44%; }
+}
