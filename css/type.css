@@ -116,3 +116,29 @@ h3 { font-size: clamp(17px, 1.5vw, 22px); }
 .series-question {
   font-feature-settings: "calt" 1, "rand" 1;
 }
+
+/* Три размера на весь сайт, без исключений */
+:root {
+  --fs-lg: clamp(28px, 3.4vw, 58px);   /* заголовки разделов */
+  --fs-md: clamp(15px, 1.15vw, 18px);  /* основной текст */
+  --fs-sm: clamp(12px, 0.85vw, 14px);  /* подписи, номера, кнопки */
+}
+
+h2, .manifesto-title, .about-heading { font-size: var(--fs-lg); }
+
+.manifesto-text p,
+.series-question,
+.note p,
+.section-intro,
+.shop-note,
+p { font-size: var(--fs-md); }
+
+.section-number,
+.tab-btn,
+.btn,
+.work-note,
+.work-price,
+.note-sign,
+.cv-card-role,
+.cv-card-hint,
+.series-label { font-size: var(--fs-sm); }

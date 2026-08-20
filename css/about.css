@@ -52,6 +52,8 @@
   object-position: center;
 }
 
+.canvas-container .main-painting { object-fit: contain; background: var(--bg); }
+
 /* Вуаль: середина открыта, края уходят в белый */
 .about-bg::after {
   content: '';
@@ -344,4 +346,115 @@ img.series-heading {
 /* Заголовки не уезжают под липкую шапку */
 #about, #manifesto, #shop, #contacts, #hero {
   scroll-margin-top: calc(var(--header-h, 72px) + 16px);
+}
+/* ==========================================================================
+   ПРАВКИ ПО РЕВЬЮ
+   ========================================================================== */
+
+/* --- 1. Обложка: надпись не должна срезаться --- */
+.canvas-container .main-painting {
+  object-fit: contain;
+  object-position: center;
+  background: var(--bg);
+}
+
+/* --- 2. Три размера на весь сайт --- */
+:root {
+  --fs-lg: clamp(28px, 3.4vw, 58px);
+  --fs-md: clamp(15px, 1.15vw, 18px);
+  --fs-sm: clamp(12px, 0.85vw, 14px);
+}
+
+h2, .manifesto-title, .about-heading, .wall-head h2 { font-size: var(--fs-lg); }
+
+.manifesto-text p,
+.series-question,
+.note p,
+.section-intro,
+.shop-note,
+.work-title { font-size: var(--fs-md); }
+
+.section-number,
+.tab-btn,
+.btn,
+.work-note,
+.work-price,
+.note-sign,
+.cv-card-role,
+.cv-card-hint { font-size: var(--fs-sm); }
+
+/* --- 3. Манифест: заголовки серий над стопкой, не поверх --- */
+.series { display: flex; flex-direction: column; }
+
+img.series-heading {
+  position: static;
+  order: -1;
+  width: clamp(180px, 17vw, 320px);
+  margin: 0 0 clamp(12px, 1.5vw, 22px);
+  align-self: flex-start;
+}
+
+.series.is-right img.series-heading { align-self: flex-end; }
+
+/* Центр выравнивается по верху колонок */
+.manifesto-grid { align-items: start; }
+.manifesto-center { padding-top: clamp(30px, 5vw, 80px); }
+
+/* Вопросы не липнут к краю экрана */
+.series-question {
+  padding: 0 clamp(20px, 3vw, 48px);
+  margin-top: clamp(20px, 2.5vw, 36px);
+}
+
+/* --- 4. Стена: единая типографика --- */
+.section-wall,
+.section-wall h2,
+.section-wall p,
+.section-wall .tab-btn { font-family: var(--font-head); }
+
+.section-wall .work-note,
+.section-wall .work-price,
+.section-wall .section-number,
+.section-wall .shop-note { font-family: var(--font-body); }
+
+/* --- 5. Кликабельность --- */
+.tab-btn,
+.cv-card,
+.work,
+.hang-frame,
+.contact-link { cursor: pointer; }
+
+.contact-link { border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+
+.cv-card::after {
+  content: '↓ Скачать';
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  opacity: .6;
+  margin-top: 8px;
+}
+
+.tab-btn.active {
+  border: 1px solid currentColor;
+  border-radius: 100px;
+  padding: 6px 16px;
+}
+
+/* --- 6. Контакты --- */
+.contact-alt {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  margin-top: 6px;
+}
+
+.legal-note {
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-soft);
+  margin-top: 36px;
+  max-width: 60ch;
 }
