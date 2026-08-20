@@ -5,20 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Ma chere Victoria</title>
     <meta name="description" content="Виктория — художница. Манифест, серия работ и лавка: оригиналы и печатные тиражи.">
-    <link rel="stylesheet" href="css/type.css?v=36">
-    <link rel="stylesheet" href="css/style.css?v=36">
-    <link rel="stylesheet" href="css/motion.css?v=36">
-    <link rel="stylesheet" href="css/shop.css?v=36">
-    <link rel="stylesheet" href="css/manifesto.css?v=36">
-    <link rel="stylesheet" href="css/about.css?v=36">
+    <link rel="stylesheet" href="css/type.css?v=37">
+    <link rel="stylesheet" href="css/style.css?v=37">
+    <link rel="stylesheet" href="css/motion.css?v=37">
+    <link rel="stylesheet" href="css/shop.css?v=37">
+    <link rel="stylesheet" href="css/manifesto.css?v=37">
+    <link rel="stylesheet" href="css/about.css?v=37">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
     <link rel="preload" href="fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
     <script src="js/gallery.js" defer></script>
     <script src="js/script.js" defer></script>
-    <script src="js/motion.js?v=36" defer></script>
+    <script src="js/motion.js?v=37" defer></script>
     <link rel="icon" href="media/favicon.png" type="image/png">
 </head>
 <body>
@@ -29,7 +28,7 @@
         <nav class="menu" id="mainMenu">
             <a href="#about">Обо мне</a>
             <a href="#manifesto">Манифест</a>
-            <a href="#catalog">Серия работ</a>
+            <a href="#manifesto">Серия работ</a>
             <a href="#shop">Лавка</a>
             <a href="#contacts">Контакты</a>
         </nav>
@@ -61,7 +60,6 @@
 
         <!-- ==========================================================================
      БЛОК 1 — ОБО МНЕ
-     Заменить весь <section id="about"> на это
      ========================================================================== -->
 
         <section id="about" class="about-scene">
@@ -139,10 +137,10 @@
                     <div class="series-stage">
                         <img class="series-circle" src="media/yellow_circle.png" alt="">
                         <img class="series-heading" src="media/yellow_heading_rus.png" alt="Предчувствие">
-                        <img class="series-piece" src="media/yellow_piece_1.png" alt="" loading="lazy">
-                        <img class="series-piece" src="media/yellow_piece_2.png" alt="" loading="lazy">
-                        <img class="series-piece" src="media/yellow_piece_3.png" alt="" loading="lazy">
-                        <img class="series-piece" src="media/yellow_piece_4.png" alt="" loading="lazy">
+                        <img class="series-piece p1" src="media/yellow_piece_1.png" alt="" loading="lazy">
+                        <img class="series-piece p2" src="media/yellow_piece_2.png" alt="" loading="lazy">
+                        <img class="series-piece p3" src="media/yellow_piece_3.png" alt="" loading="lazy">
+                        <img class="series-piece p4" src="media/yellow_piece_4.png" alt="" loading="lazy">
                     </div>
 
                     <p class="series-question">
@@ -192,7 +190,7 @@
             </div>
 
             <!-- Визитка CV: физический объект, а не ссылка в списке -->
-            <a class="cv-card" href="media/cv.jpg" download="cv-victoria.jpg">
+            <a class="cv-card" href="media/cv.pdf" download="cv-victoria.pdf">
                 <span class="cv-card-name">Victoria</span>
                 <span class="cv-card-role">Artist · Moscow</span>
                 <span class="cv-card-hint">CV — PDF</span>
@@ -220,7 +218,7 @@
         <div class="cart-foot">
             <div class="cart-total">
                 <span>Итого</span>
-                <b id="cartTotal">0 €</b>
+                <b id="cartTotal">0 ₽</b>
             </div>
             <a class="btn btn-solid" id="cartOrder" href="#">Отправить заказ</a>
             <p class="cart-hint">Откроется письмо со списком работ. Доставку и оплату согласуем в переписке.</p>
