@@ -52,8 +52,6 @@
   object-position: center;
 }
 
-.canvas-container .main-painting { object-fit: contain; background: var(--bg); }
-
 /* Вуаль: середина открыта, края уходят в белый */
 .about-bg::after {
   content: '';
@@ -200,20 +198,6 @@
 /* Текст внутри записки остаётся по левому краю */
 .about-note-layout { text-align: left; }
 
-/* --------------------------------------------------------------------------
-   ВЕНЗЕЛЬ НА ОБЛОЖКЕ
-   Внизу первого экрана, по центру — уводит взгляд вниз, к прокрутке.
-   -------------------------------------------------------------------------- */
-.hero-vensel {
-  position: absolute;
-  bottom: clamp(60px, 12vh, 140px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: clamp(200px, 26vw, 420px);
-  height: auto;
-  z-index: 3;
-  pointer-events: none;
-}
 .series.is-left img.series-heading { padding-left: clamp(30px, 4vw, 70px); }
 .series-stage { height: 34vw !important; max-height: 620px !important; }
 .series-piece { max-width: none !important; }
@@ -350,13 +334,6 @@ img.series-heading {
 /* ==========================================================================
    ПРАВКИ ПО РЕВЬЮ
    ========================================================================== */
-
-/* --- 1. Обложка: надпись не должна срезаться --- */
-.canvas-container .main-painting {
-  object-fit: contain;
-  object-position: center;
-  background: var(--bg);
-}
 
 /* --- 2. Три размера на весь сайт --- */
 :root {
