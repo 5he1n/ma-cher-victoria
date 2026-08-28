@@ -54,16 +54,16 @@
 /* Цветной ореол за стопкой */
 .series-circle {
   position: absolute;
-  top: 4%;
-  width: 116%;
+  top: -6%;
+  width: 170%;
   height: auto;
   z-index: 0;
   opacity: .85;
   pointer-events: none;
 }
 
-.series.is-left  .series-circle { left: -22%; }
-.series.is-right .series-circle { right: -22%; }
+.series.is-left  .series-circle { left: -60%; }
+.series.is-right .series-circle { right: -60%; }
 
 /* Название серии */
 .series-heading {
@@ -184,9 +184,9 @@
   .series.is-right .series-heading,
   .series.is-right .series-question { text-align: left; }
 
-  .series-circle { width: 108%; }
-  .series.is-left  .series-circle { left: -4%; }
-  .series.is-right .series-circle { right: -4%; }
+  .series-circle { top: -19%; width: 221%; }
+  .series.is-left  .series-circle { left: -93%; }
+  .series.is-right .series-circle { right: -97%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
