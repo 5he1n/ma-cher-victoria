@@ -403,8 +403,7 @@ img.series-heading {
 
 .contact-link { border-bottom: 1px solid currentColor; padding-bottom: 2px; }
 
-.cv-card::after {
-  content: '↓ Скачать';
+.cv-card-download {
   display: block;
   font-family: var(--font-body);
   font-size: var(--fs-sm);
