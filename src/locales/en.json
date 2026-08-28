@@ -26,7 +26,7 @@
     "signature": "Victoria"
   },
   "manifesto": {
-    "section": "02 — Manifesto",
+    "section": "02 — Work series",
     "titleTop": "Artist",
     "titleBottom": "Statement",
     "paragraph1": "In my artistic practice I work with the experience of feeling.",
@@ -45,7 +45,7 @@
     "hint": "Hover to reveal"
   },
   "shop": {
-    "section": "04 — Shop",
+    "section": "03 — Shop",
     "title": "The Wall",
     "intro": "Works you can take home. Sold pieces remain on the wall — a nail and a trace that has not faded.",
     "filters": {
@@ -63,7 +63,7 @@
     }
   },
   "contacts": {
-    "section": "05 — Contacts",
+    "section": "04 — Contacts",
     "title": "Get in touch",
     "email": "Email",
     "instagram": "Instagram",
