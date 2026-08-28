@@ -285,7 +285,9 @@ function hangMarkup(item, i) {
   const ratio = ratioOf(item);
 
   const body = sold
-    ? `<div class="hang-ghost" style="aspect-ratio:${esc(ratio)}" aria-hidden="true"></div>`
+    ? `<div class="hang-ghost" style="aspect-ratio:${esc(ratio)}; opacity: 0.05" aria-hidden="true">
+         ${imgTag(item.image, title, { sizes: WALL_SIZES, eager: i < 4, ratio })} 
+      </div>`
     : `<div class="hang-media" style="aspect-ratio:${esc(ratio)}">
          ${imgTag(item.image, title, { sizes: WALL_SIZES, eager: i < 4, ratio })}
        </div>`;
