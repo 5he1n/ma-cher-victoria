@@ -39,8 +39,11 @@
                 <span class="lang-divider">/</span>
                 <a href="#" class="lang-link">EN</a>
             </div>
-            <button class="cart-toggle" id="cartToggle" hidden>
-                Корзина <span class="cart-count" id="cartCount"></span>
+            <button class="cart-toggle" id="cartToggle" aria-label="Корзина" hidden>
+                <span class="cart-icon-wrap">
+                    <img class="cart-icon" src="media/cart-icon.png" alt="" width="32" height="32">
+                    <span class="cart-count" id="cartCount" aria-hidden="true" hidden></span>
+                </span>
             </button>
         </div>
 

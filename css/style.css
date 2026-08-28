@@ -167,20 +167,73 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* Кнопка корзины в шапке */
 .cart-toggle {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
   background: none;
   border: none;
   cursor: pointer;
   color: var(--text);
-  font-family: var(--font-ui);
-  font-size: 12px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  padding: 8px 0;
-  white-space: nowrap;
+  padding: 6px;
 }
 
 .cart-toggle[hidden] { display: none; }
-.cart-count { color: var(--text-soft); }
+
+.cart-toggle:focus-visible {
+  outline-width: 2px;
+  border-radius: 2px;
+}
+
+.cart-icon-wrap {
+  position: relative;
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.cart-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.cart-count {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #c62828;
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.cart-count[hidden] { display: none; }
+
+.cart-toggle[data-badge-position="top-right"] .cart-count {
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.cart-toggle[data-badge-position="bottom-right"] .cart-count {
+  right: 0;
+  bottom: 0;
+  transform: translate(50%, 50%);
+}
 
 /* Бургер */
 .nav-toggle {

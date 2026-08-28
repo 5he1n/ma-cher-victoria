@@ -4,6 +4,7 @@
 const SHOP_EMAIL = 'victtoress@mail.com';   // ← сюда приходят заказы
 const CURRENCY = '₽';
 const CART_KEY = 'mcv-cart';             // ключ хранения корзины
+const CART_BADGE_POSITION = 'top-right';  // 'top-right' | 'bottom-right'
 
 // ==========================================================================
 // 1. УТИЛИТЫ
@@ -434,8 +435,14 @@ const cart = {
           </div>`).join('')
       : '<p class="cart-empty">Пока пусто. Выберите работу на стене.</p>';
 
+    const count = this.items.length;
+    const countElement = document.getElementById('cartCount');
+    const toggle = document.getElementById('cartToggle');
+
     document.getElementById('cartTotal').textContent = money(this.total());
-    document.getElementById('cartCount').textContent = this.items.length ? `(${this.items.length})` : '';
+    countElement.textContent = count ? String(count) : '';
+    countElement.hidden = count === 0;
+    toggle.setAttribute('aria-label', count ? `Корзина, товаров: ${count}` : 'Корзина пуста');
 
     const order = document.getElementById('cartOrder');
     order.classList.toggle('is-disabled', !this.items.length);
@@ -469,6 +476,10 @@ function initCart() {
   const overlay = document.getElementById('cartOverlay');
   const toggle = document.getElementById('cartToggle');
   if (!panel || !toggle) return;
+
+  toggle.dataset.badgePosition = ['top-right', 'bottom-right'].includes(CART_BADGE_POSITION)
+    ? CART_BADGE_POSITION
+    : 'top-right';
 
   setCartOpen = (open) => {
     panel.classList.toggle('is-open', open);
