@@ -7,8 +7,12 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const TEMPLATE_PATH = resolve(ROOT, 'src/index.template.html');
 const LOCALES_DIR = resolve(ROOT, 'src/locales');
 const SITE_ROOT = 'https://sanchousmak.github.io/ma-cher-victoria/';
-const GENERATED = '<!-- GENERATED FILE — edit src/index.template.html and src/locales/*.json, then run npm run build. -->';
-const RAW_TEMPLATE_MARKERS = new Set(['switch.ruAriaCurrent', 'switch.enAriaCurrent']);
+const GENERATED = '<!-- GENERATED FILE — edit src/index.template.html, src/404.template.html, and src/locales/*.json, then run npm run build. -->';
+const RAW_TEMPLATE_MARKERS = new Set([
+  'switch.ruAriaCurrent',
+  'switch.enAriaCurrent',
+  'notFound.config'
+]);
 
 const escapeHtml = (value) => String(value)
   .replaceAll('&', '&amp;')
@@ -77,6 +81,10 @@ function renderTemplate(template, locale, code) {
       ruAriaCurrent: code === 'ru' ? 'aria-current="page"' : '',
       enAriaCurrent: code === 'en' ? 'aria-current="page"' : ''
     },
+    route: {
+      blue: `../404.html?lang=${code}`,
+      yellow: `../404.html?lang=${code}`
+    },
     seo: {
       canonical: `${SITE_ROOT}${code}/`,
       ru: `${SITE_ROOT}ru/`,
@@ -127,6 +135,35 @@ function renderRouter() {
 `;
 }
 
+function renderNotFound(template, ru, en) {
+  const config = {
+    home: {
+      ru: `ru/`,
+      en: `en/`
+    },
+    dictionaries: {
+      ru: ru.notFound,
+      en: en.notFound
+    }
+  };
+  const context = {
+    notFound: {
+      ru: ru.notFound,
+      en: en.notFound,
+      homeRu: config.home.ru,
+      homeEn: config.home.en,
+      config: safeJson(config)
+    }
+  };
+  const rendered = template.replace(/\{\{([^{}]+)\}\}/g, (whole, key) => {
+    const value = getPath(context, key.trim());
+    if (value === undefined) throw new Error(`Unresolved 404 template marker: ${whole}`);
+    return key.trim() === 'notFound.config' ? value : escapeHtml(value);
+  });
+  if (/\{\{[^{}]+\}\}/.test(rendered)) throw new Error('Unresolved template marker in 404.html');
+  return `${GENERATED}\n${rendered}`;
+}
+
 async function loadLocale(code) {
   const path = resolve(LOCALES_DIR, `${code}.json`);
   return JSON.parse(await readFile(path, 'utf8'));
@@ -147,8 +184,10 @@ async function main() {
     await mkdir(dirname(outputPath), { recursive: true });
     await writeFile(outputPath, renderTemplate(template, code === 'ru' ? ru : en, code), 'utf8');
   }
+  const notFoundTemplate = await readFile(resolve(ROOT, 'src/404.template.html'), 'utf8');
+  await writeFile(resolve(ROOT, '404.html'), renderNotFound(notFoundTemplate, ru, en), 'utf8');
   await writeFile(resolve(ROOT, 'index.html'), renderRouter(), 'utf8');
-  console.log(`Built ${relative(ROOT, resolve(ROOT, 'index.html'))}, ru/index.html, and en/index.html`);
+  console.log(`Built ${relative(ROOT, resolve(ROOT, 'index.html'))}, ru/index.html, en/index.html, and 404.html`);
 }
 
 main().catch((error) => {

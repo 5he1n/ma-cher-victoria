@@ -10,19 +10,19 @@
   <link rel="alternate" hreflang="en" href="{{seo.en}}">
   <link rel="alternate" hreflang="x-default" href="{{seo.default}}">
   <link rel="stylesheet" href="../css/type.css?v=39">
-  <link rel="stylesheet" href="../css/style.css?v=40">
+  <link rel="stylesheet" href="../css/style.css?v=42">
   <link rel="stylesheet" href="../css/motion.css?v=39">
-  <link rel="stylesheet" href="../css/shop.css?v=39">
-  <link rel="stylesheet" href="../css/manifesto.css?v=39">
-  <link rel="stylesheet" href="../css/about.css?v=40">
+  <link rel="stylesheet" href="../css/shop.css?v=42">
+  <link rel="stylesheet" href="../css/manifesto.css?v=42">
+  <link rel="stylesheet" href="../css/about.css?v=42">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="../fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
   <link rel="icon" href="../media/favicon.png" type="image/png">
   <script type="application/json" id="mcv-i18n">{{locale.json}}</script>
-  <script src="../js/i18n.js" defer></script>
-  <script src="../js/gallery.js" defer></script>
-  <script src="../js/script.js" defer></script>
+  <script src="../js/i18n.js?v=42" defer></script>
+  <script src="../js/gallery.js?v=42" defer></script>
+  <script src="../js/script.js?v=42" defer></script>
   <script src="../js/motion.js?v=39" defer></script>
 </head>
 <body>
@@ -84,16 +84,18 @@
     <section id="manifesto" class="manifesto">
       <div class="manifesto-grid">  
         <div class="series is-left" data-reveal="left" data-delay="150">
-          <div class="series-stage">
-            <img class="series-circle" src="../media/blue_circle.png" alt="">
-            <img class="series-heading" src="../media/{{locale.blueHeading}}" alt="{{i18n.series.blue.headingAlt}}">
-            <img class="series-piece p1" src="../media/blue_room_piece_1.png" alt="" loading="lazy">
-            <img class="series-piece p2" src="../media/blue_room_piece_2.png" alt="" loading="lazy">
-            <img class="series-piece p3" src="../media/blue_room_piece_3.png" alt="" loading="lazy">
-            <img class="series-piece p4" src="../media/blue_room_piece_4.png" alt="" loading="lazy">
-          </div>
+          <a class="series-link" href="{{route.blue}}" aria-label="{{i18n.series.blue.aria}}">
+            <div class="series-stage">
+              <img class="series-circle" src="../media/blue_circle.png" alt="">
+              <img class="series-heading" src="../media/{{locale.blueHeading}}" alt="{{i18n.series.blue.headingAlt}}">
+              <img class="series-piece p1" src="../media/blue_room_piece_1.png" alt="" loading="lazy">
+              <img class="series-piece p2" src="../media/blue_room_piece_2.png" alt="" loading="lazy">
+              <img class="series-piece p3" src="../media/blue_room_piece_3.png" alt="" loading="lazy">
+              <img class="series-piece p4" src="../media/blue_room_piece_4.png" alt="" loading="lazy">
+            </div>
+            <span class="series-hint" data-i18n="series.hint">{{i18n.series.hint}}</span>
+          </a>
           <p class="series-question" data-i18n="series.blue.question">{{i18n.series.blue.question}}</p>
-          <span class="series-hint" data-i18n="series.hint">{{i18n.series.hint}}</span>
         </div>
         <div class="manifesto-center">
           <span class="section-number" data-i18n="manifesto.section">{{i18n.manifesto.section}}</span>
@@ -105,16 +107,18 @@
           </div>
         </div>
         <div class="series is-right" data-reveal="right" data-delay="150">
-          <div class="series-stage">
-            <img class="series-circle" src="../media/yellow_circle.png" alt="">
-            <img class="series-heading" src="../media/{{locale.yellowHeading}}" alt="{{i18n.series.yellow.headingAlt}}">
-            <img class="series-piece p1" src="../media/yellow_piece_1.png" alt="" loading="lazy">
-            <img class="series-piece p2" src="../media/yellow_piece_2.png" alt="" loading="lazy">
-            <img class="series-piece p3" src="../media/yellow_piece_3.png" alt="" loading="lazy">
-            <img class="series-piece p4" src="../media/yellow_piece_4.png" alt="" loading="lazy">
-          </div>
+          <a class="series-link" href="{{route.yellow}}" aria-label="{{i18n.series.yellow.aria}}">
+            <div class="series-stage">
+              <img class="series-circle" src="../media/yellow_circle.png" alt="">
+              <img class="series-heading" src="../media/{{locale.yellowHeading}}" alt="{{i18n.series.yellow.headingAlt}}">
+              <img class="series-piece p1" src="../media/yellow_piece_1.png" alt="" loading="lazy">
+              <img class="series-piece p2" src="../media/yellow_piece_2.png" alt="" loading="lazy">
+              <img class="series-piece p3" src="../media/yellow_piece_3.png" alt="" loading="lazy">
+              <img class="series-piece p4" src="../media/yellow_piece_4.png" alt="" loading="lazy">
+            </div>
+            <span class="series-hint" data-i18n="series.hint">{{i18n.series.hint}}</span>
+          </a>
           <p class="series-question" data-i18n="series.yellow.question">{{i18n.series.yellow.question}}</p>
-          <span class="series-hint" data-i18n="series.hint">{{i18n.series.hint}}</span>
         </div>
       </div>
     </section>

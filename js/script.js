@@ -222,49 +222,8 @@ function initFilters(selector, onChange) {
   }));
 }
 // ==========================================================================
-// РАСКРЫТИЕ СЕРИЙ В МАНИФЕСТЕ
-// Десктоп — по наведению, телефон — по касанию.
-// Разделение по наличию точного указателя, а не по ширине экрана:
-// планшет с мышью получит поведение десктопа.
 // ==========================================================================
 
-(function () {
-  function init() {
-    const items = [...document.querySelectorAll('.series')];
-    if (!items.length) return;
-
-    const hasHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-    items.forEach((series) => {
-      if (hasHover) {
-        series.addEventListener('mouseenter', () => series.classList.add('is-open'));
-        series.addEventListener('mouseleave', () => series.classList.remove('is-open'));
-
-        // Доступность с клавиатуры
-        series.setAttribute('tabindex', '0');
-        series.addEventListener('focus', () => series.classList.add('is-open'));
-        series.addEventListener('blur', () => series.classList.remove('is-open'));
-      } else {
-        // Касание: открываем одну, остальные закрываем
-        series.addEventListener('click', () => {
-          const wasOpen = series.classList.contains('is-open');
-          items.forEach((s) => s.classList.remove('is-open'));
-          if (!wasOpen) series.classList.add('is-open');
-        });
-      }
-    });
-
-    // На телефоне первая серия открыта сразу — иначе неочевидно,
-    // что блок вообще интерактивный
-    if (!hasHover && items[0]) items[0].classList.add('is-open');
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
 // ==========================================================================
 // 5. СТЕНА (магазин)
 // ==========================================================================

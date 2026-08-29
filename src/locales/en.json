@@ -34,15 +34,24 @@
     "paragraph3": "Text, installation, and working with a complete series play an important role in my work. My interests circle around the theatrical gesture, animated movement, and the documentary quality of printmaking."
   },
   "series": {
+    "hint": "Open series",
     "blue": {
       "headingAlt": "Blue Room",
-      "question": "How does a domestic space turn from intimacy into solitude? Where does being together with oneself begin? When does a bathroom stop being ordinary and everyday?"
+      "question": "How does a domestic space turn from intimacy into solitude? Where does being together with oneself begin? When does a bathroom stop being ordinary and everyday?",
+      "aria": "Open the Blue Room series"
     },
     "yellow": {
       "headingAlt": "Presentiment",
-      "question": "Notebooks, fragments of phrases, and shards of memory. Why do we collect physical memory? What remains at the end of what we saw and remembered?"
-    },
-    "hint": "Hover to reveal"
+      "question": "Notebooks, fragments of phrases, and shards of memory. Why do we collect physical memory? What remains at the end of what we saw and remembered?",
+      "aria": "Open the Presentiment series"
+    }
+  },
+  "notFound": {
+    "documentTitle": "404 — Page not found",
+    "title": "Page not found",
+    "message": "It looks like this page has not been written yet.",
+    "home": "Back to home",
+    "language": "Language"
   },
   "shop": {
     "section": "03 — Shop",
