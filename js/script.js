@@ -30,18 +30,30 @@ const localized = (item, field, fallback = '') => {
 
 /**
  * Тег картинки с адаптивными срезами.
- * Мелкая копия ожидается рядом с оригиналом: work-1.webp → work-1-sm.webp.
- * Если её нет или файл не webp — отдаём обычный src без srcset.
+ * Метаданные full/small-версий заданы в IMAGE_META.
+ * Без метаданных размер берём из указанного ratio.
  */
-function imgTag(src, alt, { sizes, eager = false, ratio = '4/5' } = {}) {
-  const small = src.endsWith('.webp') ? src.replace(/\.webp$/, '-sm.webp') : null;
+function imgTag(src, alt, {
+  sizes,
+  loading = 'lazy',
+  fetchPriority = 'auto',
+  ratio = '4/5',
+  thumbnail = false
+} = {}) {
+  const meta = typeof IMAGE_META === 'undefined' ? null : IMAGE_META[src];
   const [w, h] = ratio.split('/').map(Number);
+  const primary = thumbnail && meta?.small
+    ? meta.small
+    : { src, width: meta?.width || w * 100, height: meta?.height || h * 100 };
+  const srcset = !thumbnail && meta?.small && sizes
+    ? `${meta.small.src} ${meta.small.width}w, ${src} ${meta.width}w`
+    : '';
 
-  return `<img src="${esc(src)}"
-    ${small && sizes ? `srcset="${esc(small)} 800w, ${esc(src)} 1400w" sizes="${esc(sizes)}"` : ''}
+  return `<img src="${esc(primary.src)}"
+    ${srcset ? `srcset="${esc(srcset)}" sizes="${esc(sizes)}"` : ''}
     alt="${esc(alt)}"
-    width="${w * 100}" height="${h * 100}"
-    loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
+    width="${primary.width}" height="${primary.height}"
+    loading="${esc(loading)}" decoding="async" fetchpriority="${esc(fetchPriority)}">`;
 }
 
 // ==========================================================================
@@ -110,14 +122,14 @@ const ARROW = {
 
 const CAROUSEL_SIZES = '(max-width: 700px) 82vw, (max-width: 1100px) 45vw, 30vw';
 
-function workMarkup(item, i, eager) {
+function workMarkup(item, i) {
   const title = localized(item, 'title', t('messages.untitled'));
   const note = esc(caption(item));
 
   return `
     <article class="work">
       <div class="work-media">
-        ${imgTag(item.image, title, { sizes: CAROUSEL_SIZES, eager })}
+        ${imgTag(item.image, title, { sizes: CAROUSEL_SIZES })}
       </div>
       <div class="work-meta">
         <div>
@@ -139,7 +151,7 @@ function renderCarousel(root, items, label) {
   root.innerHTML = `
     <div class="carousel">
       <div class="carousel-track" role="region" aria-label="${esc(t('catalog.aria'))}" tabindex="0">
-        ${items.map((it, i) => `<div class="carousel-slide">${workMarkup(it, i, i < 2)}</div>`).join('')}
+        ${items.map((it, i) => `<div class="carousel-slide">${workMarkup(it, i)}</div>`).join('')}
       </div>
       <div class="carousel-controls">
         <button class="carousel-btn" data-dir="-1" aria-label="${esc(t('catalog.previous'))}">${ARROW.prev}</button>
@@ -245,10 +257,10 @@ function hangMarkup(item, i) {
 
   const body = sold
     ? `<div class="hang-ghost" style="aspect-ratio:${esc(ratio)}; opacity: 0.05" aria-hidden="true">
-         ${imgTag(item.image, title, { sizes: WALL_SIZES, eager: i < 4, ratio })} 
+         ${imgTag(item.image, title, { sizes: WALL_SIZES, ratio })}
       </div>`
     : `<div class="hang-media" style="aspect-ratio:${esc(ratio)}">
-         ${imgTag(item.image, title, { sizes: WALL_SIZES, eager: i < 4, ratio })}
+         ${imgTag(item.image, title, { sizes: WALL_SIZES, ratio })}
        </div>`;
 
   const label = `
@@ -304,7 +316,7 @@ function openSpread(id) {
 
   spread.querySelector('.spread-inner').innerHTML = `
     <div class="spread-main">
-      ${imgTag(item.image, localized(item, 'title', t('messages.untitled')), { eager: true, ratio: ratioOf(item) })}
+      ${imgTag(item.image, localized(item, 'title', t('messages.untitled')), { loading: 'eager', fetchPriority: 'high', ratio: ratioOf(item) })}
     </div>
 
     <div class="spread-side">
@@ -312,7 +324,7 @@ function openSpread(id) {
       <h2 class="spread-title">${esc(localized(item, 'title', t('messages.untitled')))}</h2>
 
       ${item.detail ? `
-        <div class="spread-detail">${imgTag(item.detail, t('spread.detailAlt'), { eager: true })}</div>
+        <div class="spread-detail">${imgTag(item.detail, t('spread.detailAlt'), { loading: 'lazy', fetchPriority: 'auto' })}</div>
         <p class="spread-detail-note">${esc(t('spread.detailNote'))}</p>` : ''}
 
       ${item.about ? `<p class="spread-about">${esc(localized(item, 'about'))}</p>` : ''}
@@ -397,8 +409,7 @@ const cart = {
     body.innerHTML = this.items.length
       ? this.items.map((i) => `
           <div class="cart-item">
-            <img src="${esc(i.image.endsWith('.webp') ? i.image.replace(/\.webp$/, '-sm.webp') : i.image)}"
-                 alt="" width="64" height="80" loading="lazy">
+            ${imgTag(i.image, '', { loading: 'lazy', fetchPriority: 'low', ratio: ratioOf(i), thumbnail: true })}
             <div>
               <h4>${esc(localized(i, 'title', t('messages.untitled')))}</h4>
               <span class="cart-item-note">${esc([localized(i, 'type'), localized(i, 'size')].filter(Boolean).join(' · '))}</span>

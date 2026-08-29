@@ -66,8 +66,12 @@ function renderTemplate(template, locale, code) {
   const localeMeta = {
     code,
     heroPortrait: code === 'en' ? 'main-portrait-eng.webp' : 'main-portrait-rus.webp',
-    blueHeading: code === 'en' ? 'blue_room_heading.png' : 'blue_room_heading_rus.png',
-    yellowHeading: code === 'en' ? 'yellow_heading_eng.png' : 'yellow_heading_rus.png',
+    blueHeading: code === 'en' ? 'blue_room_heading.webp' : 'blue_room_heading_rus.webp',
+    blueHeadingWidth: code === 'en' ? 3052 : 3567,
+    blueHeadingHeight: code === 'en' ? 627 : 686,
+    yellowHeading: code === 'en' ? 'yellow_heading_eng.webp' : 'yellow_heading_rus.webp',
+    yellowHeadingWidth: code === 'en' ? 3628 : 3331,
+    yellowHeadingHeight: code === 'en' ? 692 : 762,
     json: safeJson(locale)
   };
   const context = {

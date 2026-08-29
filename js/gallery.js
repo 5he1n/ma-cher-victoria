@@ -1,6 +1,20 @@
 // ==========================================================================
 // СЕРИЯ РАБОТ (карусель)
 // ==========================================================================
+const IMAGE_META = {
+  '../catalog/work-1.webp':  { width: 1050, height: 1400, small: { src: '../catalog/work-1-sm.webp',  width: 600, height: 800 } },
+  '../catalog/work-2.webp':  { width: 1050, height: 1400, small: { src: '../catalog/work-2-sm.webp',  width: 600, height: 800 } },
+  '../catalog/work-3.webp':  { width: 1083, height: 1400, small: { src: '../catalog/work-3-sm.webp',  width: 619, height: 800 } },
+  '../catalog/work-4.webp':  { width: 1050, height: 1400, small: { src: '../catalog/work-4-sm.webp',  width: 600, height: 800 } },
+  '../catalog/work-5.webp':  { width: 1050, height: 1400, small: { src: '../catalog/work-5-sm.webp',  width: 600, height: 800 } },
+  '../catalog/work-6.webp':  { width: 1050, height: 1400, small: { src: '../catalog/work-6-sm.webp',  width: 600, height: 800 } },
+  '../catalog/work-7.webp':  { width: 1050, height: 1400, small: { src: '../catalog/work-7-sm.webp',  width: 600, height: 800 } },
+  '../catalog/work-8.webp':  { width: 1400, height: 1050, small: { src: '../catalog/work-8-sm.webp',  width: 800, height: 600 } },
+  '../catalog/work-9.webp':  { width: 1050, height: 1400, small: { src: '../catalog/work-9-sm.webp',  width: 600, height: 800 } },
+  '../catalog/work-10.webp': { width: 1050, height: 1400, small: { src: '../catalog/work-10-sm.webp', width: 600, height: 800 } },
+  '../catalog/work-11.webp': { width: 1050, height: 1400, small: { src: '../catalog/work-11-sm.webp', width: 600, height: 800 } }
+};
+
 const gallery = {
   painting: [
     { image: '../catalog/work-1.webp', title: { ru: 'Утро в Юрмале', en: 'Morning in Jurmala' }, year: 2024, material: { ru: 'Холст, масло', en: 'Oil on canvas' }, size: '60×80' },

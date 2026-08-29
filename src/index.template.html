@@ -18,11 +18,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="../fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="../media/main-background.webp" as="image" type="image/webp">
   <link rel="icon" href="../media/favicon.png" type="image/png">
   <script type="application/json" id="mcv-i18n">{{locale.json}}</script>
   <script src="../js/i18n.js?v=42" defer></script>
-  <script src="../js/gallery.js?v=42" defer></script>
-  <script src="../js/script.js?v=42" defer></script>
+  <script src="../js/gallery.js?v=43" defer></script>
+  <script src="../js/script.js?v=43" defer></script>
   <script src="../js/motion.js?v=39" defer></script>
 </head>
 <body>
@@ -47,7 +48,7 @@
       </div>
       <button class="cart-toggle" id="cartToggle" aria-label="{{i18n.cart.emptyLabel}}" data-i18n-aria-label="cart.emptyLabel" hidden>
         <span class="cart-icon-wrap">
-          <img class="cart-icon" src="../media/cart-icon.png" alt="" width="32" height="32">
+          <img class="cart-icon" src="../media/cart-icon.png" alt="" width="32" height="32" loading="lazy" decoding="async" fetchpriority="low">
           <span class="cart-count" id="cartCount" aria-hidden="true" hidden></span>
         </span>
       </button>
@@ -59,14 +60,14 @@
     <section class="hero-canvas" id="hero">
       <div class="canvas-container">
         <h1 class="visually-hidden" data-i18n="hero.heading">{{i18n.hero.heading}}</h1>
-        <img src="../media/main-background.webp" alt="" class="hero-layer hero-background" fetchpriority="high" decoding="async">
-        <img src="../media/main-title.webp" alt="" class="hero-layer hero-title" fetchpriority="high" decoding="async">
-        <img src="../media/{{locale.heroPortrait}}" alt="{{i18n.hero.portraitAlt}}" class="hero-layer hero-portrait" fetchpriority="high" decoding="async">
+        <img src="../media/main-background.webp" alt="" class="hero-layer hero-background" width="2056" height="2048" loading="eager" fetchpriority="high" decoding="async">
+        <img src="../media/main-title.webp" alt="" class="hero-layer hero-title" width="2056" height="2048" loading="eager" fetchpriority="auto" decoding="async">
+        <img src="../media/{{locale.heroPortrait}}" alt="{{i18n.hero.portraitAlt}}" class="hero-layer hero-portrait" width="2056" height="2048" loading="eager" fetchpriority="auto" decoding="async">
       </div>
     </section>
 
     <section id="about" class="about-scene">
-      <div class="about-bg"><img src="../media/background_obomne.png" alt=""></div>
+      <div class="about-bg"><img src="../media/background_obomne.webp" alt="" width="3840" height="2160" loading="lazy" decoding="async" fetchpriority="low"></div>
       <div class="about-scene-inner">
         <h2 class="about-heading" data-reveal="up" data-delay="80" data-i18n="about.heading">{{i18n.about.heading}}</h2>
         <div class="about-note-layout">
@@ -86,12 +87,12 @@
         <div class="series is-left" data-reveal="left" data-delay="150">
           <a class="series-link" href="{{route.blue}}" aria-label="{{i18n.series.blue.aria}}">
             <div class="series-stage">
-              <img class="series-circle" src="../media/blue_circle.png" alt="">
-              <img class="series-heading" src="../media/{{locale.blueHeading}}" alt="{{i18n.series.blue.headingAlt}}">
-              <img class="series-piece p1" src="../media/blue_room_piece_1.png" alt="" loading="lazy">
-              <img class="series-piece p2" src="../media/blue_room_piece_2.png" alt="" loading="lazy">
-              <img class="series-piece p3" src="../media/blue_room_piece_3.png" alt="" loading="lazy">
-              <img class="series-piece p4" src="../media/blue_room_piece_4.png" alt="" loading="lazy">
+              <img class="series-circle" src="../media/blue_circle.webp" alt="" width="700" height="649" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-heading" src="../media/{{locale.blueHeading}}" alt="{{i18n.series.blue.headingAlt}}" width="{{locale.blueHeadingWidth}}" height="{{locale.blueHeadingHeight}}" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p1" src="../media/blue_room_piece_1.webp" alt="" width="763" height="1019" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p2" src="../media/blue_room_piece_2.webp" alt="" width="781" height="1110" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p3" src="../media/blue_room_piece_3.webp" alt="" width="442" height="441" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p4" src="../media/blue_room_piece_4.webp" alt="" width="347" height="346" loading="lazy" decoding="async" fetchpriority="low">
             </div>
             <span class="series-hint" data-i18n="series.hint">{{i18n.series.hint}}</span>
           </a>
@@ -109,12 +110,12 @@
         <div class="series is-right" data-reveal="right" data-delay="150">
           <a class="series-link" href="{{route.yellow}}" aria-label="{{i18n.series.yellow.aria}}">
             <div class="series-stage">
-              <img class="series-circle" src="../media/yellow_circle.png" alt="">
-              <img class="series-heading" src="../media/{{locale.yellowHeading}}" alt="{{i18n.series.yellow.headingAlt}}">
-              <img class="series-piece p1" src="../media/yellow_piece_1.png" alt="" loading="lazy">
-              <img class="series-piece p2" src="../media/yellow_piece_2.png" alt="" loading="lazy">
-              <img class="series-piece p3" src="../media/yellow_piece_3.png" alt="" loading="lazy">
-              <img class="series-piece p4" src="../media/yellow_piece_4.png" alt="" loading="lazy">
+              <img class="series-circle" src="../media/yellow_circle.webp" alt="" width="700" height="649" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-heading" src="../media/{{locale.yellowHeading}}" alt="{{i18n.series.yellow.headingAlt}}" width="{{locale.yellowHeadingWidth}}" height="{{locale.yellowHeadingHeight}}" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p1" src="../media/yellow_piece_1.webp" alt="" width="365" height="469" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p2" src="../media/yellow_piece_2.webp" alt="" width="250" height="328" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p3" src="../media/yellow_piece_3.webp" alt="" width="511" height="390" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p4" src="../media/yellow_piece_4.webp" alt="" width="431" height="514" loading="lazy" decoding="async" fetchpriority="low">
             </div>
             <span class="series-hint" data-i18n="series.hint">{{i18n.series.hint}}</span>
           </a>

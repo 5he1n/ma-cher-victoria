@@ -19,11 +19,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="../fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="../media/main-background.webp" as="image" type="image/webp">
   <link rel="icon" href="../media/favicon.png" type="image/png">
   <script type="application/json" id="mcv-i18n">{"meta":{"title":"Ma chere Victoria — artist","description":"Victoria is an artist. Artist statement, work series, and a shop with originals and limited prints."},"nav":{"about":"About me","manifesto":"Manifesto","series":"Work series","shop":"Shop","contacts":"Contacts"},"access":{"openMenu":"Open menu","closeMenu":"Close menu","language":"Language"},"hero":{"heading":"Victoria — artist. Painting, drawing, illustration","portraitAlt":"Victoria"},"about":{"heading":"ABOUT ME","paragraph1":"My name is Victoria. I am an artist. In my work I begin with myself. I am interested in the effect of the familiar, the ordinary, and the understood — in how something simple and beautiful shapes a person.","paragraph2":"My artistic credo is to multiply the beauty around me. While everyone is looking for new meanings, I want to make sense of the old ones.","signature":"Victoria"},"manifesto":{"section":"02 — Work series","titleTop":"Artist","titleBottom":"Statement","paragraph1":"In my artistic practice I work with the experience of feeling.","paragraph2":"Choosing the techniques of classical painting and drawing, I turn to everyday subjects and sharpen them with a new view of familiar things.","paragraph3":"Text, installation, and working with a complete series play an important role in my work. My interests circle around the theatrical gesture, animated movement, and the documentary quality of printmaking."},"series":{"hint":"Open series","blue":{"headingAlt":"Blue Room","question":"How does a domestic space turn from intimacy into solitude? Where does being together with oneself begin? When does a bathroom stop being ordinary and everyday?","aria":"Open the Blue Room series"},"yellow":{"headingAlt":"Presentiment","question":"Notebooks, fragments of phrases, and shards of memory. Why do we collect physical memory? What remains at the end of what we saw and remembered?","aria":"Open the Presentiment series"}},"notFound":{"documentTitle":"404 — Page not found","title":"Page not found","message":"It looks like this page has not been written yet.","home":"Back to home","language":"Language"},"shop":{"section":"03 — Shop","title":"The Wall","intro":"Works you can take home. Sold pieces remain on the wall — a nail and a trace that has not faded.","filters":{"all":"All","original":"Originals","print":"Prints"},"terms":{"shippingLabel":"Shipping","shipping":"From Moscow worldwide. Originals travel in a rigid tube or crate.","timingLabel":"Timing","timing":"Russia 3–7 days, international 10–21 days.","paymentLabel":"Payment","payment":"Arranged by message — bank transfer or card."}},"contacts":{"section":"04 — Contacts","title":"Get in touch","email":"Email","instagram":"Instagram","cvRole":"Artist · Moscow","cvHint":"CV — PDF","cvDownload":"↓ Download","legal":"* Instagram belongs to Meta, recognized as an extremist organization and prohibited in the Russian Federation."},"spread":{"aria":"Artwork","close":"Close","detailAlt":"Detail of the artwork","detailNote":"Detail","year":"Year","material":"Material","size":"Size","type":"Type","price":"Price","soldIndex":"Sold","soldDefault":"Artwork sold","addToCart":"Add to cart","shipping":"Shipping from Moscow worldwide"},"cart":{"aria":"Cart","title":"Cart","close":"Close cart","emptyLabel":"Cart is empty","countLabel":"Cart, items: {count}","total":"Total","order":"Send order","hint":"An email with your selected works will open. We will arrange shipping and payment by message.","empty":"Nothing here yet. Choose a work from the wall.","remove":"Remove"},"catalog":{"aria":"Work series","previous":"Previous work","next":"Next work","empty":"This category is empty for now"},"messages":{"added":"Added to cart","alreadyInCart":"Already in cart","untitled":"Untitled"},"mail":{"greeting":"Hello! I would like to place an order:","name":"Name:","location":"Country and city:","address":"Delivery address:","phone":"Phone:","subject":"Order — Ma chere Victoria","lineSeparator":"— {title} ({details}) — {price}","total":"Total: {total}"}}</script>
   <script src="../js/i18n.js?v=42" defer></script>
-  <script src="../js/gallery.js?v=42" defer></script>
-  <script src="../js/script.js?v=42" defer></script>
+  <script src="../js/gallery.js?v=43" defer></script>
+  <script src="../js/script.js?v=43" defer></script>
   <script src="../js/motion.js?v=39" defer></script>
 </head>
 <body>
@@ -48,7 +49,7 @@
       </div>
       <button class="cart-toggle" id="cartToggle" aria-label="Cart is empty" data-i18n-aria-label="cart.emptyLabel" hidden>
         <span class="cart-icon-wrap">
-          <img class="cart-icon" src="../media/cart-icon.png" alt="" width="32" height="32">
+          <img class="cart-icon" src="../media/cart-icon.png" alt="" width="32" height="32" loading="lazy" decoding="async" fetchpriority="low">
           <span class="cart-count" id="cartCount" aria-hidden="true" hidden></span>
         </span>
       </button>
@@ -60,14 +61,14 @@
     <section class="hero-canvas" id="hero">
       <div class="canvas-container">
         <h1 class="visually-hidden" data-i18n="hero.heading">Victoria — artist. Painting, drawing, illustration</h1>
-        <img src="../media/main-background.webp" alt="" class="hero-layer hero-background" fetchpriority="high" decoding="async">
-        <img src="../media/main-title.webp" alt="" class="hero-layer hero-title" fetchpriority="high" decoding="async">
-        <img src="../media/main-portrait-eng.webp" alt="Victoria" class="hero-layer hero-portrait" fetchpriority="high" decoding="async">
+        <img src="../media/main-background.webp" alt="" class="hero-layer hero-background" width="2056" height="2048" loading="eager" fetchpriority="high" decoding="async">
+        <img src="../media/main-title.webp" alt="" class="hero-layer hero-title" width="2056" height="2048" loading="eager" fetchpriority="auto" decoding="async">
+        <img src="../media/main-portrait-eng.webp" alt="Victoria" class="hero-layer hero-portrait" width="2056" height="2048" loading="eager" fetchpriority="auto" decoding="async">
       </div>
     </section>
 
     <section id="about" class="about-scene">
-      <div class="about-bg"><img src="../media/background_obomne.png" alt=""></div>
+      <div class="about-bg"><img src="../media/background_obomne.webp" alt="" width="3840" height="2160" loading="lazy" decoding="async" fetchpriority="low"></div>
       <div class="about-scene-inner">
         <h2 class="about-heading" data-reveal="up" data-delay="80" data-i18n="about.heading">ABOUT ME</h2>
         <div class="about-note-layout">
@@ -87,12 +88,12 @@
         <div class="series is-left" data-reveal="left" data-delay="150">
           <a class="series-link" href="../404.html?lang=en" aria-label="Open the Blue Room series">
             <div class="series-stage">
-              <img class="series-circle" src="../media/blue_circle.png" alt="">
-              <img class="series-heading" src="../media/blue_room_heading.png" alt="Blue Room">
-              <img class="series-piece p1" src="../media/blue_room_piece_1.png" alt="" loading="lazy">
-              <img class="series-piece p2" src="../media/blue_room_piece_2.png" alt="" loading="lazy">
-              <img class="series-piece p3" src="../media/blue_room_piece_3.png" alt="" loading="lazy">
-              <img class="series-piece p4" src="../media/blue_room_piece_4.png" alt="" loading="lazy">
+              <img class="series-circle" src="../media/blue_circle.webp" alt="" width="700" height="649" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-heading" src="../media/blue_room_heading.webp" alt="Blue Room" width="3052" height="627" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p1" src="../media/blue_room_piece_1.webp" alt="" width="763" height="1019" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p2" src="../media/blue_room_piece_2.webp" alt="" width="781" height="1110" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p3" src="../media/blue_room_piece_3.webp" alt="" width="442" height="441" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p4" src="../media/blue_room_piece_4.webp" alt="" width="347" height="346" loading="lazy" decoding="async" fetchpriority="low">
             </div>
             <span class="series-hint" data-i18n="series.hint">Open series</span>
           </a>
@@ -110,12 +111,12 @@
         <div class="series is-right" data-reveal="right" data-delay="150">
           <a class="series-link" href="../404.html?lang=en" aria-label="Open the Presentiment series">
             <div class="series-stage">
-              <img class="series-circle" src="../media/yellow_circle.png" alt="">
-              <img class="series-heading" src="../media/yellow_heading_eng.png" alt="Presentiment">
-              <img class="series-piece p1" src="../media/yellow_piece_1.png" alt="" loading="lazy">
-              <img class="series-piece p2" src="../media/yellow_piece_2.png" alt="" loading="lazy">
-              <img class="series-piece p3" src="../media/yellow_piece_3.png" alt="" loading="lazy">
-              <img class="series-piece p4" src="../media/yellow_piece_4.png" alt="" loading="lazy">
+              <img class="series-circle" src="../media/yellow_circle.webp" alt="" width="700" height="649" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-heading" src="../media/yellow_heading_eng.webp" alt="Presentiment" width="3628" height="692" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p1" src="../media/yellow_piece_1.webp" alt="" width="365" height="469" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p2" src="../media/yellow_piece_2.webp" alt="" width="250" height="328" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p3" src="../media/yellow_piece_3.webp" alt="" width="511" height="390" loading="lazy" decoding="async" fetchpriority="low">
+              <img class="series-piece p4" src="../media/yellow_piece_4.webp" alt="" width="431" height="514" loading="lazy" decoding="async" fetchpriority="low">
             </div>
             <span class="series-hint" data-i18n="series.hint">Open series</span>
           </a>
