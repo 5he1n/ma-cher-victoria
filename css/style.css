@@ -869,7 +869,6 @@ blockquote span {
   grid-template-columns: 1.1fr 1fr;
   gap: clamp(32px, 6vw, 90px);
   align-items: start;
-  margin-top: clamp(24px, 3vw, 40px);
 }
 
 .manifesto-lead {
