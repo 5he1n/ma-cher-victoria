@@ -6,7 +6,7 @@ import process from 'node:process';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const TEMPLATE_PATH = resolve(ROOT, 'src/index.template.html');
 const LOCALES_DIR = resolve(ROOT, 'src/locales');
-const SITE_ROOT = 'https://sanchousmak.github.io/ma-cher-victoria/';
+const SITE_ROOT = 'https://macherevictoria.artalbom-graf.com/';
 const GENERATED = '<!-- GENERATED FILE — edit src/index.template.html, src/404.template.html, and src/locales/*.json, then run npm run build. -->';
 const RAW_TEMPLATE_MARKERS = new Set([
   'switch.ruAriaCurrent',
