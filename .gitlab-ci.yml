@@ -1,0 +1,46 @@
+stages:
+  - deploy
+  - verify
+
+variables:
+  DEPLOY_PATH: /var/www/mysite
+
+# --- 1. Деплой на VM при обновлении main ---
+deploy_to_vm:
+  stage: deploy
+  image: alpine:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  before_script:
+    - apk add --no-cache openssh-client rsync
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -H "$VM_HOST" >> ~/.ssh/known_hosts
+  script:
+    - rsync -avz --delete
+        --exclude '.git'
+        --exclude '.gitlab-ci.yml'
+        ./ "$VM_USER@$VM_HOST:$DEPLOY_PATH/"
+
+# --- 2. Проверка, что сайт поднялся ---
+health_check:
+  stage: verify
+  image: alpine:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  needs: [deploy_to_vm]
+  script:
+    - apk add --no-cache curl
+    - |
+      for i in $(seq 1 10); do
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
+        echo "Попытка $i: HTTP $STATUS"
+        if [ "$STATUS" = "200" ]; then
+          echo "✅ Сайт живой"
+          exit 0
+        fi
+        sleep 5
+      done
+      echo "❌ Сайт не отвечает"
+      exit 1
