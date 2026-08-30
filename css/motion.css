@@ -1,0 +1,180 @@
+/* ==========================================================================
+   ДВИЖЕНИЕ
+   Подключать после style.css. Управление — атрибутами в разметке:
+
+     data-reveal="up"        появление снизу
+     data-reveal="left"      появление слева
+     data-reveal="scale"     появление с приближением
+     data-delay="200"        задержка в миллисекундах
+
+     data-parallax="0.3"     скорость относительно прокрутки
+                             минус — движение против прокрутки
+
+     data-float="slow"       медленный дрейф на месте
+     data-float="fast"       быстрый дрейф
+
+   Всё отключается системной настройкой «уменьшить движение».
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. ПОЯВЛЕНИЕ ПРИ ПРОКРУТКЕ
+   Стартовое состояние ставится только при работающем JS: класс js-motion
+   вешается скриптом. Без него всё видно сразу — так контент не исчезнет,
+   если скрипт не загрузится.
+   -------------------------------------------------------------------------- */
+.js-motion [data-reveal] {
+  opacity: 0;
+  transition:
+    opacity 1.1s cubic-bezier(.22, 1, .36, 1),
+    transform 1.1s cubic-bezier(.22, 1, .36, 1);
+  will-change: transform, opacity;
+}
+
+.js-motion [data-reveal="up"]    { transform: translateY(48px); }
+.js-motion [data-reveal="down"]  { transform: translateY(-48px); }
+.js-motion [data-reveal="left"]  { transform: translateX(-56px); }
+.js-motion [data-reveal="right"] { transform: translateX(56px); }
+.js-motion [data-reveal="scale"] { transform: scale(0.9); }
+.js-motion [data-reveal="fade"]  { transform: none; }
+
+/* Прилетело */
+.js-motion [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   2. ПАРАЛЛАКС
+   Сдвиг задаёт скрипт через переменную --shift.
+   -------------------------------------------------------------------------- */
+[data-parallax] {
+  transform: translate3d(0, var(--shift, 0px), 0);
+  will-change: transform;
+}
+
+/* Параллакс и появление на одном элементе конфликтуют за transform,
+   поэтому появление вешаем на обёртку, а параллакс — на вложенный слой */
+[data-parallax] > * { transform: none; }
+
+/* --------------------------------------------------------------------------
+   3. ДРЕЙФ НА МЕСТЕ
+   Лёгкое покачивание — оживляет мелкие элементы даже без прокрутки.
+   -------------------------------------------------------------------------- */
+[data-float] {
+  animation: drift 9s ease-in-out infinite;
+  will-change: transform;
+}
+
+[data-float="slow"] { animation-duration: 14s; }
+[data-float="fast"] { animation-duration: 6s; }
+
+/* Разные задержки, чтобы элементы не качались синхронно */
+[data-float]:nth-of-type(2n)   { animation-delay: -2.5s; }
+[data-float]:nth-of-type(3n)   { animation-delay: -5s; }
+[data-float]:nth-of-type(4n)   { animation-delay: -7.5s; }
+
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  33%      { transform: translate3d(4px, -10px, 0) rotate(0.6deg); }
+  66%      { transform: translate3d(-5px, -4px, 0) rotate(-0.5deg); }
+}
+
+/* --------------------------------------------------------------------------
+   4. СЦЕНА СО СЛОЯМИ
+   Обёртка для составной композиции: фон, градиент, летящие картинки.
+   -------------------------------------------------------------------------- */
+.scene {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.scene-bg {
+  position: absolute;
+  inset: -8%;              /* запас по краям, чтобы параллакс не оголил край */
+  z-index: 0;
+}
+
+.scene-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Градиентная вуаль: из неё «проявляются» элементы.
+   Цвета берутся из переменных — задавай их на самой сцене. */
+.scene-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    var(--veil-angle, 180deg),
+    var(--veil-from, var(--bg)) 0%,
+    transparent 35%,
+    transparent 65%,
+    var(--veil-to, var(--bg)) 100%
+  );
+}
+
+.scene-layer {
+  position: relative;
+  z-index: 2;
+}
+
+/* Свободно летящий элемент внутри сцены */
+.scene-item {
+  position: absolute;
+  z-index: 2;
+}
+
+.scene-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Тень делает вырезанный PNG объёмным, а не наклейкой */
+.scene-item.has-shadow img {
+  filter: drop-shadow(0 18px 34px rgba(40, 34, 37, 0.18));
+}
+
+/* --------------------------------------------------------------------------
+   5. ЛЕНТА, ЗАВИСЯЩАЯ ОТ ПРОКРУТКИ
+   Горизонтальный проезд набора картинок, пока секция в кадре.
+   -------------------------------------------------------------------------- */
+.drift-strip {
+  display: flex;
+  gap: clamp(20px, 3vw, 48px);
+  width: max-content;
+  transform: translate3d(var(--strip-shift, 0px), 0, 0);
+  will-change: transform;
+}
+
+.drift-strip img {
+  height: clamp(160px, 26vh, 320px);
+  width: auto;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   6. УВАЖЕНИЕ К НАСТРОЙКАМ
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .js-motion [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none;
+  }
+
+  [data-float] { animation: none; }
+  [data-parallax] { transform: none !important; }
+}
+
+/* На телефоне параллакс режем: он съедает кадр и нагружает слабые процессоры */
+@media (max-width: 768px) {
+  .scene { min-height: 80svh; }
+  .scene-bg { inset: -4%; }
+}

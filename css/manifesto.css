@@ -1,0 +1,327 @@
+/* ==========================================================================
+   МАНИФЕСТ / ARTIST STATEMENT
+   Подключать после style.css и motion.css, перед about.css.
+
+   Коллаж собран стопкой: работы налезают друг на друга, как разложенные
+   на столе. Каждая едва заметно покачивается со своим ритмом.
+   ========================================================================== */
+
+.manifesto {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(60px, 7vw, 100px) 0;
+  background: #ffffff;
+}
+
+.manifesto-grid {
+  display: grid;
+  grid-template-columns: 30% 40% 30%;
+  align-items: start;
+  gap: 0;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   ЦЕНТР
+   -------------------------------------------------------------------------- */
+.manifesto-center {
+  text-align: center;
+  min-width: 0;
+  padding: clamp(20px, 4vw, 70px) clamp(16px, 2.5vw, 48px) 0;
+}
+
+.manifesto-center .section-number { display: block; margin-bottom: 16px; }
+
+.manifesto-title {
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: clamp(30px, 4.2vw, 74px);
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin-bottom: clamp(26px, 3vw, 44px);
+}
+
+.manifesto-text { text-align: left; max-width: 430px; margin: 0 auto; }
+.manifesto-text p + p { margin-top: 20px; }
+
+/* --------------------------------------------------------------------------
+   СЕРИЯ
+   -------------------------------------------------------------------------- */
+.series { position: relative; min-width: 0; }
+
+/* Цветной ореол за стопкой */
+.series-circle {
+  position: absolute;
+  top: -6%;
+  width: 170%;
+  height: auto;
+  z-index: 0;
+  opacity: .85;
+  pointer-events: none;
+}
+
+.series.is-left  .series-circle { left: -60%; }
+.series.is-right .series-circle { right: -60%; }
+
+/* Название серии */
+.series-heading {
+  position: relative;
+  z-index: 4;
+  display: block;
+  font-family: var(--font-head);
+  font-size: clamp(22px, 2.2vw, 40px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  padding: 0 clamp(12px, 2vw, 32px);
+  margin-bottom: clamp(10px, 1.4vw, 20px);
+  white-space: nowrap;
+}
+
+.series.is-left  .series-heading { color: #4A46D6; }
+.series.is-right .series-heading { color: #B0803A; text-align: right; }
+
+/* --------------------------------------------------------------------------
+   СТОПКА РАБОТ
+   Высота сцены задана пропорцией колонки. Работы разложены абсолютом
+   и налезают друг на друга — как в референсе.
+   -------------------------------------------------------------------------- */
+.series-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  z-index: 2;
+}
+
+.series-piece {
+  position: absolute;
+  width: auto;
+  height: auto;
+  max-width: none;
+  filter: drop-shadow(0 10px 26px rgba(40, 34, 37, .18));
+  animation: stack-drift 11s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Разные фазы: работы качаются вразнобой, а не синхронно */
+.series-piece:nth-of-type(2) { animation-delay: -2.8s; animation-duration: 13s; }
+.series-piece:nth-of-type(3) { animation-delay: -5.5s; animation-duration: 9.5s; }
+.series-piece:nth-of-type(4) { animation-delay: -8.2s; animation-duration: 12s; }
+
+@keyframes stack-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  33%      { transform: translate3d(3px, -6px, 0) rotate(0.35deg); }
+  66%      { transform: translate3d(-4px, -3px, 0) rotate(-0.3deg); }
+}
+
+/* --- ЛЕВАЯ СТОПКА (Blue Room) ---
+   Малый тайл сверху слева, крупная работа по центру, второй тайл внизу. */
+.series.is-left .series-piece:nth-of-type(1) {  /* тайл с утками */
+  left: -14%; top: 0%; width: 46%; z-index: 3;
+}
+
+.series.is-left .series-piece:nth-of-type(2) {  /* вертикальная картина */
+  left: 30%; top: -2%; width: 52%; z-index: 2;
+}
+
+.series.is-left .series-piece:nth-of-type(3) {  /* главная, крупная */
+  left: 6%; top: 26%; width: 72%; z-index: 4;
+}
+
+.series.is-left .series-piece:nth-of-type(4) {  /* тайл с птицей */
+  left: 44%; bottom: 2%; width: 42%; z-index: 5;
+}
+
+/* --- ПРАВАЯ СТОПКА (Предчувствие) --- */
+.series.is-right .series-piece:nth-of-type(1) {
+  right: 8%; top: 2%; width: 44%; z-index: 4;
+}
+
+.series.is-right .series-piece:nth-of-type(2) {
+  right: -12%; top: 14%; width: 38%; z-index: 3;
+}
+
+.series.is-right .series-piece:nth-of-type(3) {
+  right: 30%; top: 34%; width: 46%; z-index: 2;
+}
+
+.series.is-right .series-piece:nth-of-type(4) {
+  right: -6%; bottom: 4%; width: 56%; z-index: 5;
+}
+
+/* --------------------------------------------------------------------------
+   ВОПРОСЫ
+   -------------------------------------------------------------------------- */
+.series-question {
+  position: relative;
+  z-index: 4;
+  margin-top: clamp(14px, 1.8vw, 24px);
+  padding: 0 clamp(12px, 2vw, 32px);
+  max-width: none;
+}
+
+.series.is-left  .series-question { color: #4A46D6; }
+.series.is-right .series-question { color: #B0803A; text-align: right; }
+
+.series-link {
+  display: block;
+  position: relative;
+  z-index: 1;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--transition);
+}
+
+.series.is-left .series-link { color: #4A46D6; }
+.series.is-right .series-link { color: #B0803A; }
+
+.series-link:hover { transform: translateY(-2px); }
+
+.series-link:hover .series-piece {
+  filter: drop-shadow(0 14px 30px rgba(40, 34, 37, .24));
+}
+
+.series-link:active { transform: translateY(0) scale(.995); }
+
+.series-link:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 8px;
+}
+
+.series-hint {
+  display: block;
+  position: relative;
+  z-index: 4;
+  margin: 10px clamp(12px, 2vw, 32px) 0;
+  color: inherit;
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: .14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  font-feature-settings: "calt" 1, "rand" 1;
+  opacity: 1;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--transition);
+}
+
+.series-link:hover .series-hint,
+.series-link:focus-visible .series-hint { text-decoration-color: currentColor; }
+
+.series.is-left .series-hint::before {
+  content: '←';
+  display: inline-block;
+  margin-right: .55em;
+  font-family: inherit;
+  letter-spacing: normal;
+}
+
+.series.is-right .series-hint::after {
+  content: '→';
+  display: inline-block;
+  margin-left: .55em;
+  font-family: inherit;
+  letter-spacing: normal;
+}
+
+.series.is-right .series-hint {
+  color: #6B4F24;
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   ПЛАНШЕТ И ТЕЛЕФОН
+   -------------------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .manifesto-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(56px, 10vw, 90px);
+    padding: 0 var(--pad-x);
+  }
+
+  .manifesto-center { order: -1; padding: 0; }
+
+  .series { max-width: 500px; margin: 0 auto; }
+
+  .series.is-right .series-heading,
+  .series.is-right .series-question,
+  .series.is-right .series-hint { text-align: left; }
+
+  .series-circle { top: -19%; width: 221%; }
+  .series.is-left  .series-circle { left: -93%; }
+  .series.is-right .series-circle { right: -97%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .series-piece { animation: none; }
+  .series-link,
+  .series-hint { transition: none; }
+}
+/* --------------------------------------------------------------------------
+   ЖЁСТКОЕ ОГРАНИЧЕНИЕ РАЗМЕРОВ
+   Работы измеряются от ширины окна, а не от родителя — так они не могут
+   взять натуральный размер, даже если сцена потеряла высоту.
+   -------------------------------------------------------------------------- */
+.series { overflow: visible; }
+
+.series-stage {
+  position: relative;
+  width: 100%;
+  height: 34vw;              /* высота от ширины окна, не от содержимого */
+  max-height: 620px;
+}
+
+.series-piece {
+  position: absolute;
+  max-width: none;
+  height: auto;
+}
+
+/* Левая стопка */
+.series.is-left .series-piece:nth-of-type(1) { left: -6%; top: 0;    width: 13vw; z-index: 3; }
+.series.is-left .series-piece:nth-of-type(2) { left: 34%; top: -2%;  width: 11vw; z-index: 2; }
+.series.is-left .series-piece:nth-of-type(3) { left: 10%; top: 22%;  width: 17vw; z-index: 4; }
+.series.is-left .series-piece:nth-of-type(4) { left: 46%; top: 60%;  width: 10vw; z-index: 5; }
+
+/* Правая стопка */
+.series.is-right .series-piece:nth-of-type(1) { right: 12%; top: 2%;   width: 10vw; z-index: 4; }
+.series.is-right .series-piece:nth-of-type(2) { right: -4%; top: 16%;  width: 9vw;  z-index: 3; }
+.series.is-right .series-piece:nth-of-type(3) { right: 34%; top: 38%;  width: 12vw; z-index: 2; }
+.series.is-right .series-piece:nth-of-type(4) { right: 2%;  top: 55%;  width: 15vw; z-index: 5; }
+
+@media (max-width: 1100px) {
+  .series-stage { height: 92vw; max-height: 560px; }
+  .series-piece { width: auto !important; }
+  .series.is-left .series-piece:nth-of-type(1),
+  .series.is-right .series-piece:nth-of-type(1) { max-width: 38%; }
+  .series.is-left .series-piece:nth-of-type(2),
+  .series.is-right .series-piece:nth-of-type(2) { max-width: 32%; }
+  .series.is-left .series-piece:nth-of-type(3),
+  .series.is-right .series-piece:nth-of-type(3) { max-width: 48%; }
+  .series.is-left .series-piece:nth-of-type(4),
+  .series.is-right .series-piece:nth-of-type(4) { max-width: 40%; }
+}
+/* Жёсткое ограничение: размеры от ширины окна */
+.series-stage { position: relative; width: 100%; height: 34vw; max-height: 620px; }
+.series-piece { position: absolute; max-width: none; height: auto; }
+
+.series.is-left .series-piece:nth-of-type(1) { left: -6%; top: 0;   width: 13vw; z-index: 3; }
+.series.is-left .series-piece:nth-of-type(2) { left: 34%; top: -2%; width: 11vw; z-index: 2; }
+.series.is-left .series-piece:nth-of-type(3) { left: 10%; top: 22%; width: 17vw; z-index: 4; }
+.series.is-left .series-piece:nth-of-type(4) { left: 46%; top: 60%; width: 10vw; z-index: 5; }
+
+.series.is-right .series-piece:nth-of-type(1) { right: 12%; top: 2%;  width: 10vw; z-index: 4; }
+.series.is-right .series-piece:nth-of-type(2) { right: -4%; top: 16%; width: 9vw;  z-index: 3; }
+.series.is-right .series-piece:nth-of-type(3) { right: 34%; top: 38%; width: 12vw; z-index: 2; }
+.series.is-right .series-piece:nth-of-type(4) { right: 2%;  top: 55%; width: 15vw; z-index: 5; }
+
+@media (max-width: 1100px) {
+  .series-stage { height: 92vw; max-height: 560px; }
+  .series-piece { width: auto; max-width: 44%; }
+}
