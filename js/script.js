@@ -2,13 +2,21 @@
 // НАСТРОЙКИ
 // ==========================================================================
 const SHOP_EMAIL = 'victtoress@mail.com';   // ← сюда приходят заказы
-const CURRENCY = '₽';
 const CART_KEY = 'mcv-cart';             // ключ хранения корзины
 const CART_BADGE_POSITION = 'top-right';  // 'top-right' | 'bottom-right'
 const i18n = window.mcvI18n || {
   t: (path) => path,
   value: (entry) => (entry && typeof entry === 'object' ? (entry.ru ?? entry.en ?? '') : (entry ?? '')),
-  money: (amount) => `${Number(amount || 0).toLocaleString('ru-RU')} ${CURRENCY}`
+  amount: (entry) => {
+    const localized = entry && typeof entry === 'object' ? (entry.ru ?? entry.en ?? 0) : entry;
+    const number = Number(localized || 0);
+    return Number.isFinite(number) ? number : 0;
+  },
+  money: (entry) => {
+    const locale = document.documentElement.lang === 'en' ? 'en' : 'ru';
+    const number = entry && typeof entry === 'object' ? (entry[locale] ?? entry.ru ?? entry.en ?? 0) : entry;
+    return `${Number(number || 0).toLocaleString(locale === 'en' ? 'en-US' : 'ru-RU')} ${locale === 'en' ? '€' : '₽'}`;
+  }
 };
 const t = (path, replacements) => i18n.t(path, replacements);
 const value = (entry) => i18n.value(entry);
@@ -20,6 +28,13 @@ const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const money = (n) => i18n.money(n);
+const amount = (n) => i18n.amount(n);
+const moneyMarkup = (n) => {
+  const formatted = money(n);
+  const currency = formatted.match(/[₽€]$/)?.[0];
+  if (!currency) return esc(formatted);
+  return `${esc(formatted.slice(0, -1))}<span class="currency-symbol">${currency}</span>`;
+};
 const num = (i) => String(i + 1).padStart(2, '0');
 const caption = (o) => [value(o.year), value(o.material), value(o.size)].filter(Boolean).join(' · ');
 
@@ -239,12 +254,17 @@ function initFilters(selector, onChange) {
 // ==========================================================================
 // 5. СТЕНА (магазин)
 // ==========================================================================
-const shopItems = () => (typeof shop === 'undefined' ? [] : shop);
+const shopItems = () => (typeof shop !== 'undefined' && Array.isArray(shop) ? shop : []);
 const findItem = (id) => shopItems().find((i) => String(i.id) === String(id));
 
 // Пропорция работы: пустое место от проданной картины занимает ровно
 // столько же, сколько занимала она сама
 const ratioOf = (item) => item.ratio || '4/5';
+
+const visualRatioOf = (item) => {
+  const meta = typeof IMAGE_META === 'undefined' ? null : IMAGE_META[item.image];
+  return meta?.width && meta?.height ? `${meta.width}/${meta.height}` : ratioOf(item);
+};
 
 const WALL_SIZES = '(max-width: 700px) 88vw, (max-width: 1100px) 44vw, 30vw';
 
@@ -253,7 +273,7 @@ function hangMarkup(item, i) {
   const title = localized(item, 'title', t('messages.untitled'));
   const meta = esc([localized(item, 'type'), localized(item, 'size')].filter(Boolean).join(' · '));
   const scale = item.scale === 's' || item.scale === 'l' ? ` is-${item.scale}` : '';
-  const ratio = ratioOf(item);
+  const ratio = visualRatioOf(item);
 
   const body = sold
     ? `<div class="hang-ghost" style="aspect-ratio:${esc(ratio)}; opacity: 0.05" aria-hidden="true">
@@ -270,7 +290,7 @@ function hangMarkup(item, i) {
         ${meta ? `<span class="hang-meta">${meta}</span>` : ''}
         ${sold && item.collection ? `<span class="hang-collection">${esc(localized(item, 'collection'))}</span>` : ''}
       </span>
-      <span class="hang-price">${sold ? esc(t('spread.soldIndex')) : money(item.price)}</span>
+      <span class="hang-price">${sold ? esc(t('spread.soldIndex')) : moneyMarkup(item.price)}</span>
     </div>`;
 
   // Проданная работа тоже кликабельна: у неё есть своя история
@@ -299,9 +319,131 @@ function renderShop(filter = 'all') {
 // 6. РАЗВОРОТ РАБОТЫ
 // ==========================================================================
 let lastFocused = null;   // куда вернуть фокус после закрытия
+let cleanupDetailCarousel = () => {};
 
 function specRow(name, value) {
   return value ? `<div><span>${esc(name)}</span><span>${esc(value)}</span></div>` : '';
+}
+
+function detailImages(detail) {
+  const values = Array.isArray(detail) ? detail : [detail];
+  return values.filter((src) => typeof src === 'string' && src.trim());
+}
+
+const DETAIL_SIZES = '(max-width: 1024px) 90vw, 40vw';
+const DETAIL_RATIO_FALLBACK = '16 / 9';
+
+function detailRatioOf(src) {
+  const meta = typeof IMAGE_META === 'undefined' ? null : IMAGE_META[src];
+  return meta?.width && meta?.height ? `${meta.width} / ${meta.height}` : DETAIL_RATIO_FALLBACK;
+}
+
+function detailMarkup(detail) {
+  if (!detail.length) return '';
+
+  if (detail.length === 1) {
+    return `
+      <div class="spread-detail" style="--detail-ratio: ${detailRatioOf(detail[0])}">${imgTag(detail[0], t('spread.detailAlt'), { sizes: DETAIL_SIZES, loading: 'lazy', fetchPriority: 'auto' })}</div>
+      <p class="spread-detail-note">${esc(t('spread.detailNote'))}</p>`;
+  }
+
+  return `
+    <div class="spread-detail-gallery">
+      <div class="spread-detail-track" style="--detail-ratio: ${detailRatioOf(detail[0])}" role="region" aria-roledescription="carousel" aria-label="${esc(t('spread.detailsAria'))}" tabindex="0">
+        ${detail.map((src) => `
+          <div class="spread-detail-slide" data-detail-ratio="${detailRatioOf(src)}">${imgTag(src, t('spread.detailAlt'), { sizes: DETAIL_SIZES, loading: 'lazy', fetchPriority: 'auto' })}</div>`).join('')}
+      </div>
+      <div class="spread-detail-controls">
+        <button class="spread-detail-btn" type="button" data-detail-dir="-1" aria-label="${esc(t('spread.previousDetail'))}">${ARROW.prev}</button>
+        <span class="spread-detail-counter" aria-live="polite"></span>
+        <button class="spread-detail-btn" type="button" data-detail-dir="1" aria-label="${esc(t('spread.nextDetail'))}">${ARROW.next}</button>
+      </div>
+    </div>
+    <p class="spread-detail-note">${esc(t('spread.detailNote'))}</p>`;
+}
+
+function wireDetailCarousel(root, total) {
+  const track = root.querySelector('.spread-detail-track');
+  if (!track || total < 2) return () => {};
+
+  const buttons = [...root.querySelectorAll('.spread-detail-btn')];
+  const counter = root.querySelector('.spread-detail-counter');
+  const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const step = () => track.clientWidth || track.querySelector('.spread-detail-slide')?.getBoundingClientRect().width || 1;
+  const behavior = () => (prefersReducedMotion.matches ? 'auto' : 'smooth');
+  const slides = [...track.querySelectorAll('.spread-detail-slide')];
+  let currentIndex = 0;
+  let requestedIndex = 0;
+  let targetIndex = null;
+  let observedWidth = track.clientWidth;
+
+  const setTrackRatio = (index) => {
+    track.style.setProperty('--detail-ratio', slides[index]?.dataset.detailRatio || DETAIL_RATIO_FALLBACK);
+  };
+
+  const update = () => {
+    const max = Math.max(0, track.scrollWidth - track.clientWidth);
+    const index = Math.min(total - 1, Math.max(0, Math.round(track.scrollLeft / step())));
+    currentIndex = index;
+    setTrackRatio(targetIndex ?? index);
+    if (targetIndex !== null && Math.abs(track.scrollLeft - targetIndex * step()) <= 2) {
+      targetIndex = null;
+      requestedIndex = index;
+    } else if (targetIndex === null) {
+      requestedIndex = index;
+    }
+    counter.textContent = `${num(index)} / ${num(total - 1)}`;
+    buttons[0].disabled = requestedIndex === 0;
+    buttons[1].disabled = requestedIndex === total - 1 || track.scrollLeft >= max - 2;
+  };
+
+  const move = (direction) => {
+    requestedIndex = Math.min(total - 1, Math.max(0, requestedIndex + direction));
+    targetIndex = requestedIndex;
+    setTrackRatio(requestedIndex);
+    track.scrollTo({ left: requestedIndex * step(), behavior: behavior() });
+    update();
+  };
+
+  const onButtonClick = (event) => move(Number(event.currentTarget.dataset.detailDir));
+  const onKeydown = (event) => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+    event.preventDefault();
+    move(event.key === 'ArrowRight' ? 1 : -1);
+  };
+  const onPointerDown = () => {
+    targetIndex = null;
+    requestedIndex = currentIndex;
+  };
+
+  let scrollFrame = 0;
+  const onScroll = () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; update(); });
+  };
+  const observer = new ResizeObserver(([entry]) => {
+    const width = entry.contentRect.width;
+    if (Math.abs(width - observedWidth) < 1) return;
+    observedWidth = width;
+    track.scrollTo({ left: requestedIndex * step(), behavior: 'auto' });
+    update();
+  });
+
+  buttons.forEach((button) => button.addEventListener('click', onButtonClick));
+  track.addEventListener('keydown', onKeydown);
+  track.addEventListener('pointerdown', onPointerDown, { passive: true });
+  track.addEventListener('scroll', onScroll, { passive: true });
+  observer.observe(track);
+  update();
+
+  return () => {
+    if (scrollFrame) cancelAnimationFrame(scrollFrame);
+    observer.disconnect();
+    buttons.forEach((button) => button.removeEventListener('click', onButtonClick));
+    track.removeEventListener('keydown', onKeydown);
+    track.removeEventListener('pointerdown', onPointerDown);
+    track.removeEventListener('scroll', onScroll);
+  };
 }
 
 function openSpread(id) {
@@ -313,7 +455,10 @@ function openSpread(id) {
 
   const index = shopItems().indexOf(item);
   const sold = item.status === 'sold';
+  const details = detailImages(item.detail);
 
+  cleanupDetailCarousel();
+  cleanupDetailCarousel = () => {};
   spread.querySelector('.spread-inner').innerHTML = `
     <div class="spread-main">
       ${imgTag(item.image, localized(item, 'title', t('messages.untitled')), { loading: 'eager', fetchPriority: 'high', ratio: ratioOf(item) })}
@@ -323,9 +468,7 @@ function openSpread(id) {
       <span class="spread-index">№${num(index)}${sold ? ` — ${esc(t('spread.soldIndex'))}` : ''}</span>
       <h2 class="spread-title">${esc(localized(item, 'title', t('messages.untitled')))}</h2>
 
-      ${item.detail ? `
-        <div class="spread-detail">${imgTag(item.detail, t('spread.detailAlt'), { loading: 'lazy', fetchPriority: 'auto' })}</div>
-        <p class="spread-detail-note">${esc(t('spread.detailNote'))}</p>` : ''}
+      ${detailMarkup(details)}
 
       ${item.about ? `<p class="spread-about">${esc(localized(item, 'about'))}</p>` : ''}
 
@@ -345,6 +488,7 @@ function openSpread(id) {
            </div>`}
     </div>`;
 
+  cleanupDetailCarousel = wireDetailCarousel(spread.querySelector('.spread-side'), details.length);
   spread.classList.add('is-open');
   spread.setAttribute('aria-hidden', 'false');
   document.body.classList.add('is-locked');
@@ -355,6 +499,8 @@ function closeSpread() {
   const spread = document.getElementById('spread');
   if (!spread?.classList.contains('is-open')) return;
 
+  cleanupDetailCarousel();
+  cleanupDetailCarousel = () => {};
   spread.classList.remove('is-open');
   spread.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('is-locked');
@@ -400,7 +546,7 @@ const cart = {
     this.render();
   },
 
-  total() { return this.items.reduce((s, i) => s + Number(i.price || 0), 0); },
+  total() { return this.items.reduce((sum, item) => sum + amount(item.price), 0); },
 
   render() {
     const body = document.getElementById('cartBody');

@@ -5,7 +5,6 @@
   },
   "nav": {
     "about": "About me",
-    "manifesto": "Manifesto",
     "series": "Work series",
     "shop": "Shop",
     "contacts": "Contacts"
@@ -21,29 +20,30 @@
   },
   "about": {
     "heading": "ABOUT ME",
-    "paragraph1": "My name is Victoria. I am an artist. In my work I begin with myself. I am interested in the effect of the familiar, the ordinary, and the understood — in how something simple and beautiful shapes a person.",
-    "paragraph2": "My artistic credo is to multiply the beauty around me. While everyone is looking for new meanings, I want to make sense of the old ones.",
+    "paragraph1": "My name is Victoria – I am an artist. In my work, I begin with my own sensations and anticipations. I’m interested in the effect of the familiar, mundane, and sentimental, and in the ways a person is shaped by the simple and beautiful.",
+    "paragraph2": "My aim in art is to add to the beauty that surrounds me. While everyone is searching for new meanings, I want to make sense of the old ones.",
     "signature": "Victoria"
   },
   "manifesto": {
     "section": "02 — Work series",
     "titleTop": "Artist",
     "titleBottom": "Statement",
-    "paragraph1": "In my artistic practice I work with the experience of feeling.",
-    "paragraph2": "Choosing the techniques of classical painting and drawing, I turn to everyday subjects and sharpen them with a new view of familiar things.",
-    "paragraph3": "Text, installation, and working with a complete series play an important role in my work. My interests circle around the theatrical gesture, animated movement, and the documentary quality of printmaking."
+    "paragraph1": "In my artistic practice, I work with the experience of feeling and living through things.",
+    "paragraph2": "Working with acrylic painting and line drawing, I turn to people in everyday situations who have paused or remembered something. They think about the past while the present around them slips away and moves swiftly on. My art is always personal and deeply felt. An impressionistic approach to painting and a free, flowing line are my language: the path from thought to image.",
+    "paragraph3": "My art does not investigate anything, nor does it pretend to be more complex than it is. I have chosen figurative painting and drawing because, for me, they are the most expressive ways of being understood. I am interested in the moment when someone remembers something, falls silent, becomes still, or takes a breath.",
+    "paragraph4": "As a child, I felt there was not enough beauty around me. That is why today I celebrate beauty in my paintings and in my life. My works are memories of memories."
   },
   "series": {
     "hint": "Open series",
     "blue": {
       "headingAlt": "Blue Room",
-      "question": "How does a domestic space turn from intimacy into solitude? Where does being together with oneself begin? When does a bathroom stop being ordinary and everyday?",
+      "question": "Domestic space becomes the place that protects our vulnerability. The place where one can be at home like a fish in the water. Where does unity with oneself begin? When does a bathroom cease to be a mundane space and instead take us beyond the bounds of other worlds?",
       "aria": "Open the Blue Room series"
     },
     "yellow": {
-      "headingAlt": "Presentiment",
-      "question": "Notebooks, fragments of phrases, and shards of memory. Why do we collect physical memory? What remains at the end of what we saw and remembered?",
-      "aria": "Open the Presentiment series"
+      "headingAlt": "Anticipaton",
+      "question": "Notebooks, snatches of phrases, fragments of memories. Why do we collect At the end of our lives, what remains of everything we’ve seen, memorised and tried to preserve with so much care?",
+      "aria": "Open the Anticipaton series"
     }
   },
   "notFound": {
@@ -86,6 +86,9 @@
     "close": "Close",
     "detailAlt": "Detail of the artwork",
     "detailNote": "Detail",
+    "detailsAria": "Artwork details",
+    "previousDetail": "Previous detail",
+    "nextDetail": "Next detail",
     "year": "Year",
     "material": "Material",
     "size": "Size",

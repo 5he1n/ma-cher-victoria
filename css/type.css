@@ -1,15 +1,15 @@
 @font-face {
-  font-family: "TT2020";
-  src: url("../fonts/TT2020StyleE-Regular.woff2") format("woff2");
+  font-family: "Sabir Mono";
+  src: url("../fonts/SabirMono-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
-/* Maslova остаётся — но только для крупных надписей поверх фотографий,
+/* Glanz используется для крупных надписей поверх фотографий,
    где её тонкий штрих работает как в журнале. */
 @font-face {
-  font-family: "Maslova";
-  src: url("../fonts/cd-masvol-thin.otf") format("opentype");
+  font-family: "Glanz";
+  src: url("../fonts/Glanz.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -19,17 +19,14 @@
    ПЕРЕМЕННЫЕ
    -------------------------------------------------------------------------- */
 :root {
-  /* Book Antiqua метрически совпадает с Palatino: если у посетителя нет
-     первого, второй встанет на его место без сдвига вёрстки. */
-  --font-head: "Book Antiqua", "Palatino Linotype", "URW Palladio L",
-               Palatino, "Palatino LT STD", Georgia, serif;
+  /* Единый шрифт сайта; системный monospace остаётся запасным вариантом. */
+  --font-head: "Sabir Mono", monospace;
 
-  /* Наборный текст. Courier остаётся запасным: если TT2020 не загрузится,
-     машинописный характер сохранится. */
-  --font-body: "TT2020", "Courier New", "Nimbus Mono PS", monospace;
+  /* Наборный текст использует тот же Sabir Mono, что и интерфейсные подписи. */
+  --font-body: "Sabir Mono", monospace;
 
   /* Крупные надписи на фотографиях */
-  --font-display: "Maslova", var(--font-head);
+  --font-display: "Glanz", var(--font-head);
 
   /* Совместимость: старые файлы ссылаются на эти имена */
   --font-main: var(--font-head);
@@ -47,7 +44,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-head);
-  font-weight: 400;             /* у Palatino нормальное начертание плотнее */
+  font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1.12;
 }
@@ -79,6 +76,15 @@ h3 { font-size: clamp(17px, 1.5vw, 22px); }
   text-transform: uppercase;
 }
 
+.note,
+.note p,
+.manifesto-text,
+.manifesto-text p,
+.series-question,
+.note-sign {
+  text-transform: none;
+}
+
 /* Интерфейсная мелочь: номера разделов, кнопки, этикетки */
 .section-number,
 .series-label,
@@ -95,7 +101,7 @@ h3 { font-size: clamp(17px, 1.5vw, 22px); }
   text-transform: uppercase;
 }
 
-/* Меню: Book Antiqua, крупнее и плотнее — по правке «контрастнее и жирнее» */
+/* Меню: Sabir Mono, крупнее и плотнее — по правке «контрастнее и жирнее» */
 .menu a {
   font-family: var(--font-head);
   font-size: clamp(14px, 1.15vw, 17px);
@@ -105,10 +111,8 @@ h3 { font-size: clamp(17px, 1.5vw, 22px); }
 }
 
 /* --------------------------------------------------------------------------
-   ЗАМЕТКА ПРО TT2020
-   Шрифт содержит по девять вариантов каждого глифа: одинаковые буквы
-   в строке рисуются по-разному, как у настоящей машинки. За это отвечает
-   таблица альтернатив — включаем её явно.
+   НАСТРОЙКА НАБОРА
+   Включаем стандартные таблицы OpenType для Sabir Mono.
    -------------------------------------------------------------------------- */
 .typed,
 .note p,

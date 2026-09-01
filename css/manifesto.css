@@ -34,7 +34,6 @@
 .manifesto-center .section-number { display: block; margin-bottom: 16px; }
 
 .manifesto-title {
-  font-family: var(--font-head);
   font-weight: 400;
   font-size: clamp(30px, 4.2vw, 74px);
   line-height: 0.98;
