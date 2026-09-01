@@ -51,15 +51,21 @@
     return entry ?? '';
   }
 
-  function money(amount) {
-    const number = Number(amount || 0);
+  function amount(entry) {
+    const localized = value(entry);
+    const number = Number(localized || 0);
+    return Number.isFinite(number) ? number : 0;
+  }
+
+  function money(entry) {
+    const number = amount(entry);
     let formatted;
     try {
       formatted = new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'ru-RU').format(number);
     } catch (error) {
       formatted = String(number);
     }
-    return `${formatted} ₽`;
+    return `${formatted} ${locale === 'en' ? '€' : '₽'}`;
   }
 
   function localeFromLink(link) {
@@ -106,7 +112,7 @@
     });
   }
 
-  window.mcvI18n = Object.freeze({ locale, t, value, money });
+  window.mcvI18n = Object.freeze({ locale, t, value, amount, money });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initLanguageLinks, { once: true });

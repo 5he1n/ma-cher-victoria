@@ -66,6 +66,7 @@ function renderTemplate(template, locale, code) {
   const localeMeta = {
     code,
     heroPortrait: code === 'en' ? 'main-portrait-eng.webp' : 'main-portrait-rus.webp',
+    cvFile: code === 'en' ? 'CV Victoria Golikova EN.pdf' : 'CV Victoria Golikova RU.pdf',
     blueHeading: code === 'en' ? 'blue_room_heading.webp' : 'blue_room_heading_rus.webp',
     blueHeadingWidth: code === 'en' ? 3052 : 3567,
     blueHeadingHeight: code === 'en' ? 627 : 686,

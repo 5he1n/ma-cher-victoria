@@ -167,7 +167,6 @@
   font-family: var(--font-body);
   font-size: 11px;
   letter-spacing: .12em;
-  text-transform: uppercase;
   color: rgba(31, 29, 26, .5);
 }
 
@@ -280,7 +279,7 @@ img.series-heading {
   margin-inline: auto;
   text-align: justify;
 }
-.manifesto-text p { margin-inline: auto; }
+.manifesto-text p { margin-inline: auto; color: black; line-height: 1.5;}
 .manifesto-center { padding: clamp(30px, 5vw, 90px) clamp(12px, 1.5vw, 28px) 0; }
 .manifesto-title { font-size: clamp(38px, 5.2vw, 92px); }
 
@@ -390,7 +389,6 @@ img.series-heading {
 
 /* --- 4. Стена: единая типографика --- */
 .section-wall,
-.section-wall h2,
 .section-wall p,
 .section-wall .tab-btn { font-family: var(--font-head); }
 

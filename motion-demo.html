@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Движение — примеры</title>
 <style>
+  @font-face {
+    font-family: "Sabir Mono";
+    src: url('fonts/SabirMono-Regular.woff2') format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
   :root {
     --bg: #F5F2EC;
     --text: #282225;
@@ -12,9 +20,9 @@
     --pad-x: clamp(20px, 5vw, 60px);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background: var(--bg); color: var(--text); font-family: Georgia, serif; }
+  body { background: var(--bg); color: var(--text); font-family: "Sabir Mono", monospace; }
   h2 { font-weight: 300; font-size: clamp(28px, 5vw, 64px); letter-spacing: .04em; }
-  .note { font-family: system-ui, sans-serif; font-size: 12px; letter-spacing: .14em;
+  .note { font-family: "Sabir Mono", monospace; font-size: 12px; letter-spacing: .14em;
           text-transform: uppercase; opacity: .5; }
   .pad { padding: 12vh var(--pad-x); }
   /* Заглушки вместо реальных картинок */

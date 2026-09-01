@@ -9,21 +9,21 @@
   <link rel="alternate" hreflang="ru" href="{{seo.ru}}">
   <link rel="alternate" hreflang="en" href="{{seo.en}}">
   <link rel="alternate" hreflang="x-default" href="{{seo.default}}">
-  <link rel="stylesheet" href="../css/type.css?v=39">
-  <link rel="stylesheet" href="../css/style.css?v=42">
+  <link rel="stylesheet" href="../css/type.css?v=47">
+  <link rel="stylesheet" href="../css/style.css?v=46">
   <link rel="stylesheet" href="../css/motion.css?v=39">
-  <link rel="stylesheet" href="../css/shop.css?v=42">
-  <link rel="stylesheet" href="../css/manifesto.css?v=42">
-  <link rel="stylesheet" href="../css/about.css?v=42">
+  <link rel="stylesheet" href="../css/shop.css?v=46">
+  <link rel="stylesheet" href="../css/manifesto.css?v=44">
+  <link rel="stylesheet" href="../css/about.css?v=45">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="../fonts/cd-masvol-thin.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="../fonts/Glanz.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../media/main-background.webp" as="image" type="image/webp">
   <link rel="icon" href="../media/favicon.png" type="image/png">
   <script type="application/json" id="mcv-i18n">{{locale.json}}</script>
-  <script src="../js/i18n.js?v=42" defer></script>
-  <script src="../js/gallery.js?v=43" defer></script>
-  <script src="../js/script.js?v=43" defer></script>
+  <script src="../js/i18n.js?v=43" defer></script>
+  <script src="../js/gallery.js?v=47" defer></script>
+  <script src="../js/script.js?v=51" defer></script>
   <script src="../js/motion.js?v=39" defer></script>
 </head>
 <body>
@@ -105,6 +105,7 @@
             <p data-reveal="up" data-delay="120" data-i18n="manifesto.paragraph1">{{i18n.manifesto.paragraph1}}</p>
             <p data-reveal="up" data-delay="220" data-i18n="manifesto.paragraph2">{{i18n.manifesto.paragraph2}}</p>
             <p data-reveal="up" data-delay="320" data-i18n="manifesto.paragraph3">{{i18n.manifesto.paragraph3}}</p>
+            <p data-reveal="up" data-delay="420" data-i18n="manifesto.paragraph4">{{i18n.manifesto.paragraph4}}</p>
           </div>
         </div>
         <div class="series is-right" data-reveal="right" data-delay="150">
@@ -152,7 +153,7 @@
         <div><a href="mailto:victtoress@mail.com" class="contact-link" data-i18n="contacts.email">{{i18n.contacts.email}}</a><span class="contact-alt">victtoress@mail.com</span></div>
         <div><a href="https://www.instagram.com/macherevictoria" target="_blank" rel="noopener" class="contact-link" data-i18n="contacts.instagram">{{i18n.contacts.instagram}}<sup>*</sup></a><span class="contact-alt">@macherevictoria</span></div>
       </div>
-      <a class="cv-card" href="../media/CV Victoria Golikova.pdf" download="cv-victoria.pdf"><span class="cv-card-name">Victoria</span><span class="cv-card-role" data-i18n="contacts.cvRole">{{i18n.contacts.cvRole}}</span><span class="cv-card-hint" data-i18n="contacts.cvHint">{{i18n.contacts.cvHint}}</span><span class="cv-card-download" data-i18n="contacts.cvDownload">{{i18n.contacts.cvDownload}}</span></a>
+      <a class="cv-card" href="../media/{{locale.cvFile}}" download="{{locale.cvFile}}"><span class="cv-card-name">Victoria</span><span class="cv-card-role" data-i18n="contacts.cvRole">{{i18n.contacts.cvRole}}</span><span class="cv-card-hint" data-i18n="contacts.cvHint">{{i18n.contacts.cvHint}}</span><span class="cv-card-download" data-i18n="contacts.cvDownload">{{i18n.contacts.cvDownload}}</span></a>
       <p class="legal-note" data-i18n="contacts.legal">{{i18n.contacts.legal}}</p>
     </section>
   </main>
@@ -162,7 +163,7 @@
   <aside class="cart-panel" id="cartPanel" aria-hidden="true" aria-label="{{i18n.cart.aria}}">
     <div class="cart-head"><h3 data-i18n="cart.title">{{i18n.cart.title}}</h3><button class="cart-close" aria-label="{{i18n.cart.close}}" data-i18n-aria-label="cart.close">&times;</button></div>
     <div class="cart-body" id="cartBody"></div>
-    <div class="cart-foot"><div class="cart-total"><span data-i18n="cart.total">{{i18n.cart.total}}</span><b id="cartTotal">0 ₽</b></div><a class="btn btn-solid" id="cartOrder" href="#" data-i18n="cart.order">{{i18n.cart.order}}</a><p class="cart-hint" data-i18n="cart.hint">{{i18n.cart.hint}}</p></div>
+    <div class="cart-foot"><div class="cart-total"><span data-i18n="cart.total">{{i18n.cart.total}}</span><b id="cartTotal"></b></div><a class="btn btn-solid" id="cartOrder" href="#" data-i18n="cart.order">{{i18n.cart.order}}</a><p class="cart-hint" data-i18n="cart.hint">{{i18n.cart.hint}}</p></div>
   </aside>
 </body>
 </html>
