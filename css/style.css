@@ -21,8 +21,8 @@
   --accent: #9BB7D4;
 
   --font-main: "Glanz", "Cormorant Garamond", Georgia, serif;
-  /* Все обычные и интерфейсные элементы используют Sabir Mono. */
-  --font-ui: "Sabir Mono", monospace;
+  /* Все обычные и интерфейсные элементы используют Involve. */
+  --font-ui: "Involve", Arial, sans-serif;
 
   --container: 1400px;
   --transition: .4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -553,6 +553,10 @@ blockquote span {
 
 .shop-note { color: var(--text-soft); }
 
+.shop-note span {
+  white-space: pre-line;
+}
+
 .shop-note strong {
   display: block;
   color: var(--text);
@@ -759,6 +763,10 @@ blockquote span {
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+
+#contacts h2 {
+  text-transform: uppercase;
 }
 
 .contact-link {

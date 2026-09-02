@@ -19,10 +19,10 @@
     "portraitAlt": "Victoria"
   },
   "about": {
-    "heading": "ABOUT ME",
+    "section": "01 — About me",
+    "heading": "BONJOUR!",
     "paragraph1": "My name is Victoria – I am an artist. In my work, I begin with my own sensations and anticipations. I’m interested in the effect of the familiar, mundane, and sentimental, and in the ways a person is shaped by the simple and beautiful.",
-    "paragraph2": "My aim in art is to add to the beauty that surrounds me. While everyone is searching for new meanings, I want to make sense of the old ones.",
-    "signature": "Victoria"
+    "paragraph2": "My aim in art is to add to the beauty that surrounds me. While everyone is searching for new meanings, I want to make sense of the old ones."
   },
   "manifesto": {
     "section": "02 — Work series",
@@ -63,12 +63,12 @@
       "print": "Prints"
     },
     "terms": {
-      "shippingLabel": "Shipping",
-      "shipping": "From Moscow worldwide. Originals travel in a rigid tube or crate.",
-      "timingLabel": "Timing",
-      "timing": "Russia 3–7 days, international 10–21 days.",
+      "shippingLabel": "Framing",
+      "shipping": "We can arrange custom framing for your painting upon request for an additional fee.",
+      "timingLabel": "Delivery",
+      "timing": "Delivery within Russia takes 3–7 days.\nInternational delivery takes 10–21 days.",
       "paymentLabel": "Payment",
-      "payment": "Arranged by message — bank transfer or card."
+      "payment": "Payment for the painting is made by bank transfer to the artist's account using your preferred method. If you have any questions, please contact us via Instagram or email."
     }
   },
   "contacts": {

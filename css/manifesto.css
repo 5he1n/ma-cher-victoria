@@ -248,10 +248,6 @@
 
   .series { max-width: 500px; margin: 0 auto; }
 
-  .series.is-right .series-heading,
-  .series.is-right .series-question,
-  .series.is-right .series-hint { text-align: left; }
-
   .series-circle { top: -19%; width: 221%; }
   .series.is-left  .series-circle { left: -93%; }
   .series.is-right .series-circle { right: -97%; }

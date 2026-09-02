@@ -116,13 +116,15 @@
   content: '';
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   background-color: #F2F1EC;
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E"),
+    url("../media/paper-noise.webp"),
     radial-gradient(ellipse 130% 90% at 50% 40%, rgba(255,255,255,.7), transparent 65%),
     radial-gradient(ellipse at 100% 100%, rgba(120,112,98,.10), transparent 45%),
     radial-gradient(ellipse at 0% 95%, rgba(120,112,98,.07), transparent 40%);
+  background-size: 128px 128px, 100% 100%, 100% 100%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
   background-blend-mode: multiply, normal, normal, normal;
   clip-path: polygon(
     0.4% 0.6%, 26% 0%, 58% 0.9%, 84% 0.2%, 100% 1.1%,
@@ -158,17 +160,13 @@
   );
 }
 
-.note p { color: #1F1D1A; max-width: none; }
-.note p + p { margin-top: 26px; }
-
-.note-sign {
-  display: block;
-  margin-top: 28px;
-  font-family: var(--font-body);
-  font-size: 11px;
-  letter-spacing: .12em;
-  color: rgba(31, 29, 26, .5);
+.note p {
+  position: relative;
+  z-index: 1;
+  color: #1F1D1A;
+  max-width: none;
 }
+.note p + p { margin-top: 26px; }
 
 /* --------------------------------------------------------------------------
    5. МОБИЛЬНЫЙ
@@ -185,6 +183,24 @@
   .about-portrait.is-left  { margin: 0 auto 0 0; }
   .about-portrait.is-right { margin: 0 0 0 auto; }
   .about-portrait img { max-height: 320px; }
+
+  .about-bg { display: none; }
+}
+
+/* На телефоне в альбомной ориентации возвращаем только композицию записки
+   к десктопному виду. Остальные мобильные правила сайта не меняются. */
+@media (orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse) {
+  .about-note-layout {
+    grid-template-columns: 1fr minmax(300px, 460px) 1fr;
+    gap: clamp(8px, 1.5vw, 24px);
+  }
+
+  .about-note-layout .note { order: 0; }
+
+  .about-note-layout .about-portrait { max-width: none; }
+  .about-note-layout .about-portrait.is-left { margin: 0 -8% 0 0; }
+  .about-note-layout .about-portrait.is-right { margin: 0 0 0 -8%; }
+  .about-note-layout .about-portrait img { max-height: 460px; }
 }
 
 .about-scene-inner { text-align: center; }
@@ -192,6 +208,7 @@
 .about-heading {
   font-weight: 400;
   letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Текст внутри записки остаётся по левому краю */
@@ -360,7 +377,6 @@ h2, .manifesto-title, .about-heading, .wall-head h2 { font-size: var(--fs-lg); }
 .btn,
 .work-note,
 .work-price,
-.note-sign,
 .cv-card-role,
 .cv-card-hint { font-size: var(--fs-sm); }
 
@@ -545,6 +561,9 @@ img.series-heading {
    левая серия, правая серия. Заголовки серий сохраняют мобильную логику. */
 @media (max-width: 1100px) {
   .manifesto .manifesto-center { order: -1; }
+  /* Явная ширина не даёт измеренным heading/question сжимать grid-item
+     и вслед за ним саму сцену при повторных измерениях. */
+  .manifesto .series { width: 100%; }
   .manifesto .series.is-left { order: 0; left: -6%;}
   .manifesto .series.is-right { order: 1; right: -6%; }
   .manifesto img.series-heading { width: clamp(250px, 17vw, 320px); }
@@ -629,5 +648,39 @@ img.series-heading {
     top: 47.0204% !important;
     width: 58.8235% !important;
     z-index: 4 !important;
+  }
+}
+
+/* На мобильном заголовок и вопрос занимают видимую ширину стопки.
+   До измерения продолжают работать существующие CSS-размеры как fallback. */
+@media (max-width: 1100px) {
+  .manifesto .series.has-measured-pieces {
+    --series-edge-inset: clamp(12px, 3vw, 20px);
+  }
+
+  .manifesto .series.has-measured-pieces img.series-heading {
+    position: relative !important;
+    left: var(--series-pieces-left) !important;
+    width: calc(var(--series-pieces-width) - var(--series-edge-inset)) !important;
+    max-width: none !important;
+    box-sizing: border-box;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  .manifesto .series.has-measured-pieces .series-question {
+    width: calc(var(--series-pieces-width) - var(--series-edge-inset)) !important;
+    max-width: none !important;
+    margin-left: var(--series-pieces-left) !important;
+    padding-inline: 0 !important;
+  }
+
+  /* У левой серии отступ добавляется к исходной опорной линии. */
+  .manifesto .series.is-left.has-measured-pieces img.series-heading {
+    left: var(--series-edge-inset) !important;
+  }
+
+  .manifesto .series.is-left.has-measured-pieces .series-question {
+    margin-left: var(--series-edge-inset) !important;
   }
 }
