@@ -35,7 +35,7 @@ const IMAGE_META = Object.fromEntries([
   ['work-16-main', 1600, 1111, 800, 556],
   ['work-16-detail-01', 1600, 1163, 800, 582],
   ['work-16-detail-02', 1600, 1163, 800, 582],
-  ['work-17-main', 1600, 1227, 800, 614],
+  ['work-17-main', 1280, 960, 800, 600],
   ['work-17-detail-01', 1027, 1600, 513, 800],
   ['work-17-detail-02', 1023, 1600, 512, 800],
   ['work-18-main', 1600, 1003, 800, 501],
@@ -173,6 +173,15 @@ const shop = [
     size: { ru: '21×29,7 см', en: '21×29.7 cm' },
     price: { ru: 8000, en: 100 }
   }),
+  originalWork(25, {
+    title: { ru: 'Муза устала быть Музой', en: 'The Muse Is Tired of Being a Muse' },
+    ratio: '21/29.7',
+    scale: 's',
+    material: { ru: 'Бумага, акрил', en: 'Paper, acrylic' },
+    size: { ru: '21×29,7 см', en: '21×29.7 cm' },
+    status: 'sold',
+    collection: { ru: 'Частная коллекция, Санкт-Петербург', en: 'Private collection, Saint Petersburg' }
+  }),
   originalWork(7, {
     title: { ru: 'Её шуршащие шелка', en: 'Her rustling silks' },
     ratio: '21/29.7',
@@ -189,21 +198,19 @@ const shop = [
     size: { ru: '10,5×14,8 см', en: '10.5×14.8 cm' },
     price: { ru: 7000, en: 100 }
   }),
-  originalWork(9, {
-    title: { ru: 'Весна внутри', en: 'Spring is inside' },
-    ratio: '14.8/21',
-    scale: 's',
-    material: { ru: 'Бумага, акрил, карандаш', en: 'Paper, acrylic, pencil' },
-    size: { ru: '14,8×21 см', en: '14.8×21 cm' },
-    price: { ru: 7000, en: 100 }
-  }),
-  originalWork(10, {
-    title: { ru: 'Солнечные ветры и женщины пытаются жить', en: 'Solar winds and women are trying to live' },
-    ratio: '14.8/21',
-    scale: 's',
-    material: { ru: 'Бумага, акрил, карандаш', en: 'Paper, acrylic, pencil' },
-    size: { ru: '14,8×21 см', en: '14.8×21 cm' },
-    price: { ru: 7000, en: 100 }
+  originalWork(24, {
+    title: { ru: 'Август', en: 'August' },
+    detail: [
+      '../catalog/work-24-detail-01.webp',
+      '../catalog/work-24-detail-02.webp',
+      '../catalog/work-24-detail-03.webp'
+    ],
+    ratio: '29.7/42',
+    scale: 'l',
+    material: { ru: 'Бумага, акрил', en: 'Paper, acrylic' },
+    size: { ru: '29,7×42 см', en: '29.7×42 cm' },
+    status: 'sold',
+    collection: { ru: 'Частная коллекция, Екатеринбург', en: 'Private collection, Yekaterinburg' }
   }),
   originalWork(11, {
     title: { ru: 'Жемчуг', en: 'Pearl' },
@@ -257,17 +264,13 @@ const shop = [
     size: { ru: '29,7×42 см', en: '29.7×42 cm' },
     price: { ru: 10000, en: 100 }
   }),
-  originalWork(17, {
-    title: { ru: 'Двое', en: 'Two' },
-    detail: [
-      '../catalog/work-17-detail-01.webp',
-      '../catalog/work-17-detail-02.webp'
-    ],
-    ratio: '21/29.7',
+  originalWork(10, {
+    title: { ru: 'Солнечные ветры и женщины пытаются жить', en: 'Solar winds and women are trying to live' },
+    ratio: '14.8/21',
     scale: 's',
-    material: { ru: 'Бумага, акрил', en: 'Paper, acrylic' },
-    size: { ru: '21×29,7 см', en: '21×29.7 cm' },
-    price: { ru: 10000, en: 100 }
+    material: { ru: 'Бумага, акрил, карандаш', en: 'Paper, acrylic, pencil' },
+    size: { ru: '14,8×21 см', en: '14.8×21 cm' },
+    price: { ru: 7000, en: 100 }
   }),
   originalWork(18, {
     title: { ru: 'Оленёнок', en: 'Deer' },
@@ -302,27 +305,24 @@ const shop = [
     size: { ru: '14,8×21 см', en: '14.8×21 cm' },
     price: { ru: 8000, en: 100 }
   }),
-  originalWork(24, {
-    title: { ru: 'Август', en: 'August' },
-    detail: [
-      '../catalog/work-24-detail-01.webp',
-      '../catalog/work-24-detail-02.webp',
-      '../catalog/work-24-detail-03.webp'
-    ],
-    ratio: '29.7/42',
-    scale: 'm',
-    material: { ru: 'Бумага, акрил', en: 'Paper, acrylic' },
-    size: { ru: '29,7×42 см', en: '29.7×42 cm' },
-    status: 'sold',
-    collection: { ru: 'Частная коллекция, Екатеринбург', en: 'Private collection, Yekaterinburg' }
+  originalWork(9, {
+    title: { ru: 'Весна внутри', en: 'Spring is inside' },
+    ratio: '14.8/21',
+    scale: 's',
+    material: { ru: 'Бумага, акрил, карандаш', en: 'Paper, acrylic, pencil' },
+    size: { ru: '14,8×21 см', en: '14.8×21 cm' },
+    price: { ru: 7000, en: 100 }
   }),
-  originalWork(25, {
-    title: { ru: 'Муза устала быть Музой', en: 'The Muse Is Tired of Being a Muse' },
+  originalWork(17, {
+    title: { ru: 'Двое', en: 'Two' },
+    detail: [
+      '../catalog/work-17-detail-01.webp',
+      '../catalog/work-17-detail-02.webp'
+    ],
     ratio: '21/29.7',
     scale: 's',
     material: { ru: 'Бумага, акрил', en: 'Paper, acrylic' },
     size: { ru: '21×29,7 см', en: '21×29.7 cm' },
-    status: 'sold',
-    collection: { ru: 'Частная коллекция, Санкт-Петербург', en: 'Private collection, Saint Petersburg' }
-  })
+    price: { ru: 10000, en: 100 }
+  }),
 ];

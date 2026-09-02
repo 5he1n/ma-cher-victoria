@@ -1,7 +1,7 @@
 // ==========================================================================
 // НАСТРОЙКИ
 // ==========================================================================
-const SHOP_EMAIL = 'victtoress@mail.com';   // ← сюда приходят заказы
+const SHOP_EMAIL = 'victtoress@gmail.com';   // ← сюда приходят заказы
 const CART_KEY = 'mcv-cart';             // ключ хранения корзины
 const CART_BADGE_POSITION = 'top-right';  // 'top-right' | 'bottom-right'
 const i18n = window.mcvI18n || {
@@ -128,7 +128,107 @@ function initScrollSpy() {
 }
 
 // ==========================================================================
-// 4. КАРУСЕЛЬ «СЕРИЯ РАБОТ»
+// 4. ГРАНИЦЫ СЕРИЙ
+// ==========================================================================
+function initSeriesBounds() {
+  const mobileView = window.matchMedia('(max-width: 1100px)');
+
+  const layoutLeftWithin = (element, ancestor) => {
+    let left = 0;
+    let current = element;
+
+    while (current && current !== ancestor) {
+      left += current.offsetLeft;
+      current = current.offsetParent;
+    }
+
+    return current === ancestor ? left : null;
+  };
+
+  document.querySelectorAll('.manifesto .series').forEach((series) => {
+    const manifesto = series.closest('.manifesto');
+    const stage = series.querySelector('.series-stage');
+    const pieces = [...series.querySelectorAll('.series-piece')];
+    if (!manifesto || !stage || !pieces.length) return;
+
+    let frame = 0;
+    let observing = false;
+
+    const clear = () => {
+      series.classList.remove('has-measured-pieces');
+      series.style.removeProperty('--series-pieces-left');
+      series.style.removeProperty('--series-pieces-width');
+    };
+
+    const update = () => {
+      frame = 0;
+      if (!mobileView.matches) {
+        clear();
+        return;
+      }
+
+      const stageLeft = layoutLeftWithin(stage, manifesto);
+      const pieceBounds = pieces.map((piece) => {
+        const left = layoutLeftWithin(piece, stage);
+        return left === null ? null : { left, right: left + piece.offsetWidth };
+      }).filter(Boolean);
+      if (stageLeft === null || !pieceBounds.length) return;
+
+      const stackLeft = Math.min(...pieceBounds.map((piece) => piece.left));
+      const stackRight = Math.max(...pieceBounds.map((piece) => piece.right));
+      const visibleLeft = -stageLeft;
+      const visibleRight = manifesto.clientWidth - stageLeft;
+      const left = Math.max(stackLeft, visibleLeft);
+      const right = Math.min(stackRight, visibleRight);
+      const width = right - left;
+      if (!Number.isFinite(left) || !Number.isFinite(width) || width <= 0) return;
+
+      series.style.setProperty('--series-pieces-left', `${left}px`);
+      series.style.setProperty('--series-pieces-width', `${width}px`);
+      series.classList.add('has-measured-pieces');
+    };
+    const scheduleUpdate = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(update);
+    };
+
+    const observer = new ResizeObserver(scheduleUpdate);
+    const toggle = () => {
+      if (mobileView.matches) {
+        if (!observing) {
+          observer.observe(manifesto);
+          observer.observe(stage);
+          pieces.forEach((piece) => observer.observe(piece));
+          observing = true;
+        }
+        scheduleUpdate();
+      } else {
+        observer.disconnect();
+        observing = false;
+        if (frame) cancelAnimationFrame(frame);
+        frame = 0;
+        clear();
+      }
+    };
+
+    pieces.forEach((piece) => {
+      if (!piece.complete) piece.addEventListener('load', scheduleUpdate, { once: true });
+      if (typeof piece.decode === 'function') {
+        piece.decode().then(scheduleUpdate).catch(() => {});
+      }
+    });
+
+    if (typeof mobileView.addEventListener === 'function') {
+      mobileView.addEventListener('change', toggle);
+    } else {
+      mobileView.addListener(toggle);
+    }
+    toggle();
+  });
+}
+
+// ==========================================================================
+// 5. КАРУСЕЛЬ «СЕРИЯ РАБОТ»
 // ==========================================================================
 const ARROW = {
   prev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M15 4 7 12l8 8"/></svg>',
@@ -271,7 +371,12 @@ const WALL_SIZES = '(max-width: 700px) 88vw, (max-width: 1100px) 44vw, 30vw';
 function hangMarkup(item, i) {
   const sold = item.status === 'sold';
   const title = localized(item, 'title', t('messages.untitled'));
-  const meta = esc([localized(item, 'type'), localized(item, 'size')].filter(Boolean).join(' · '));
+  const type = localized(item, 'type');
+  const size = localized(item, 'size');
+  const meta = [
+    type ? `<span class="hang-type">${esc(type)}</span>` : '',
+    size ? `<span class="hang-size">${esc(size)}</span>` : ''
+  ].filter(Boolean).join('');
   const scale = item.scale === 's' || item.scale === 'l' ? ` is-${item.scale}` : '';
   const ratio = visualRatioOf(item);
 
@@ -697,4 +802,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   initCart();
   initDelegation();
   initScrollSpy();
+  initSeriesBounds();
 });

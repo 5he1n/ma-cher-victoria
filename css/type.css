@@ -1,6 +1,6 @@
 @font-face {
-  font-family: "Sabir Mono";
-  src: url("../fonts/SabirMono-Regular.woff2") format("woff2");
+  font-family: "Involve";
+  src: url("../fonts/Involve-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -19,11 +19,11 @@
    ПЕРЕМЕННЫЕ
    -------------------------------------------------------------------------- */
 :root {
-  /* Единый шрифт сайта; системный monospace остаётся запасным вариантом. */
-  --font-head: "Sabir Mono", monospace;
+  /* Единый шрифт сайта; системный sans-serif остаётся запасным вариантом. */
+  --font-head: "Involve", Arial, sans-serif;
 
-  /* Наборный текст использует тот же Sabir Mono, что и интерфейсные подписи. */
-  --font-body: "Sabir Mono", monospace;
+  /* Наборный текст использует тот же Involve, что и интерфейсные подписи. */
+  --font-body: "Involve", Arial, sans-serif;
 
   /* Крупные надписи на фотографиях */
   --font-display: "Glanz", var(--font-head);
@@ -80,8 +80,7 @@ h3 { font-size: clamp(17px, 1.5vw, 22px); }
 .note p,
 .manifesto-text,
 .manifesto-text p,
-.series-question,
-.note-sign {
+.series-question {
   text-transform: none;
 }
 
@@ -101,7 +100,7 @@ h3 { font-size: clamp(17px, 1.5vw, 22px); }
   text-transform: uppercase;
 }
 
-/* Меню: Sabir Mono, крупнее и плотнее — по правке «контрастнее и жирнее» */
+/* Меню: Involve, крупнее и плотнее — по правке «контрастнее и жирнее» */
 .menu a {
   font-family: var(--font-head);
   font-size: clamp(14px, 1.15vw, 17px);
@@ -112,7 +111,7 @@ h3 { font-size: clamp(17px, 1.5vw, 22px); }
 
 /* --------------------------------------------------------------------------
    НАСТРОЙКА НАБОРА
-   Включаем стандартные таблицы OpenType для Sabir Mono.
+   Включаем стандартные таблицы OpenType для Involve.
    -------------------------------------------------------------------------- */
 .typed,
 .note p,
@@ -142,7 +141,6 @@ p { font-size: var(--fs-md); }
 .btn,
 .work-note,
 .work-price,
-.note-sign,
 .cv-card-role,
 .cv-card-hint,
 .series-label { font-size: var(--fs-sm); }

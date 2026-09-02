@@ -38,6 +38,7 @@
 .section-wall .section-intro { color: var(--wall-soft); }
 
 .wall-head { max-width: 60ch; }
+.wall-head h2 { text-transform: uppercase; }
 
 /* Рейка подвеса — тонкая линия, от которой отсчитывается вся экспозиция */
 .wall-rail {
@@ -56,7 +57,7 @@
    -------------------------------------------------------------------------- */
 .wall {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(13, 1fr);
   align-items: center;          /* общая осевая линия подвеса */
   gap: clamp(48px, 6vw, 96px) clamp(24px, 3vw, 48px);
   padding: clamp(56px, 7vw, 100px) 0 clamp(64px, 8vw, 110px);
@@ -176,6 +177,10 @@
   text-transform: uppercase;
   color: var(--wall-soft);
   margin-top: 6px;
+}
+
+.hang-type + .hang-size::before {
+  content: ' · ';
 }
 
 .hang-price {
@@ -446,6 +451,7 @@
    Адаптив
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
+  .wall { grid-template-columns: repeat(12, 1fr); }
   .hang, .hang.is-s, .hang.is-l { grid-column: span 6; }
   .wall > .hang:nth-child(3n+2),
   .wall > .hang:nth-child(3n+3) { margin-top: 0; }
@@ -473,15 +479,22 @@
     grid-row: 1;
   }
   .hang-title {
-    grid-column: 2;
+    grid-column: 2 / -1;
     grid-row: 1;
     min-width: 0;
     flex: none;
     font-size: clamp(15px, 4.5vw, 18px);
   }
+  .hang-size {
+    display: block;
+  }
+  .hang-type + .hang-size::before {
+    content: none;
+  }
   .hang-price {
-    grid-column: 3;
-    grid-row: 1;
+    grid-column: 2 / -1;
+    grid-row: 2;
+    justify-self: end;
   }
 }
 
