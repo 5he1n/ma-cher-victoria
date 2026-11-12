@@ -1,201 +1,117 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, resolve, relative } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import process from 'node:process';
+import { writeBrowserCatalog } from './build-catalog.mjs';
+import { loadPortfolio, renderPortfolio } from '../shared/portfolio.mjs';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const TEMPLATE_PATH = resolve(ROOT, 'src/index.template.html');
-const LOCALES_DIR = resolve(ROOT, 'src/locales');
-const SITE_ROOT = 'https://macherevictoria.artalbom-graf.com/';
-const GENERATED = '<!-- GENERATED FILE — edit src/index.template.html, src/404.template.html, and src/locales/*.json, then run npm run build. -->';
-const RAW_TEMPLATE_MARKERS = new Set([
-  'switch.ruAriaCurrent',
-  'switch.enAriaCurrent',
-  'notFound.config'
-]);
-
-const escapeHtml = (value) => String(value)
-  .replaceAll('&', '&amp;')
-  .replaceAll('<', '&lt;')
-  .replaceAll('>', '&gt;')
-  .replaceAll('"', '&quot;')
-  .replaceAll("'", '&#39;');
-
-const safeJson = (value) => JSON.stringify(value)
-  .replaceAll('<', '\\u003C')
-  .replaceAll('>', '\\u003E')
-  .replaceAll('&', '\\u0026')
-  .replaceAll('\u2028', '\\u2028')
-  .replaceAll('\u2029', '\\u2029');
-
-function getPath(value, path) {
-  return path.split('.').reduce((current, part) => current?.[part], value);
-}
-
-function flatten(value, prefix = '', result = new Set()) {
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const pages = ['home', 'about', 'series', 'shop', 'order', 'contacts', 'portfolio'];
+const site = 'https://macherevictoria.artalbom-graf.com/';
+const contactTargets = {
+  instagram: 'https://www.instagram.com/macherevictoria',
+  email: 'mailto:victtoress@gmail.com',
+  tiktok: '',
+  telegram: '',
+  youtube: '',
+  vk: ''
+};
+const artistStatementImage = {
+  src: 'artist-statement-placeholder.png',
+  width: 1122,
+  height: 1402,
+  isPlaceholder: true
+};
+const esc = (v) => String(v).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+const route = (lang, page) => page === 'home' ? lang + '/' : lang + '/' + page + '/';
+const absolute = (lang, page) => site + route(lang, page);
+function leafKeys(value, prefix = '', result = new Set()) {
   for (const [key, child] of Object.entries(value)) {
-    const path = prefix ? `${prefix}.${key}` : key;
-    if (child && typeof child === 'object' && !Array.isArray(child)) flatten(child, path, result);
-    else result.add(path);
+    const current = prefix ? prefix + '.' + key : key;
+    if (child && typeof child === 'object' && !Array.isArray(child)) leafKeys(child, current, result);
+    else result.add(current);
   }
   return result;
 }
+function validateLocales(ru, en) {
+  const ruKeys = leafKeys(ru);
+  const enKeys = leafKeys(en);
+  const missing = [...ruKeys].filter((key) => !enKeys.has(key)).concat([...enKeys].filter((key) => !ruKeys.has(key)));
+  if (missing.length) throw new Error('Locale key parity failed: ' + missing.join(', '));
+}
 
-function validateLocaleParity(ru, en) {
-  const ruKeys = flatten(ru);
-  const enKeys = flatten(en);
-  const missingInEn = [...ruKeys].filter((key) => !enKeys.has(key));
-  const missingInRu = [...enKeys].filter((key) => !ruKeys.has(key));
-  if (missingInEn.length || missingInRu.length) {
-    throw new Error(`Locale key parity failed. Missing in en: ${missingInEn.join(', ') || 'none'}; missing in ru: ${missingInRu.join(', ') || 'none'}`);
+let pageTemplates = {};
+let shellTemplate;
+function render(template, context) {
+ const rendered = template.replace(/\{\{([^{}]+)\}\}/g, (_, key) => {
+  const value = key.trim().split('.').reduce((o,k)=>o?.[k], context);
+  if (value === undefined) throw new Error('Missing template value: ' + key);
+  return ['nav','dictionary','content','socialLinks','artistStatementMedia','portfolioMarkup','portfolioNotice','pageScripts','pageStyles'].includes(key.trim()) ? value : esc(value);
+ });
+ if (/\{\{[^{}]+\}\}/.test(rendered)) throw new Error('Unresolved template marker');
+ return rendered;
+}
+const icons = {
+  instagram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5Zm5.2-3.2a1.15 1.15 0 1 1-1.15 1.15A1.15 1.15 0 0 1 17.2 6.3Z"/></svg>',
+  email: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3V5Zm2 2v.7l7 4.8 7-4.8V7H5Zm14 10V10l-7 4.8L5 10v7h14Z"/></svg>',
+  tiktok: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v11.1a4.8 4.8 0 1 1-4-4.73v2.08a2.8 2.8 0 1 0 2 2.68V3h2Zm2.2 0c.36 1.85 1.48 3.02 3.8 3.28v2.04A7.14 7.14 0 0 1 16.2 7v7.1H14V3h2.2Z"/></svg>',
+  telegram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 4-3 16-5.5-4-3.1 3 .4-4.3L17.7 7 7.9 13.2l-4.1-1.4L21 4Z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0 3.1-.36 5.03-.9 6.2-.3.66-.84 1.2-1.5 1.5C18.43 20.24 16.5 20.6 12 20.6s-6.43-.36-7.6-.9a3.2 3.2 0 0 1-1.5-1.5C2.36 17.03 2 15.1 2 12s.36-5.03.9-6.2c.3-.66.84-1.2 1.5-1.5C5.57 3.76 7.5 3.4 12 3.4s6.43.36 7.6.9c.66.3 1.2.84 1.5 1.5.54 1.17.9 3.1.9 6.2ZM10 8.6v6.8l5.7-3.4L10 8.6Z"/></svg>',
+  vk: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h3.2c.2 5.1 2.4 7.3 4.1 7.8V6h3v4.5c1.7-.18 3.48-2.2 4.1-4.5h3c-.47 2.83-2.4 4.85-3.77 5.68 1.37.67 3.57 2.42 4.37 5.32h-3.3c-.68-2.2-2.3-3.84-4.4-4.07V17h-.36c-4.35 0-6.83-2.98-7.1-11Z"/></svg>'
+};
+function socialLinks(l) {
+  return Object.entries(contactTargets).map(([name, href]) => {
+    const platform = l.hero.social[name];
+    const label = esc(href ? platform : l.hero.socialUnavailable.replace('{platform}', platform));
+    const icon = icons[name];
+    if (!href) return `<span class="hero-social-placeholder" role="img" aria-label="${label}">${icon}</span>`;
+    const external = name === 'instagram' ? ' target="_blank" rel="noopener"' : '';
+    return `<a class="hero-social-link" href="${esc(href)}" aria-label="${label}"${external}>${icon}</a>`;
+  }).join('');
+}
+function artistStatementMedia(l, asset) {
+  if (!artistStatementImage?.src) {
+    return `<div class="statement-media statement-media--empty" role="img" aria-label="${esc(l.artistStatement.imageUnavailable)}"><span>${esc(l.artistStatement.imageUnavailable)}</span></div>`;
   }
+  const { src, width, height, isPlaceholder } = artistStatementImage;
+  const caption = isPlaceholder ? `<figcaption>${esc(l.artistStatement.imageCaption)}</figcaption>` : '';
+  const alt = isPlaceholder ? l.artistStatement.imageAlt : l.artistStatement.photoAlt;
+  return `<figure class="statement-media${isPlaceholder ? ' is-placeholder' : ''}"><img src="${asset}media/${esc(src)}" width="${Number(width)}" height="${Number(height)}" alt="${esc(alt)}" decoding="async">${caption}</figure>`;
+}
+function content(lang, page, l, asset, portfolio) {
+ const portfolioMarkup = page === 'portfolio' ? renderPortfolio(portfolio, lang, asset, l.portfolio) : '';
+ const portfolioNotice = page === 'portfolio' && portfolio.some((item) => item.isDemo) ? `<p class="bookshelf-notice">${esc(l.portfolio.demoNotice)}</p>` : '';
+ return render(pageTemplates[page], {i18n:l, asset, portrait:lang==='en'?'main-portrait-eng.webp':'main-portrait-rus.webp', cv:'CV Victoria Golikova '+lang.toUpperCase()+'.pdf', socialLinks:socialLinks(l), artistStatementMedia:artistStatementMedia(l, asset), portfolioMarkup, portfolioNotice});
 }
 
-function validateTemplateKeys(template, locale) {
-  const markerKeys = [...template.matchAll(/\{\{i18n\.([^{}]+)\}\}/g)].map((match) => match[1]);
-  const missingMarkers = markerKeys.filter((key) => getPath(locale, key) === undefined);
-  const dataKeys = [...template.matchAll(/data-i18n="([^"]+)"/g)].map((match) => match[1]);
-  const missingDataKeys = dataKeys.filter((key) => getPath(locale, key) === undefined);
-  if (missingMarkers.length || missingDataKeys.length) {
-    const missing = [...new Set([...missingMarkers, ...missingDataKeys])];
-    throw new Error(`Template references missing locale keys: ${missing.join(', ')}`);
+function document(lang, page, l, portfolio) {
+  const nested = page !== 'home';
+  const asset = nested ? '../../' : '../';
+  const localeRoot = nested ? '../' : './';
+  const other = lang === 'ru' ? 'en' : 'ru';
+  const entries = [['about', l.nav.about], ['series', l.nav.series], ['shop', l.nav.shop], ['portfolio', l.nav.portfolio], ['contacts', l.nav.contacts]];
+  const nav = entries.map(([id, label]) => '<a href="' + (page === 'home' ? id + '/' : '../' + id + '/') + '"' + (page === id ? ' aria-current="page"' : '') + '>' + esc(label) + '</a>').join('');
+  const title = page === 'home' ? l.meta.title : (l.nav[page] || l.portfolio.title) + ' — ' + l.meta.title;
+  const language = page === 'home' ? '../' + other + '/' : '../../' + other + '/' + page + '/';
+  const pageScripts = page === 'portfolio' ? `<script src="${asset}js/portfolio.js" defer></script>` : '';
+  const pageStyles = page === 'portfolio' ? `<link rel="stylesheet" href="${asset}css/portfolio.css">` : '';
+  return render(shellTemplate, {lang,page,asset,localeRoot,title,nav,language,other,i18n:l,dictionary:JSON.stringify(l).replaceAll('<','\\u003C'),canonical:{current:absolute(lang,page),ru:absolute('ru',page),en:absolute('en',page),[lang]:absolute(lang,page)},content:content(lang,page,l,asset,portfolio),pageScripts,pageStyles});
+}
+
+const load = (lang) => readFile(resolve(root, 'src/locales', lang + '.json'), 'utf8').then(JSON.parse);
+const main = async () => {
+  await writeBrowserCatalog();
+  const [ru, en, portfolio] = await Promise.all([load('ru'), load('en'), loadPortfolio()]);
+  validateLocales(ru, en);
+  shellTemplate = await readFile(resolve(root,'src/site.template.html'),'utf8');
+  pageTemplates = Object.fromEntries(await Promise.all(pages.map(async page => [page, await readFile(resolve(root, 'src/pages', page+'.html'), 'utf8')])));
+  for (const lang of ['ru', 'en']) for (const page of pages) {
+    const target = resolve(root, route(lang, page), 'index.html');
+    await mkdir(dirname(target), { recursive: true });
+    await writeFile(target, document(lang, page, lang === 'ru' ? ru : en, portfolio), 'utf8');
   }
-}
-
-function renderTemplate(template, locale, code) {
-  const localeMeta = {
-    code,
-    heroPortrait: code === 'en' ? 'main-portrait-eng.webp' : 'main-portrait-rus.webp',
-    cvFile: code === 'en' ? 'CV Victoria Golikova EN.pdf' : 'CV Victoria Golikova RU.pdf',
-    blueHeading: code === 'en' ? 'blue_room_heading.webp' : 'blue_room_heading_rus.webp',
-    blueHeadingWidth: code === 'en' ? 3052 : 3567,
-    blueHeadingHeight: code === 'en' ? 627 : 686,
-    yellowHeading: code === 'en' ? 'yellow_heading_eng.webp' : 'yellow_heading_rus.webp',
-    yellowHeadingWidth: code === 'en' ? 3628 : 3331,
-    yellowHeadingHeight: code === 'en' ? 692 : 762,
-    json: safeJson(locale)
-  };
-  const context = {
-    locale: localeMeta,
-    i18n: locale,
-    switch: {
-      ru: '../ru/',
-      en: '../en/',
-      ruClass: code === 'ru' ? ' active' : '',
-      enClass: code === 'en' ? ' active' : '',
-      ruAriaCurrent: code === 'ru' ? 'aria-current="page"' : '',
-      enAriaCurrent: code === 'en' ? 'aria-current="page"' : ''
-    },
-    route: {
-      blue: `../404.html?lang=${code}`,
-      yellow: `../404.html?lang=${code}`
-    },
-    seo: {
-      canonical: `${SITE_ROOT}${code}/`,
-      ru: `${SITE_ROOT}ru/`,
-      en: `${SITE_ROOT}en/`,
-      default: SITE_ROOT
-    }
-  };
-  const rendered = template.replace(/\{\{([^{}]+)\}\}/g, (whole, key) => {
-    const value = getPath(context, key.trim());
-    if (value === undefined) throw new Error(`Unresolved template marker: ${whole}`);
-    return key.trim() === 'locale.json' || RAW_TEMPLATE_MARKERS.has(key.trim())
-      ? value
-      : escapeHtml(value);
-  });
-  if (/\{\{[^{}]+\}\}/.test(rendered)) throw new Error(`Unresolved template marker in ${code}/index.html`);
-  return `${GENERATED}\n${rendered}`;
-}
-
-function renderRouter() {
-  return `${GENERATED}
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ma chere Victoria</title>
-  <meta http-equiv="refresh" content="0; url=ru/">
-  <link rel="canonical" href="${SITE_ROOT}">
-</head>
-<body>
-  <main>
-    <p><a href="ru/">Русская версия</a> / <a href="en/">English version</a></p>
-    <noscript><p><a href="ru/">Продолжить на русском</a></p></noscript>
-  </main>
-  <script>
-    (() => {
-      let saved = '';
-      try { saved = localStorage.getItem('mcv-locale') || ''; } catch (_) {}
-      const target = saved === 'en' ? 'en/' : 'ru/';
-      const url = new URL(target, location.href);
-      url.search = location.search;
-      url.hash = location.hash;
-      location.replace(url.href);
-    })();
-  </script>
-</body>
-</html>
-`;
-}
-
-function renderNotFound(template, ru, en) {
-  const config = {
-    home: {
-      ru: `ru/`,
-      en: `en/`
-    },
-    dictionaries: {
-      ru: ru.notFound,
-      en: en.notFound
-    }
-  };
-  const context = {
-    notFound: {
-      ru: ru.notFound,
-      en: en.notFound,
-      homeRu: config.home.ru,
-      homeEn: config.home.en,
-      config: safeJson(config)
-    }
-  };
-  const rendered = template.replace(/\{\{([^{}]+)\}\}/g, (whole, key) => {
-    const value = getPath(context, key.trim());
-    if (value === undefined) throw new Error(`Unresolved 404 template marker: ${whole}`);
-    return key.trim() === 'notFound.config' ? value : escapeHtml(value);
-  });
-  if (/\{\{[^{}]+\}\}/.test(rendered)) throw new Error('Unresolved template marker in 404.html');
-  return `${GENERATED}\n${rendered}`;
-}
-
-async function loadLocale(code) {
-  const path = resolve(LOCALES_DIR, `${code}.json`);
-  return JSON.parse(await readFile(path, 'utf8'));
-}
-
-async function main() {
-  const [template, ru, en] = await Promise.all([
-    readFile(TEMPLATE_PATH, 'utf8'),
-    loadLocale('ru'),
-    loadLocale('en')
-  ]);
-  validateLocaleParity(ru, en);
-  validateTemplateKeys(template, ru);
-  validateTemplateKeys(template, en);
-
-  for (const code of ['ru', 'en']) {
-    const outputPath = resolve(ROOT, code, 'index.html');
-    await mkdir(dirname(outputPath), { recursive: true });
-    await writeFile(outputPath, renderTemplate(template, code === 'ru' ? ru : en, code), 'utf8');
-  }
-  const notFoundTemplate = await readFile(resolve(ROOT, 'src/404.template.html'), 'utf8');
-  await writeFile(resolve(ROOT, '404.html'), renderNotFound(notFoundTemplate, ru, en), 'utf8');
-  await writeFile(resolve(ROOT, 'index.html'), renderRouter(), 'utf8');
-  console.log(`Built ${relative(ROOT, resolve(ROOT, 'index.html'))}, ru/index.html, en/index.html, and 404.html`);
-}
-
-main().catch((error) => {
-  console.error(`Build failed: ${error.message}`);
-  process.exitCode = 1;
-});
+  await writeFile(resolve(root, 'index.html'), '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ma chere Victoria</title><link rel="canonical" href="' + site + '"></head><body><script>(()=>{let l="ru";try{l=localStorage.getItem("mcv-locale")||"ru"}catch(_){}l=l==="en"?"en":"ru";let m={"#manifesto":"series/","#shop":"shop/","#contacts":"contacts/"};let suffix=m[location.hash]||"";location.replace(l+"/"+suffix+location.search+(location.hash==="#about"?"#about":""))})()</script><p><a href="ru/">Русская версия</a> / <a href="en/">English version</a></p></body></html>', 'utf8');
+  const notFound = { ru: ru.notFound, en: en.notFound };
+  await writeFile(resolve(root, '404.html'), '<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>404</title><link rel="stylesheet" href="/css/site.css"></head><body><main class="layout"><section class="page-section empty-state"><h1 id="title"></h1><p id="message"></p><p><a id="home"></a></p></section></main><script>const d=' + JSON.stringify(notFound).replaceAll('<', '\\u003C') + ';let l=new URLSearchParams(location.search).get("lang")||location.pathname.match(/\\/(ru|en)\\//)?.[1];if(l!=="en"&&l!=="ru"){try{l=localStorage.getItem("mcv-locale")}catch(_){}}l=l==="en"?"en":"ru";document.documentElement.lang=l;document.title=d[l].documentTitle;title.textContent=d[l].title;message.textContent=d[l].message;home.textContent=d[l].home;home.href="/"+l+"/";</script></body></html>', 'utf8');
+  console.log('Built 14 localized pages and root router');
+};
+main().catch((error) => { console.error('Build failed: ' + error.message); process.exitCode = 1; });

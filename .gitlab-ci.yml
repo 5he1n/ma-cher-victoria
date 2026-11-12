@@ -21,6 +21,17 @@ deploy_to_vm:
     - rsync -avz --delete
         --exclude '.git'
         --exclude '.gitlab-ci.yml'
+        --exclude '.env*'
+        --exclude 'node_modules'
+        --exclude 'server'
+        --exclude 'shared'
+        --exclude 'tests'
+        --exclude 'scripts'
+        --exclude 'deploy'
+        --exclude 'src'
+        --exclude 'package*.json'
+        --exclude 'pnpm-lock.yaml'
+        --exclude '.venv'
         ./ "$VM_USER@$VM_HOST:$DEPLOY_PATH/"
 
 # --- 2. Проверка, что сайт поднялся ---

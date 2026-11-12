@@ -1,0 +1,55 @@
+<section class="page-section order-page" id="orderRoot">
+  <header class="order-heading">
+    <h1>{{i18n.order.title}}</h1>
+  </header>
+
+  <div class="order-empty" id="orderEmpty" hidden>
+    <p>{{i18n.order.empty}}</p>
+    <a class="btn btn-solid" href="../shop/">{{i18n.order.backToShop}}</a>
+  </div>
+
+  <div class="order-layout" id="orderLayout">
+    <section class="order-summary" aria-labelledby="orderSummaryHeading">
+      <h2 id="orderSummaryHeading">{{i18n.order.summary}}</h2>
+      <div id="orderSummary" aria-live="polite"></div>
+    </section>
+
+    <section class="order-details" aria-labelledby="orderDetailsHeading">
+      <h2 id="orderDetailsHeading">{{i18n.order.detailsTitle}}</h2>
+      <form id="orderForm" hidden novalidate>
+        <div class="order-fields">
+          <div class="order-field">
+            <label for="orderName">{{i18n.order.name}}</label>
+            <input id="orderName" name="name" type="text" autocomplete="name" maxlength="120" required>
+          </div>
+          <div class="order-field">
+            <label for="orderEmail">{{i18n.order.email}}</label>
+            <input id="orderEmail" name="email" type="email" autocomplete="email" maxlength="254" required>
+          </div>
+          <div class="order-field">
+            <label for="orderPhone">{{i18n.order.phone}}</label>
+            <input id="orderPhone" name="phone" type="tel" autocomplete="tel" maxlength="60">
+          </div>
+          <div class="order-field order-field--full">
+            <label for="orderComment">{{i18n.order.comment}}</label>
+            <textarea id="orderComment" name="comment" rows="5" maxlength="2000"></textarea>
+          </div>
+          <div class="order-honeypot" aria-hidden="true">
+            <label for="orderWebsite">Website</label>
+            <input id="orderWebsite" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+        </div>
+        <button class="btn btn-solid" id="orderSubmit" type="submit">{{i18n.order.submit}}</button>
+      </form>
+      <p class="order-disclaimer">{{i18n.order.disclaimer}}</p>
+      <div class="order-status" id="orderStatus" role="status" aria-live="polite" tabindex="-1"></div>
+    </section>
+  </div>
+
+  <p class="order-review" id="orderReview" hidden aria-live="polite">{{i18n.order.changed}}</p>
+
+  <section class="order-success" id="orderSuccess" hidden tabindex="-1" aria-live="polite">
+    <h2>{{i18n.order.success}}</h2>
+    <p><span>{{i18n.order.orderNumber}}:</span> <strong id="orderNumber"></strong></p>
+  </section>
+</section>

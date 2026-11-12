@@ -99,13 +99,14 @@
         const nextLocale = localeFromLink(link);
         if (nextLocale) rememberLocale(nextLocale);
 
-        // Keep the current section when the target link points to a page
-        // without an explicit fragment. Storage is deliberately best effort.
+        // The generator supplies the equivalent page in the other language.
+        // Fragments belong to legacy one-page URLs and must not leak to it.
         const href = link.getAttribute('href');
         if (!href || href === '#') return;
         try {
           const target = new URL(href, location.href);
-          if (location.hash && !target.hash) target.hash = location.hash;
+          if (location.search && !target.search) target.search = location.search;
+          if (target.hash) target.hash = '';
           link.href = target.href;
         } catch (error) { /* browser will handle the original href */ }
       });

@@ -2,3 +2,8 @@ media/_orig/
 catalog/_orig/
 fonts/_unused/
 media/_slides/
+node_modules/
+.env
+.env.*
+!.env.example
+debug.log

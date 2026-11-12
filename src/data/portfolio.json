@@ -1,0 +1,41 @@
+[
+  {
+    "id": "demo-film",
+    "type": "film",
+    "isDemo": true,
+    "title": {
+      "ru": "Демо: фильм",
+      "en": "Demo: film"
+    },
+    "description": {
+      "ru": "Место для будущих материалов о кино-проекте: изображения, краткого описания и ссылок.",
+      "en": "A place for future film-project materials: images, a short description and links."
+    }
+  },
+  {
+    "id": "demo-theatre",
+    "type": "theatre",
+    "isDemo": true,
+    "title": {
+      "ru": "Демо: спектакль",
+      "en": "Demo: theatre"
+    },
+    "description": {
+      "ru": "Место для будущих материалов о театральном проекте: изображения, краткого описания и ссылок.",
+      "en": "A place for future theatre-project materials: images, a short description and links."
+    }
+  },
+  {
+    "id": "demo-book",
+    "type": "literature",
+    "isDemo": true,
+    "title": {
+      "ru": "Демо: книга",
+      "en": "Demo: book"
+    },
+    "description": {
+      "ru": "Место для будущих материалов о книжном проекте: изображения, краткого описания и ссылок.",
+      "en": "A place for future book-project materials: images, a short description and links."
+    }
+  }
+]

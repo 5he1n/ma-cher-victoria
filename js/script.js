@@ -1,7 +1,6 @@
 // ==========================================================================
 // НАСТРОЙКИ
 // ==========================================================================
-const SHOP_EMAIL = 'victtoress@gmail.com';   // ← сюда приходят заказы
 const CART_KEY = 'mcv-cart';             // ключ хранения корзины
 const CART_BADGE_POSITION = 'top-right';  // 'top-right' | 'bottom-right'
 const i18n = window.mcvI18n || {
@@ -20,6 +19,13 @@ const i18n = window.mcvI18n || {
 };
 const t = (path, replacements) => i18n.t(path, replacements);
 const value = (entry) => i18n.value(entry);
+const assetRoot = document.body?.dataset.assets || '../';
+const localeRoot = document.body?.dataset.localeRoot || './';
+let currentCatalog = {
+  items: typeof shop === 'undefined' ? [] : shop,
+  images: typeof IMAGE_META === 'undefined' ? {} : IMAGE_META,
+  revision: typeof CATALOG_REVISION === 'undefined' ? '' : CATALOG_REVISION
+};
 
 // ==========================================================================
 // 1. УТИЛИТЫ
@@ -43,6 +49,10 @@ const localized = (item, field, fallback = '') => {
   return result || fallback;
 };
 
+const assetPath = (src = '') => String(src).startsWith('../')
+  ? `${assetRoot}${String(src).slice(3)}`
+  : String(src);
+
 /**
  * Тег картинки с адаптивными срезами.
  * Метаданные full/small-версий заданы в IMAGE_META.
@@ -55,13 +65,13 @@ function imgTag(src, alt, {
   ratio = '4/5',
   thumbnail = false
 } = {}) {
-  const meta = typeof IMAGE_META === 'undefined' ? null : IMAGE_META[src];
+  const meta = currentCatalog.images[src];
   const [w, h] = ratio.split('/').map(Number);
   const primary = thumbnail && meta?.small
-    ? meta.small
-    : { src, width: meta?.width || w * 100, height: meta?.height || h * 100 };
+    ? { ...meta.small, src: assetPath(meta.small.src) }
+    : { src: assetPath(src), width: meta?.width || w * 100, height: meta?.height || h * 100 };
   const srcset = !thumbnail && meta?.small && sizes
-    ? `${meta.small.src} ${meta.small.width}w, ${src} ${meta.width}w`
+    ? `${assetPath(meta.small.src)} ${meta.small.width}w, ${assetPath(src)} ${meta.width}w`
     : '';
 
   return `<img src="${esc(primary.src)}"
@@ -125,6 +135,22 @@ function initScrollSpy() {
   }, { rootMargin: '-45% 0px -50% 0px' });
 
   sections.forEach((s) => io.observe(s));
+}
+
+function redirectLegacyHash() {
+  if (document.body.dataset.page !== 'home') return;
+  if (location.hash === '#about') return;
+  const routes = {
+    '#about': '',
+    '#manifesto': 'series/',
+    '#shop': 'shop/',
+    '#contacts': 'contacts/'
+  };
+  if (!Object.hasOwn(routes, location.hash)) return;
+  const target = routes[location.hash];
+  const url = new URL(`${localeRoot}${target}`, location.href);
+  url.search = location.search;
+  location.replace(url.href);
 }
 
 // ==========================================================================
@@ -354,7 +380,7 @@ function initFilters(selector, onChange) {
 // ==========================================================================
 // 5. СТЕНА (магазин)
 // ==========================================================================
-const shopItems = () => (typeof shop !== 'undefined' && Array.isArray(shop) ? shop : []);
+const shopItems = () => currentCatalog.items;
 const findItem = (id) => shopItems().find((i) => String(i.id) === String(id));
 
 // Пропорция работы: пустое место от проданной картины занимает ровно
@@ -362,7 +388,7 @@ const findItem = (id) => shopItems().find((i) => String(i.id) === String(id));
 const ratioOf = (item) => item.ratio || '4/5';
 
 const visualRatioOf = (item) => {
-  const meta = typeof IMAGE_META === 'undefined' ? null : IMAGE_META[item.image];
+  const meta = currentCatalog.images[item.image];
   return meta?.width && meta?.height ? `${meta.width}/${meta.height}` : ratioOf(item);
 };
 
@@ -381,7 +407,7 @@ function hangMarkup(item, i) {
   const ratio = visualRatioOf(item);
 
   const body = sold
-    ? `<div class="hang-ghost" style="aspect-ratio:${esc(ratio)}; opacity: 0.05" aria-hidden="true">
+    ? `<div class="hang-media hang-sold" style="aspect-ratio:${esc(ratio)}">
          ${imgTag(item.image, title, { sizes: WALL_SIZES, ratio })}
       </div>`
     : `<div class="hang-media" style="aspect-ratio:${esc(ratio)}">
@@ -390,7 +416,6 @@ function hangMarkup(item, i) {
 
   const label = `
     <div class="hang-label">
-      <span class="hang-index">№${num(i)}</span>
       <span class="hang-title">${esc(title)}
         ${meta ? `<span class="hang-meta">${meta}</span>` : ''}
         ${sold && item.collection ? `<span class="hang-collection">${esc(localized(item, 'collection'))}</span>` : ''}
@@ -401,7 +426,6 @@ function hangMarkup(item, i) {
   // Проданная работа тоже кликабельна: у неё есть своя история
   return `
     <article class="hang${scale}">
-      <span class="hang-nail" aria-hidden="true"></span>
       <button class="hang-frame" data-open="${esc(item.id)}" aria-label="${esc(`${title} — ${t('spread.aria')}`)}">
         ${body}
         ${label}
@@ -417,7 +441,36 @@ function renderShop(filter = 'all') {
 
   wall.innerHTML = items.length
     ? items.map(hangMarkup).join('')
-    : `<p class="state-empty">${esc(t('catalog.empty'))}</p>`;
+    : `<p class="state-empty" role="status">${esc(t(filter === 'print' ? 'shop.printsEmpty' : 'catalog.empty'))}</p>`;
+}
+
+function initShopFilters() {
+  const tabs = [...document.querySelectorAll('#shopFilters .tab-btn')];
+  if (!tabs.length || !document.getElementById('shopWall')) return;
+  const readFilter = () => {
+    const filter = new URL(location.href).searchParams.get('filter');
+    return ['all', 'original', 'print'].includes(filter) ? filter : 'all';
+  };
+  const apply = () => {
+    const filter = readFilter();
+    tabs.forEach((button) => {
+      const active = button.dataset.filter === filter;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    renderShop(filter);
+  };
+  tabs.forEach((button) => button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+    if (filter !== readFilter()) {
+      const url = new URL(location.href);
+      url.searchParams.set('filter', filter);
+      history.pushState(null, '', url);
+    }
+    apply();
+  }));
+  window.addEventListener('popstate', apply);
+  apply();
 }
 
 // ==========================================================================
@@ -425,6 +478,22 @@ function renderShop(filter = 'all') {
 // ==========================================================================
 let lastFocused = null;   // куда вернуть фокус после закрытия
 let cleanupDetailCarousel = () => {};
+
+function trapFocus(event, container) {
+  if (event.key !== 'Tab' || !container) return;
+  const focusable = [...container.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+    .filter((element) => !element.hidden && element.getClientRects().length);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
 
 function specRow(name, value) {
   return value ? `<div><span>${esc(name)}</span><span>${esc(value)}</span></div>` : '';
@@ -439,7 +508,7 @@ const DETAIL_SIZES = '(max-width: 1024px) 90vw, 40vw';
 const DETAIL_RATIO_FALLBACK = '16 / 9';
 
 function detailRatioOf(src) {
-  const meta = typeof IMAGE_META === 'undefined' ? null : IMAGE_META[src];
+  const meta = currentCatalog.images[src];
   return meta?.width && meta?.height ? `${meta.width} / ${meta.height}` : DETAIL_RATIO_FALLBACK;
 }
 
@@ -558,7 +627,6 @@ function openSpread(id) {
 
   lastFocused = document.activeElement;
 
-  const index = shopItems().indexOf(item);
   const sold = item.status === 'sold';
   const details = detailImages(item.detail);
 
@@ -570,7 +638,7 @@ function openSpread(id) {
     </div>
 
     <div class="spread-side">
-      <span class="spread-index">№${num(index)}${sold ? ` — ${esc(t('spread.soldIndex'))}` : ''}</span>
+      ${sold ? `<span class="spread-index">${esc(t('spread.soldIndex'))}</span>` : ''}
       <h2 class="spread-title">${esc(localized(item, 'title', t('messages.untitled')))}</h2>
 
       ${detailMarkup(details)}
@@ -649,6 +717,7 @@ const cart = {
     this.items = this.items.filter((i) => String(i.id) !== String(id));
     this.save();
     this.render();
+    refreshOrderSummary();
   },
 
   total() { return this.items.reduce((sum, item) => sum + amount(item.price), 0); },
@@ -687,33 +756,116 @@ const cart = {
     const order = document.getElementById('cartOrder');
     order.classList.toggle('is-disabled', !this.items.length);
     order.setAttribute('aria-disabled', String(!this.items.length));
-    order.href = this.items.length ? this.mailto() : '#';
-  },
-
-  // Бэкенда у статического хостинга нет — заказ уходит письмом
-  mailto() {
-    const lines = this.items.map((i) =>
-      t('mail.lineSeparator', {
-        title: localized(i, 'title', t('messages.untitled')),
-        details: [localized(i, 'type'), localized(i, 'size')].filter(Boolean).join(', '),
-        price: money(i.price)
-      }));
-
-    const body = [
-      t('mail.greeting'), '',
-      ...lines, '',
-      t('mail.total', { total: money(this.total()) }), '',
-      t('mail.name'),
-      t('mail.location'),
-      t('mail.address'),
-      t('mail.phone')
-    ].join('\n');
-
-    return `mailto:${SHOP_EMAIL}?subject=${encodeURIComponent(t('mail.subject'))}&body=${encodeURIComponent(body)}`;
+    order.href = `${localeRoot}order/`;
   }
 };
 
+let refreshOrderSummary = () => {};
+function initOrder() {
+  const root = document.getElementById('orderRoot');
+  if (!root) return;
+  const form = document.getElementById('orderForm');
+  const summary = document.getElementById('orderSummary');
+  const empty = document.getElementById('orderEmpty');
+  const submit = document.getElementById('orderSubmit');
+  const status = document.getElementById('orderStatus');
+  const review = document.getElementById('orderReview');
+  const success = document.getElementById('orderSuccess');
+  const layout = document.getElementById('orderLayout');
+  let sending = false;
+  let completed = false;
+  let lastPayload = '';
+  let requestId = '';
+
+  refreshOrderSummary = () => {
+    if (completed) return;
+    empty.hidden = cart.items.length > 0;
+    if (layout) layout.hidden = cart.items.length === 0;
+    form.hidden = cart.items.length === 0;
+    summary.innerHTML = cart.items.map(item => `<article class="order-item">
+      ${imgTag(item.image, '', {thumbnail:true, ratio:ratioOf(item)})}
+      <div><h3>${esc(localized(item,'title'))}</h3><p>${esc(caption(item))}</p>
+      <button type="button" data-remove="${esc(item.id)}"${sending ? ' disabled' : ''}>${esc(t('order.remove'))}</button></div>
+      <span>${moneyMarkup(item.price)}</span></article>`).join('') +
+      (cart.items.length ? `<p class="order-total">${esc(t('order.total'))}: <strong>${esc(money(cart.total()))}</strong></p>` : '');
+    submit.disabled = sending || !cart.items.length;
+  };
+  const showStatus = (message) => {
+    status.textContent = message;
+    status.focus();
+  };
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (sending || !cart.items.length || !form.reportValidity()) return;
+    const fields = new FormData(form);
+    const payload = {
+      locale: i18n.locale || document.documentElement.lang,
+      items: cart.items.map(item => ({id:item.id})),
+      catalogRevision:currentCatalog.revision,
+      customer:Object.fromEntries(['name','email','phone','comment'].map(key => [key,String(fields.get(key)||'').trim()])),
+      website:String(fields.get('website')||'')
+    };
+    const fingerprint = JSON.stringify(payload);
+    if (fingerprint !== lastPayload) {
+      lastPayload = fingerprint;
+      requestId = globalThis.crypto?.randomUUID?.() || 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const n = Math.floor(Math.random()*16);return (c === 'x' ? n : (n&3)|8).toString(16);
+      });
+    }
+    sending = true;
+    review.hidden = true;
+    status.textContent = t('order.sending');
+    form.setAttribute('aria-busy','true');
+    const controls = [...form.querySelectorAll('input, textarea, button')];
+    controls.forEach(control => {control.disabled = true;});
+    const cartToggle = document.getElementById('cartToggle');
+    cartToggle.disabled = true;
+    refreshOrderSummary();
+    try {
+      const response = await fetch('/api/orders', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({...payload,requestId}),
+        signal:AbortSignal.timeout(45000)
+      });
+      const result = await response.json();
+      if (response.status === 409 && result.catalog && Array.isArray(result.catalog.items)) {
+        currentCatalog = result.catalog;
+        cart.items = cart.items.map(item => findItem(item.id)).filter(item => item && item.status !== 'sold');
+        cart.save(); cart.render();
+        review.textContent = t('order.changed');
+        review.hidden = false;
+        showStatus(t('order.review'));
+        lastPayload = '';
+      } else if (!response.ok) {
+        showStatus(t(response.status === 400 ? 'order.invalid' : 'order.error'));
+      } else if (typeof result.orderId === 'string' && result.orderId) {
+        completed = true;
+        cart.items = []; cart.save(); cart.render();
+        summary.innerHTML = ''; empty.hidden = true; form.hidden = true;
+        if (layout) layout.hidden = true;
+        document.getElementById('orderNumber').textContent = result.orderId;
+        success.hidden = false;
+        status.textContent = '';
+        success.setAttribute('tabindex','-1'); success.focus();
+        form.reset();
+      } else {
+        showStatus(t('order.error'));
+      }
+    } catch (_) {
+      showStatus(t('order.error'));
+    } finally {
+      sending = false;
+      form.removeAttribute('aria-busy');
+      controls.forEach(control => {control.disabled = false;});
+      cartToggle.disabled = false;
+      refreshOrderSummary();
+    }
+  });
+  refreshOrderSummary();
+}
+
 let setCartOpen = () => {};
+let lastCartFocused = null;
 
 function initCart() {
   const panel = document.getElementById('cartPanel');
@@ -730,7 +882,12 @@ function initCart() {
     overlay?.classList.toggle('is-open', open);
     panel.setAttribute('aria-hidden', String(!open));
     document.body.classList.toggle('is-locked', open);
-    if (open) panel.querySelector('.cart-close')?.focus();
+    if (open) {
+      lastCartFocused = document.activeElement;
+      panel.querySelector('.cart-close')?.focus();
+    } else {
+      lastCartFocused?.focus();
+    }
   };
 
   toggle.addEventListener('click', () => setCartOpen(true));
@@ -775,6 +932,10 @@ function initDelegation() {
 
   // Один обработчик на всё: сначала верхний слой, потом нижний
   document.addEventListener('keydown', (e) => {
+    const spread = document.getElementById('spread');
+    const cartPanel = document.getElementById('cartPanel');
+    if (spread?.classList.contains('is-open')) trapFocus(e, spread);
+    else if (cartPanel?.classList.contains('is-open')) trapFocus(e, cartPanel);
     if (e.key !== 'Escape') return;
     if (document.getElementById('spread')?.classList.contains('is-open')) {
       closeSpread();
@@ -791,16 +952,16 @@ function initDelegation() {
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', async () => {
   await loadParts();
+  redirectLegacyHash();
   initNav();
 
   renderCatalog('all');
   initFilters('#catalogFilters .tab-btn', renderCatalog);
 
-  renderShop('all');
-  initFilters('#shopFilters .tab-btn', renderShop);
+  initShopFilters();
 
   initCart();
+  initOrder();
   initDelegation();
   initScrollSpy();
-  initSeriesBounds();
 });

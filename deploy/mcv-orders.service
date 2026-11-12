@@ -1,0 +1,21 @@
+[Unit]
+Description=Ma chere Victoria order API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=mcv-orders
+Group=mcv-orders
+WorkingDirectory=/opt/mcv-orders
+EnvironmentFile=/etc/mcv-orders.env
+ExecStart=/usr/bin/node /opt/mcv-orders/server/index.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

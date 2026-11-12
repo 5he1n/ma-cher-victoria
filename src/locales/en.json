@@ -7,6 +7,8 @@
     "about": "About me",
     "series": "Work series",
     "shop": "Shop",
+    "order": "Place an enquiry",
+    "portfolio": "Portfolio",
     "contacts": "Contacts"
   },
   "access": {
@@ -16,7 +18,26 @@
   },
   "hero": {
     "heading": "Victoria — artist. Painting, drawing, illustration",
-    "portraitAlt": "Victoria"
+    "portraitAlt": "Victoria",
+    "introduction": "My name is Victoria – I am an artist",
+    "navigationLabel": "Site sections",
+    "socialLabel": "Social media and contacts",
+    "links": {
+      "about": "About me",
+      "prints": "Prints",
+      "shop": "Works on sale",
+      "portfolio": "Portfolio",
+      "contacts": "Contacts"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "email": "Email",
+      "tiktok": "TikTok",
+      "telegram": "Telegram",
+      "youtube": "YouTube",
+      "vk": "VK"
+    },
+    "socialUnavailable": "{platform} — link coming soon"
   },
   "about": {
     "section": "01 — About me",
@@ -32,6 +53,12 @@
     "paragraph2": "Working with acrylic painting and line drawing, I turn to people in everyday situations who have paused or remembered something. They think about the past while the present around them slips away and moves swiftly on. My art is always personal and deeply felt. An impressionistic approach to painting and a free, flowing line are my language: the path from thought to image.",
     "paragraph3": "My art does not investigate anything, nor does it pretend to be more complex than it is. I have chosen figurative painting and drawing because, for me, they are the most expressive ways of being understood. I am interested in the moment when someone remembers something, falls silent, becomes still, or takes a breath.",
     "paragraph4": "As a child, I felt there was not enough beauty around me. That is why today I celebrate beauty in my paintings and in my life. My works are memories of memories."
+  },
+  "artistStatement": {
+    "photoAlt": "Victoria with her artworks",
+    "imageAlt": "Temporary AI illustration of an art studio with paintings",
+    "imageCaption": "Temporary AI illustration. A photograph is coming soon.",
+    "imageUnavailable": "A photograph is coming soon."
   },
   "series": {
     "hint": "Open series",
@@ -55,13 +82,14 @@
   },
   "shop": {
     "section": "03 — Shop",
-    "title": "The Wall",
-    "intro": "Works you can take home. Sold pieces remain on the wall — a nail and a trace that has not faded.",
+    "title": "Shop",
+    "intro": "Originals and prints. Select a work to explore the details and place an enquiry.",
     "filters": {
       "all": "All",
       "original": "Originals",
       "print": "Prints"
     },
+    "printsEmpty": "Prints are coming soon.",
     "terms": {
       "shippingLabel": "Framing",
       "shipping": "We can arrange custom framing for your painting upon request for an additional fee.",
@@ -80,6 +108,45 @@
     "cvHint": "CV — PDF",
     "cvDownload": "↓ Download",
     "legal": "* Instagram belongs to Meta, recognized as an extremist organization and prohibited in the Russian Federation."
+  },
+  "order": {
+    "detailsTitle": "Contact details",
+    "title": "Place an enquiry",
+    "empty": "Your cart is empty. Choose a work in the shop before placing an enquiry.",
+    "backToShop": "Go to shop",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone (optional)",
+    "comment": "Comment (optional)",
+    "submit": "Send enquiry",
+    "sending": "Sending…",
+    "success": "Your enquiry has been sent. We will contact you at the email address provided.",
+    "disclaimer": "An enquiry is not payment or a reservation. Availability, delivery and payment will be confirmed by message.",
+    "error": "We could not send your enquiry. Please try again later.",
+    "invalid": "Check the form and the selected works.",
+    "changed": "Your order has changed. Review the works before sending again.",
+    "review": "Review order",
+    "unknown": "Untitled",
+    "sold": "Sold",
+    "total": "Total",
+    "remove": "Remove",
+    "summary": "Your order",
+    "orderNumber": "Enquiry number"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "intro": "This is where interdisciplinary projects and their materials will be collected.",
+    "demoNotice": "Demo projects. Real materials are coming soon.",
+    "shelfLabel": "Project bookshelf",
+    "close": "Close",
+    "demo": "Demo",
+    "open": "Open project",
+    "types": {
+      "film": "Film",
+      "theatre": "Theatre",
+      "literature": "Book"
+    },
+    "empty": "Projects are coming soon."
   },
   "spread": {
     "aria": "Artwork",
@@ -106,8 +173,8 @@
     "emptyLabel": "Cart is empty",
     "countLabel": "Cart, items: {count}",
     "total": "Total",
-    "order": "Send order",
-    "hint": "An email with your selected works will open. We will arrange shipping and payment by message.",
+    "order": "Place an enquiry",
+    "hint": "Complete a short form. We will arrange shipping and payment by message.",
     "empty": "Nothing here yet. Choose a work from the wall.",
     "remove": "Remove"
   },
