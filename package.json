@@ -2,15 +2,21 @@
   "name": "ma-cher-victoria",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.25.0",
   "scripts": {
     "build": "node scripts/build.mjs",
     "start": "node server/index.mjs",
-    "test": "node --test tests/*.mjs"
+    "test": "node scripts/run-checks.mjs --node",
+    "test:browser": "node scripts/run-checks.mjs --browser",
+    "check": "node scripts/run-checks.mjs"
   },
   "engines": {
     "node": ">=22"
   },
   "dependencies": {
     "nodemailer": "^10.5.0"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

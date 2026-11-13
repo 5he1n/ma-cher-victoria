@@ -1,4 +1,5 @@
 // Generated from catalog/works.json. Do not edit directly.
+const MAX_ORDER_ITEMS = 20;
 const CATALOG_REVISION = "027d24a0c1a5250eb32f188e4d90d7be509877009fcc53727ea762d7e1f8c066";
 const IMAGE_META = {
   "../catalog/work-01-main.webp": {

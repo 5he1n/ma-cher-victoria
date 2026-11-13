@@ -3,10 +3,11 @@ import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 import nodemailer from 'nodemailer';
 import { createOrderApp } from './app.mjs';
+import { buildSmtpOptions } from './smtp.mjs';
 
 function required(name) { if (!process.env[name]) throw new Error(`${name} must be configured`); return process.env[name]; }
 export function createOrderServer(options = {}) {
-  const transport = options.transport || nodemailer.createTransport({ host: required('SMTP_HOST'), port: Number(process.env.SMTP_PORT || 587), secure: process.env.SMTP_SECURE === 'true', auth: { user: required('SMTP_USER'), pass: required('SMTP_PASS') }, connectionTimeout: 10_000, greetingTimeout: 10_000, socketTimeout: 15_000 }, { from: required('SMTP_FROM') });
+  const transport = options.transport || nodemailer.createTransport(buildSmtpOptions(process.env), { from: required('SMTP_FROM') });
   return http.createServer(createOrderApp({ transport, siteOrigin: options.siteOrigin ?? required('SITE_ORIGIN'), trustProxy: options.trustProxy ?? process.env.TRUST_PROXY === 'true', ...options }));
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {

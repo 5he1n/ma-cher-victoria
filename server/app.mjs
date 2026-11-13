@@ -1,5 +1,6 @@
 import { randomUUID, createHash } from 'node:crypto';
 import { loadCatalog, resolveOrderItems, toBrowserCatalog } from '../shared/catalog.mjs';
+import { MAX_ORDER_ITEMS } from '../shared/order-policy.mjs';
 
 const RECIPIENT = 'victtoress@gmail.com';
 const MAX_BODY_BYTES = 16 * 1024;
@@ -21,7 +22,8 @@ function validateOrder(payload) {
   if (!payload || typeof payload !== 'object' || !['ru', 'en'].includes(payload.locale)) return null;
   if (typeof payload.catalogRevision !== 'string' || !/^[a-f0-9]{64}$/.test(payload.catalogRevision)) return null;
   if (typeof payload.requestId !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(payload.requestId)) return null;
-  if (!Array.isArray(payload.items) || payload.items.length < 1 || payload.items.length > 20) return null;
+  if (!Array.isArray(payload.items) || payload.items.length < 1) return null;
+  if (payload.items.length > MAX_ORDER_ITEMS) return { error: 'ORDER_LIMIT_EXCEEDED' };
   const ids = new Set();
   if (!payload.items.every((entry) => entry && typeof entry.id === 'string' && /^[a-z0-9-]{1,80}$/i.test(entry.id) && !ids.has(entry.id) && (ids.add(entry.id), true))) return null;
   const name = string(payload.customer?.name, 1, 120, { lineBreaks: false });
@@ -54,7 +56,9 @@ export function createOrderApp({ loadCatalogFn = loadCatalog, transport, siteOri
     if (!rateLimiter.consume(clientIp(request, trustProxy), now())) return json(response, 429, { code: 'RATE_LIMITED' });
     let raw; try { raw = await readJson(request); } catch (error) { return json(response, error.code === 'TOO_LARGE' ? 413 : 400, { code: error.code === 'TOO_LARGE' ? 'PAYLOAD_TOO_LARGE' : 'INVALID_REQUEST' }); }
     if (raw?.website) return response.writeHead(204).end();
-    const order = validateOrder(raw); if (!order) return json(response, 400, { code: 'INVALID_REQUEST' });
+    const order = validateOrder(raw);
+    if (order?.error === 'ORDER_LIMIT_EXCEEDED') return json(response, 400, { code: 'ORDER_LIMIT_EXCEEDED', maxItems: MAX_ORDER_ITEMS });
+    if (!order) return json(response, 400, { code: 'INVALID_REQUEST' });
     cleanup(); const previous = idempotency.get(order.requestId);
     const fingerprint=createHash('sha256').update(JSON.stringify({...order,requestId:undefined})).digest('hex');
     if (previous) { if(previous.fingerprint!==fingerprint)return json(response,409,{code:'REQUEST_ID_REUSED'}); try { const completed = await previous.result; return json(response, completed.status, completed.body); } catch { return json(response, 503, { code: 'ORDER_UNAVAILABLE' }); } }

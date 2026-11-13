@@ -10,7 +10,6 @@
     }));
     // Keep the readable fallback if the generated structure is incomplete.
     if (entries.some(entry => !entry.panel || !entry.panel.querySelector('[data-book-close]'))) return;
-    const mouseHover = matchMedia('(hover: hover) and (pointer: fine)');
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
     let active = null;
     let pinned = false;
@@ -41,7 +40,7 @@
     }
     entries.forEach(entry => {
       entry.trigger.addEventListener('pointerenter', event => {
-        if (event.pointerType !== 'mouse' || !mouseHover.matches || pinned) return;
+        if (event.pointerType !== 'mouse' || pinned) return;
         if (active?.panel.contains(document.activeElement)) return;
         open(entry, false);
       });

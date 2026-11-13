@@ -185,6 +185,9 @@
     "empty": "This category is empty for now"
   },
   "messages": {
+    "orderLimit": "You can select up to {max} works per enquiry. Remove the extra works from your basket.",
+    "sold": "This work has been sold",
+    "unknown": "This work is no longer available",
     "added": "Added to cart",
     "alreadyInCart": "Already in cart",
     "untitled": "Untitled"

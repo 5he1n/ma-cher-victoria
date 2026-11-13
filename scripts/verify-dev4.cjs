@@ -67,5 +67,24 @@ const server = http.createServer((req,res)=>{
  await page.goto(`${base}/en/shop/`);await page.locator('[data-open]').first().click();await page.locator('[data-add]').click();await page.keyboard.press('Escape');
  await page.goto(`${base}/en/order/`);await page.locator('[name="name"]').fill('API integration');await page.locator('[name="email"]').fill('api@example.test');await page.locator('#orderSubmit').click();await page.waitForFunction(()=>!document.querySelector('#orderSuccess').hidden);assert.equal(mailCount,1);assert.deepEqual(errors,[]);
  console.log('PASS Dev4 browser-to-real-API integration (injected local transport, no external mail)');
+ for(const lang of ['ru','en']){
+ await page.goto(`${base}/${lang}/shop/`);
+ const ids=await page.evaluate(()=>currentCatalog.items.filter(item=>item.status!=='sold').map(item=>item.id));
+ assert.ok(ids.length>=21,'Boundary fixture must contain at least 21 available works');
+ await page.evaluate(ids=>localStorage.setItem('mcv-cart',JSON.stringify(ids.slice(0,20))),ids);await page.reload();
+ assert.equal(await page.evaluate(()=>cart.items.length),20);
+ await page.locator(`[data-open="${ids[20]}"]`).click();await page.locator('[data-add]').click();
+ assert.equal(await page.evaluate(()=>cart.items.length),20);assert.match(await page.locator('[data-cart-feedback]').textContent(),/20/);await page.keyboard.press('Escape');
+ await page.locator(`[data-open="${ids[0]}"]`).click();await page.locator('[data-add]').click();assert.match(await page.locator('[data-cart-feedback]').textContent(),lang==='ru'?/Уже в корзине/:/Already in/);await page.keyboard.press('Escape');
+ assert.equal(await page.evaluate(()=>cart.add(currentCatalog.items.find(item=>item.status==='sold').id)),'sold');
+ await page.evaluate(ids=>localStorage.setItem('mcv-cart',JSON.stringify(ids.slice(0,21))),ids);await page.goto(`${base}/${lang}/order/`);
+ assert.equal(await page.locator('#orderSummary .order-item').count(),21);assert.equal(await page.locator('#orderSubmit').isDisabled(),true);assert.match(await page.locator('#orderLimitNotice').textContent(),/20/);
+ await page.locator('#orderSummary [data-remove]').first().click();assert.equal(await page.locator('#orderSummary .order-item').count(),20);assert.equal(await page.locator('#orderSubmit').isEnabled(),true);assert.equal(await page.locator('#orderLimitNotice').isVisible(),false);
+ await page.locator('[name="name"]').fill('Boundary customer');await page.locator('[name="email"]').fill('boundary@example.test');
+ await page.route('**/api/orders',route=>route.fulfill({status:400,json:{code:'ORDER_LIMIT_EXCEEDED',maxItems:20}}));
+ await page.locator('#orderSubmit').click();await page.waitForFunction(()=>document.querySelector('#orderForm').getAttribute('aria-busy')===null);assert.match(await page.locator('#orderStatus').textContent(),/20/);assert.equal(await page.locator('[name="name"]').inputValue(),'Boundary customer');
+ await page.unroute('**/api/orders');await page.locator('#orderSubmit').click();await page.waitForFunction(()=>!document.querySelector('#orderSuccess').hidden);
+ }
+ assert.deepEqual(errors,[]);console.log('PASS review boundaries: client limit20, old basket21 retained, RU/EN errors, server limit handling and real API20 success');
  } finally {await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1});

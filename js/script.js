@@ -691,7 +691,7 @@ const cart = {
   load() {
     try {
       const ids = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-      this.items = ids.map(findItem).filter((i) => i && i.status !== 'sold');
+      this.items = [...new Set(ids)].map(findItem).filter((i) => i && i.status !== 'sold');
     } catch (e) {
       this.items = [];
     }
@@ -705,12 +705,14 @@ const cart = {
 
   add(id) {
     const product = findItem(id);
-    if (!product || product.status === 'sold') return false;
-    if (this.items.some((i) => i.id === product.id)) return false;  // оригинал один
+    if (!product) return 'unknown';
+    if (product.status === 'sold') return 'sold';
+    if (this.items.some((i) => i.id === product.id)) return 'alreadyInCart';
+    if (this.items.length >= MAX_ORDER_ITEMS) return 'limit';
     this.items.push(product);
     this.save();
     this.render();
-    return true;
+    return 'added';
   },
 
   remove(id) {
@@ -757,6 +759,15 @@ const cart = {
     order.classList.toggle('is-disabled', !this.items.length);
     order.setAttribute('aria-disabled', String(!this.items.length));
     order.href = `${localeRoot}order/`;
+    let limitNotice = document.getElementById('cartLimitNotice');
+    if (!limitNotice) {
+      limitNotice = document.createElement('p');
+      limitNotice.id = 'cartLimitNotice';
+      limitNotice.setAttribute('role','status');
+      order.before(limitNotice);
+    }
+    limitNotice.hidden = this.items.length <= MAX_ORDER_ITEMS;
+    limitNotice.textContent = t('messages.orderLimit', {max:MAX_ORDER_ITEMS});
   }
 };
 
@@ -772,6 +783,10 @@ function initOrder() {
   const review = document.getElementById('orderReview');
   const success = document.getElementById('orderSuccess');
   const layout = document.getElementById('orderLayout');
+  const limitNotice = document.createElement('p');
+  limitNotice.id = 'orderLimitNotice';
+  limitNotice.setAttribute('role','status');
+  form.prepend(limitNotice);
   let sending = false;
   let completed = false;
   let lastPayload = '';
@@ -788,7 +803,10 @@ function initOrder() {
       <button type="button" data-remove="${esc(item.id)}"${sending ? ' disabled' : ''}>${esc(t('order.remove'))}</button></div>
       <span>${moneyMarkup(item.price)}</span></article>`).join('') +
       (cart.items.length ? `<p class="order-total">${esc(t('order.total'))}: <strong>${esc(money(cart.total()))}</strong></p>` : '');
-    submit.disabled = sending || !cart.items.length;
+    const overLimit = cart.items.length > MAX_ORDER_ITEMS;
+    limitNotice.hidden = !overLimit;
+    limitNotice.textContent = t('messages.orderLimit', {max:MAX_ORDER_ITEMS});
+    submit.disabled = sending || !cart.items.length || overLimit;
   };
   const showStatus = (message) => {
     status.textContent = message;
@@ -796,7 +814,9 @@ function initOrder() {
   };
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    if (sending || !cart.items.length || !form.reportValidity()) return;
+    if (sending || !cart.items.length) return;
+    if (cart.items.length > MAX_ORDER_ITEMS) { showStatus(t('messages.orderLimit', {max:MAX_ORDER_ITEMS})); return; }
+    if (!form.reportValidity()) return;
     const fields = new FormData(form);
     const payload = {
       locale: i18n.locale || document.documentElement.lang,
@@ -837,7 +857,8 @@ function initOrder() {
         showStatus(t('order.review'));
         lastPayload = '';
       } else if (!response.ok) {
-        showStatus(t(response.status === 400 ? 'order.invalid' : 'order.error'));
+        if (result.code === 'ORDER_LIMIT_EXCEEDED') showStatus(t('messages.orderLimit', {max:MAX_ORDER_ITEMS}));
+        else showStatus(t(response.status === 400 ? 'order.invalid' : 'order.error'));
       } else if (typeof result.orderId === 'string' && result.orderId) {
         completed = true;
         cart.items = []; cart.save(); cart.render();
@@ -915,10 +936,21 @@ function initDelegation() {
 
     const add = e.target.closest('[data-add]');
     if (add) {
-      const ok = cart.add(add.dataset.add);
+      const result = cart.add(add.dataset.add);
       const original = add.textContent;
-      add.textContent = ok ? t('messages.added') : t('messages.alreadyInCart');
-      add.classList.add('btn-added');
+      const message = result === 'limit' ? t('messages.orderLimit', {max:MAX_ORDER_ITEMS})
+        : t(`messages.${result}`);
+      add.textContent = message;
+      add.classList.toggle('btn-added', result === 'added');
+      const container = add.closest('.spread-side') || add.parentElement;
+      let feedback = container.querySelector('[data-cart-feedback]');
+      if (!feedback) {
+        feedback = document.createElement('p');
+        feedback.dataset.cartFeedback = '';
+        feedback.setAttribute('role','status');
+        container.append(feedback);
+      }
+      feedback.textContent = message;
       setTimeout(() => {
         add.textContent = original;
         add.classList.remove('btn-added');

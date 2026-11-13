@@ -51,7 +51,12 @@ const server = http.createServer((req,res)=>{
  const noJs=await browser.newContext({javaScriptEnabled:false});const fallback=await noJs.newPage();await fallback.goto(`${base}/ru/portfolio/`);
  assert.equal(await fallback.locator('[data-book-panel]').evaluateAll(els=>els.filter(el=>!el.hidden).length),3);
  assert.equal(await fallback.locator('[data-book-trigger]:not([hidden])').count(),0);await noJs.close();
- const touch=await browser.newContext({hasTouch:true,isMobile:true,viewport:{width:360,height:800}});const mobile=await touch.newPage();await mobile.goto(`${base}/ru/portfolio/`);await mobile.locator('[data-book-trigger]').first().tap();assert.equal(await mobile.locator('[data-book-trigger]').first().getAttribute('aria-expanded'),'true');await mobile.locator('[data-book-trigger]').first().tap();assert.equal(await mobile.locator('[data-book-trigger]').first().getAttribute('aria-expanded'),'false');await touch.close();
+ const touch=await browser.newContext({hasTouch:true,isMobile:true,viewport:{width:360,height:800}});const mobile=await touch.newPage();await mobile.goto(`${base}/ru/portfolio/`);
+ assert.equal(await mobile.evaluate(()=>matchMedia('(hover: hover) and (pointer: fine)').matches),false);
+ await mobile.locator('[data-book-trigger]').first().dispatchEvent('pointerenter',{pointerType:'touch'});assert.equal(await mobile.locator('[data-book-trigger]').first().getAttribute('aria-expanded'),'false');
+ await mobile.locator('[data-book-trigger]').first().dispatchEvent('pointerenter',{pointerType:'mouse'});assert.equal(await mobile.locator('[data-book-trigger]').first().getAttribute('aria-expanded'),'true');
+ await mobile.locator('[data-bookshelf]').dispatchEvent('pointerleave',{pointerType:'mouse'});assert.equal(await mobile.locator('[data-book-trigger]').first().getAttribute('aria-expanded'),'false');
+ await mobile.locator('[data-book-trigger]').first().tap();assert.equal(await mobile.locator('[data-book-trigger]').first().getAttribute('aria-expanded'),'true');await mobile.locator('[data-book-trigger]').first().tap();assert.equal(await mobile.locator('[data-book-trigger]').first().getAttribute('aria-expanded'),'false');await touch.close();
  const {renderPortfolio}=await import('../shared/portfolio.mjs');const demos=JSON.parse(fs.readFileSync(path.join(root,'src/data/portfolio.json'),'utf8'));
  const fixture=await browser.newPage({viewport:{width:360,height:800}});
  const fixtureHtml=items=>`<html lang="ru"><head><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="${base}/css/site.css"><link rel="stylesheet" href="${base}/css/portfolio.css"></head><body><main class="layout">${renderPortfolio(items,'ru',base+'/')}</main></body></html>`;
